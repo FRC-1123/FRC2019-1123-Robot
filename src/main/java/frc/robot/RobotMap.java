@@ -50,6 +50,8 @@ public class RobotMap {
   //
   // Solenoid ports for floating axles and mass mover.
   //
+  public static final int compressor_Module = 21;
+  
   public static final int solenoid_Module_Axle_MiddleDown = 21;
   public static final int solenoid_Channel_Axle_MiddleDown = 0;
   public static final int solenoid_Module_Axle_MiddleUp = 21;

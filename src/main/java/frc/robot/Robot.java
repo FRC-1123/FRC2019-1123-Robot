@@ -18,6 +18,8 @@ import frc.robot.commands.Command_MassMoveForward;
 import frc.robot.commands.Command_RetractBothAxles;
 import frc.robot.commands.Command_RetractFloatAxle;
 import frc.robot.commands.Command_RetractMiddleAxle;
+import frc.robot.commands.Command_StartCompressor;
+import frc.robot.commands.Command_StopCompressor;
 import frc.robot.subsystems.Subsystem_Pneumatics;
 
 /**
@@ -43,6 +45,8 @@ public class Robot extends TimedRobot {
   Command_RetractFloatAxle retractFloatAxle = new Command_RetractFloatAxle();
   Command_MassMoveForward moveMassForward = new Command_MassMoveForward();
   Command_MassMoveBack moveMassBack = new Command_MassMoveBack();
+  Command_StartCompressor startCompressor = new Command_StartCompressor();
+  Command_StopCompressor stopCompressor = new Command_StopCompressor();
 
   /**
    * This function is run when the robot is first started up and should be
@@ -59,6 +63,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Retract Float Axle", retractFloatAxle);
     SmartDashboard.putData("Move Mass Forward", moveMassForward);
     SmartDashboard.putData("Move Mass Back", moveMassBack);
+    SmartDashboard.putData("Start Compressor", startCompressor);
+    SmartDashboard.putData("Stop Compressor", stopCompressor);
 
     log.debug("End robotInit");
    }
