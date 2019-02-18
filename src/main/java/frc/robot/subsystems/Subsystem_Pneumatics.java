@@ -76,6 +76,26 @@ public class Subsystem_Pneumatics extends Subsystem {
     this.m_middleDown.set(false);
   }
 
+  public void extendMiddleAxleStart() {
+    log.debug("***extendMiddleAxleStart");
+    this.m_middleDown.set(true);
+  }
+
+  public void extendMiddleAxleStop() {
+    log.debug("***extendMiddleAxleStop");
+    this.m_middleDown.set(false);
+  }
+
+  public void extendFloatAxleStart() {
+    log.debug("***extendFloatAxleStart");
+    this.m_floatDown.set(true);
+  }
+
+  public void extendFloatAxleStop() {
+    log.debug("***extendFloatAxleStop");
+    this.m_floatDown.set(false);
+  }
+
   public void retractBothAxlesStart() {
     log.debug("***retractBothAxlesStart");
     this.m_floatUp.set(true);

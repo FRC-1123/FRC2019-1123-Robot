@@ -14,6 +14,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Command_ExtendBothAxlesStart;
 import frc.robot.commands.Command_ExtendBothAxlesStop;
+import frc.robot.commands.Command_ExtendFloatAxleStart;
+import frc.robot.commands.Command_ExtendFloatAxleStop;
+import frc.robot.commands.Command_ExtendMiddleAxleStart;
+import frc.robot.commands.Command_ExtendMiddleAxleStop;
 import frc.robot.commands.Command_MassMoveBack;
 import frc.robot.commands.Command_MassMoveForward;
 import frc.robot.commands.Command_RetractBothAxlesStart;
@@ -58,6 +62,10 @@ public class Robot extends TimedRobot {
   Command_RetractMiddleAxleStop retractMiddleAxleStop = new Command_RetractMiddleAxleStop();
   Command_RetractFloatAxleStart retractFloatAxleStart = new Command_RetractFloatAxleStart();
   Command_RetractFloatAxleStop retractFloatAxleStop = new Command_RetractFloatAxleStop();
+  Command_ExtendMiddleAxleStart extendMiddleAxleStart = new Command_ExtendMiddleAxleStart();
+  Command_ExtendMiddleAxleStop extendMiddleAxleStop = new Command_ExtendMiddleAxleStop();
+  Command_ExtendFloatAxleStart extendFloatAxleStart = new Command_ExtendFloatAxleStart();
+  Command_ExtendFloatAxleStop extendFloatAxleStop = new Command_ExtendFloatAxleStop();
 
   Command_MassMoveForward moveMassForward = new Command_MassMoveForward();
   Command_MassMoveBack moveMassBack = new Command_MassMoveBack();
@@ -84,6 +92,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Retract Middle Axle Stop", retractMiddleAxleStop);
     SmartDashboard.putData("Retract Float Axle Start", retractFloatAxleStart);
     SmartDashboard.putData("Retract Float Axle Stop", retractFloatAxleStop);
+    SmartDashboard.putData("Extend Middle Axle Start", extendMiddleAxleStart);
+    SmartDashboard.putData("Extend Middle Axle Stop", extendMiddleAxleStop);
+    SmartDashboard.putData("Extend Float Axle Start", extendFloatAxleStart);
+    SmartDashboard.putData("Extend Float Axle Stop", extendFloatAxleStop);
 
     SmartDashboard.putData("Move Mass Forward", moveMassForward);
     SmartDashboard.putData("Move Mass Back", moveMassBack);
