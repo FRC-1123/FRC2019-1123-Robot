@@ -64,6 +64,50 @@ public class Subsystem_Pneumatics extends Subsystem {
   public void initDefaultCommand() {
   }
 
+  public void extendBothAxlesStart() {
+    log.debug("***extendBothAxlesStart");
+    this.m_floatDown.set(true);
+    this.m_middleDown.set(true);
+  }
+
+  public void extendBothAxlesStop() {
+    log.debug("***extendBothAxlesStop");
+    this.m_floatDown.set(false);
+    this.m_middleDown.set(false);
+  }
+
+  public void retractBothAxlesStart() {
+    log.debug("***retractBothAxlesStart");
+    this.m_floatUp.set(true);
+    this.m_middleUp.set(true);
+  }
+
+  public void retractBothAxlesStop() {
+    log.debug("***retractBothAxlesStop");
+    this.m_floatUp.set(false);
+    this.m_middleUp.set(false);
+  }
+
+  public void retractMiddleAxleStart() {
+    log.debug("***retractMiddleAxlesStart");
+    this.m_middleUp.set(true);
+  }
+
+  public void retractMiddleAxleStop() {
+    log.debug("***retractMiddleAxlesStop");
+    this.m_middleUp.set(false);
+  }
+
+  public void retractFloatAxleStart() {
+    log.debug("***retractFloatAxlesStart");
+    this.m_floatUp.set(true);
+  }
+
+  public void retractFloatAxleStop() {
+    log.debug("***retractFloatAxlesStop");
+    this.m_floatUp.set(false);
+  }
+
   public void extendBothAxles() {
     log.debug("***extendBothAxles");
     extendAxle(AXLE.FLOAT);

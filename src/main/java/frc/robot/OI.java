@@ -7,6 +7,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.Command_ExtendBothAxles;
+import frc.robot.commands.Command_RetractBothAxles;
+import frc.robot.commands.Command_RetractFloatAxle;
+import frc.robot.commands.Command_RetractMiddleAxle;
+import edu.wpi.first.wpilibj.XboxController;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -39,4 +47,32 @@ public class OI {
   // Start the command when the button is released and let it run the command
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
+
+  private static final int driveControllerPort = 0;
+
+  private XboxController controller;
+
+  public OI() {
+    controller = new XboxController(driveControllerPort);
+  }
+
+  public double getLeftStickX() {
+    return controller.getX(Hand.kLeft);
+  }
+
+  public double getLeftStickY() {
+    return controller.getY(Hand.kLeft);
+  }
+  
+  public double getRightStickX() {
+    return controller.getX(Hand.kRight);
+  }
+
+  public double getRightStickY() { 
+   return controller.getY(Hand.kRight);
+  }
+
+  public static OI create() {
+    return new OI();
+  }
 }
