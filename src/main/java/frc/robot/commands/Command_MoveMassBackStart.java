@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Logger;
 import frc.robot.Robot;
 
-public class Command_RetractBothAxles extends Command {
-  private static final Logger log = new Logger(Command_RetractBothAxles.class);
+public class Command_MoveMassBackStart extends Command {
+  private static final Logger log = new Logger(Command_MoveMassBackStart.class);
   private boolean isFinished;
 
-  public Command_RetractBothAxles() {
+  public Command_MoveMassBackStart() {
     requires(Robot.m_subsystemPneumatics);
     log.debug("***constructor");
   }
@@ -31,7 +31,7 @@ public class Command_RetractBothAxles extends Command {
   @Override
   protected void execute() {
     log.debug("***execute");
-    Robot.m_subsystemPneumatics.retractBothAxles();
+    Robot.m_subsystemPneumatics.moveMassBackStart();
     this.isFinished = true;
   }
 

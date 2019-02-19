@@ -8,61 +8,27 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Logger;
 import frc.robot.RobotMap;
+import frc.robot.commands.Command_DriveManually;
 
 /**
- * Add your docs here.
+ * Drive Train subsystem supports tank drive. We stole code librally from the
+ * WPILIB DifferentialDrivde class to make sure we've got all the safety stuff
+ * correct.
  */
 public class Subsystem_DriveTrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   private static final String subsystemName = "Drive Train";
-
-  //
-  // Keys to report motor data to Smartdashboard.
-  //
-  private static final String keyMotorState_DevId_FixedA = subsystemName + "/Motor/Fixed A/DevId";
-  private static final String keyMotorState_Temp_FixedA = subsystemName + "/Motor/Fixed A/Temp";
-  private static final String keyMotorState_BusVolt_FixedA = subsystemName + "/Motor/Fixed A/BusVolt";
-  private static final String keyMotorState_SetSpeed_FixedA = subsystemName + "/Motor/Fixed A/SetSpeed";
-  private static final String keyMotorState_OutAmps_FixedA = subsystemName + "/Motor/Fixed A/OutAmps";
-
-  private static final String keyMotorState_DevId_FixedB = subsystemName + "/Motor/Fixed B/DevId";
-  private static final String keyMotorState_Temp_FixedB = subsystemName + "/Motor/Fixed B/Temp";
-  private static final String keyMotorState_BusVolt_FixedB = subsystemName + "/Motor/Fixed B/BusVolt";
-  private static final String keyMotorState_SetSpeed_FixedB = subsystemName + "/Motor/Fixed B/SetSpeed";
-  private static final String keyMotorState_OutAmps_FixedB = subsystemName + "/Motor/Fixed B/OutAmps";
-
-  private static final String keyMotorState_DevId_MiddleA = subsystemName + "/Motor/Middle A/DevId";
-  private static final String keyMotorState_Temp_MiddleA = subsystemName + "/Motor/Middle A/Temp";
-  private static final String keyMotorState_BusVolt_MiddleA = subsystemName + "/Motor/Middle A/BusVolt";
-  private static final String keyMotorState_SetSpeed_MiddleA = subsystemName + "/Motor/Middle A/SetSpeed";
-  private static final String keyMotorState_OutAmps_MiddleA = subsystemName + "/Motor/Middle A/OutAmps";
-
-  private static final String keyMotorState_DevId_MiddleB = subsystemName + "/Motor/Middle B/DevId";
-  private static final String keyMotorState_Temp_MiddleB = subsystemName + "/Motor/Middle B/Temp";
-  private static final String keyMotorState_BusVolt_MiddleB = subsystemName + "/Motor/Middle B/BusVolt";
-  private static final String keyMotorState_SetSpeed_MiddleB = subsystemName + "/Motor/Middle B/SetSpeed";
-  private static final String keyMotorState_OutAmps_MiddleB = subsystemName + "/Motor/Middle B/OutAmps";
-
-  private static final String keyMotorState_DevId_FloatA = subsystemName + "/Motor/Float A/DevId";
-  private static final String keyMotorState_Temp_FloatA = subsystemName + "/Motor/Float A/Temp";
-  private static final String keyMotorState_BusVolt_FloatA = subsystemName + "/Motor/Float A/BusVolt";
-  private static final String keyMotorState_SetSpeed_FloatA = subsystemName + "/Motor/Float A/SetSpeed";
-  private static final String keyMotorState_OutAmps_FloatA = subsystemName + "/Motor/Float A/OutAmps";
-
-  private static final String keyMotorState_DevId_FloatB = subsystemName + "/Motor/Float B/DevId";
-  private static final String keyMotorState_Temp_FloatB = subsystemName + "/Motor/Float B/Temp";
-  private static final String keyMotorState_BusVolt_FloatB = subsystemName + "/Motor/Float B/BusVolt";
-  private static final String keyMotorState_SetSpeed_FloatB = subsystemName + "/Motor/Float B/SetSpeed";
-  private static final String keyMotorState_OutAmps_FloatB = subsystemName + "/Motor/Float B/OutAmps";
 
   //
   // Drive train motors.
@@ -73,42 +39,49 @@ public class Subsystem_DriveTrain extends Subsystem {
   private final CANSparkMax m_motorMiddleB;
   private final CANSparkMax m_motorFloatA;
   private final CANSparkMax m_motorFloatB;
+  private final CANSparkMax[] m_motors;
+  private final CANSparkMax[] m_motorsSideA;
+  private final CANSparkMax[] m_motorsSideB;
 
-  //
-  // Drive train side A and B speed controller groups.
-  //
-  private final SpeedControllerGroup m_speedControllerGroupA;
-  private final SpeedControllerGroup m_speedControllerGroupB;
+  public static final double kDefaultDeadband = 0.02;
+  public static final double kDefaultMaxOutput = 1.0;
 
-  //
-  // Drive train differential drive.
-  //
-  private final DifferentialDrive m_differentialDrive;
+  protected double m_deadband = kDefaultDeadband;
+  protected double m_maxOutput = kDefaultMaxOutput;
 
   //
   // Logger
   //
   private final Logger m_logger;
 
+  //
+  // Motor safety members
+  //
+  private static final long kDefaultSafetyExpiration = 100;
+
+  private long m_expiration = kDefaultSafetyExpiration;
+  private long m_stopTime = RobotController.getFPGATime();
+  private final Object m_thisMutex = new Object();
+
   public Subsystem_DriveTrain(CANSparkMax motorFixedA, CANSparkMax motorFixedB, CANSparkMax motorMiddleA,
       CANSparkMax motorMiddleB, CANSparkMax motorFloatA, CANSparkMax motorFloatB) {
     super(subsystemName);
 
-    this.m_logger = new Logger("Drive Train", RobotMap.logLevel);
+    this.m_logger = new Logger(Subsystem_DriveTrain.class);
 
+    this.m_motors = new CANSparkMax[6];
     this.m_motorFixedA = motorFixedA;
+    this.m_motors[0] = motorFixedA;
     this.m_motorFixedB = motorFixedB;
+    this.m_motors[1] = motorFixedB;
     this.m_motorMiddleA = motorMiddleA;
+    this.m_motors[2] = motorMiddleA;
     this.m_motorMiddleB = motorMiddleB;
+    this.m_motors[3] = motorMiddleB;
     this.m_motorFloatA = motorFloatA;
+    this.m_motors[4] = motorFloatA;
     this.m_motorFloatB = motorFloatB;
-
-    addChild(this.m_motorFixedA);
-    addChild(this.m_motorMiddleA);
-    addChild(this.m_motorFloatA);
-    addChild(this.m_motorFixedB);
-    addChild(this.m_motorMiddleB);
-    addChild(this.m_motorFloatB);
+    this.m_motors[5] = motorFloatB;
 
     //
     // Set the inverted flags on the motors individually
@@ -122,70 +95,69 @@ public class Subsystem_DriveTrain extends Subsystem {
     this.m_motorFloatB.setInverted(RobotMap.invertedFlag_Side_B);
 
     //
-    // Group left and right motors into speed controller groups.
+    // Group side A and side B motors into speed controller groups.
     //
     m_logger.debug("Creating speed control groups for side A and B.");
-    m_speedControllerGroupA = new SpeedControllerGroup(this.m_motorFixedA, this.m_motorMiddleA, this.m_motorFloatA);
-    m_speedControllerGroupB = new SpeedControllerGroup(this.m_motorFixedB, this.m_motorMiddleB, this.m_motorFloatB);
+    m_motorsSideA = new CANSparkMax[3];
+    m_motorsSideA[0] = this.m_motorFixedA;
+    m_motorsSideA[1] = this.m_motorMiddleA;
+    m_motorsSideA[2] = this.m_motorFloatA;
+
+    m_motorsSideB = new CANSparkMax[3];
+    m_motorsSideB[0] = this.m_motorFixedB;
+    m_motorsSideB[1] = this.m_motorMiddleB;
+    m_motorsSideB[2] = this.m_motorFloatB;
 
     //
     // Use speed controller groups to create a differential drive.
     //
     m_logger.debug("Creating Differential Drive.");
-    m_differentialDrive = new DifferentialDrive(m_speedControllerGroupA, m_speedControllerGroupB);
+
+    //
+    // Add sendables for Dashboard reporting.
+    //
+    addChild(this.m_motorFixedA);
+    addChild(this.m_motorMiddleA);
+    addChild(this.m_motorFloatA);
+    addChild(this.m_motorFixedB);
+    addChild(this.m_motorMiddleB);
+    addChild(this.m_motorFloatB);
+
   }
 
   public void drive(double leftSpeed, double rightSpeed) {
-    m_differentialDrive.tankDrive(leftSpeed, rightSpeed);
-    _logState();
+    this._tankDrive(leftSpeed, rightSpeed, true);
   }
 
   public void stop() {
     drive(0, 0);
+    for (CANSparkMax motor : m_motors) {
+      motor.stopMotor();
+    }
   }
 
-  private void _logState() {
-    SmartDashboard.putNumber(keyMotorState_DevId_FixedA, m_motorFixedA.getDeviceId());
-    SmartDashboard.putNumber(keyMotorState_Temp_FixedA, m_motorFixedA.getMotorTemperature());
-    SmartDashboard.putNumber(keyMotorState_BusVolt_FixedA, m_motorFixedA.getBusVoltage());
-    SmartDashboard.putNumber(keyMotorState_OutAmps_FixedA, m_motorFixedA.getOutputCurrent());
-    SmartDashboard.putNumber(keyMotorState_SetSpeed_FixedA, m_motorFixedA.get());
-    SmartDashboard.putNumber(keyMotorState_DevId_FixedB, m_motorFixedB.getDeviceId());
-    SmartDashboard.putNumber(keyMotorState_Temp_FixedB, m_motorFixedB.getMotorTemperature());
-    SmartDashboard.putNumber(keyMotorState_BusVolt_FixedB, m_motorFixedB.getBusVoltage());
-    SmartDashboard.putNumber(keyMotorState_OutAmps_FixedB, m_motorFixedB.getOutputCurrent());
-    SmartDashboard.putNumber(keyMotorState_SetSpeed_FixedB, m_motorFixedB.get());
+  public void setIdleCost() {
+    stop();
+    for (CANSparkMax motor : m_motors) {
+      motor.setIdleMode(IdleMode.kCoast);
+    }
+  }
 
-    SmartDashboard.putNumber(keyMotorState_DevId_MiddleA, m_motorMiddleA.getDeviceId());
-    SmartDashboard.putNumber(keyMotorState_Temp_MiddleA, m_motorMiddleA.getMotorTemperature());
-    SmartDashboard.putNumber(keyMotorState_BusVolt_MiddleA, m_motorMiddleA.getBusVoltage());
-    SmartDashboard.putNumber(keyMotorState_OutAmps_MiddleA, m_motorMiddleA.getOutputCurrent());
-    SmartDashboard.putNumber(keyMotorState_SetSpeed_MiddleA, m_motorMiddleA.get());
-    SmartDashboard.putNumber(keyMotorState_DevId_MiddleB, m_motorMiddleB.getDeviceId());
-    SmartDashboard.putNumber(keyMotorState_Temp_MiddleB, m_motorMiddleB.getMotorTemperature());
-    SmartDashboard.putNumber(keyMotorState_BusVolt_MiddleB, m_motorMiddleB.getBusVoltage());
-    SmartDashboard.putNumber(keyMotorState_OutAmps_MiddleB, m_motorMiddleB.getOutputCurrent());
-    SmartDashboard.putNumber(keyMotorState_SetSpeed_MiddleB, m_motorMiddleB.get());
-
-    SmartDashboard.putNumber(keyMotorState_DevId_FloatA, m_motorFloatA.getDeviceId());
-    SmartDashboard.putNumber(keyMotorState_Temp_FloatA, m_motorFloatA.getMotorTemperature());
-    SmartDashboard.putNumber(keyMotorState_BusVolt_FloatA, m_motorFloatA.getBusVoltage());
-    SmartDashboard.putNumber(keyMotorState_OutAmps_FloatA, m_motorFloatA.getOutputCurrent());
-    SmartDashboard.putNumber(keyMotorState_SetSpeed_FloatA, m_motorFloatA.get());
-    SmartDashboard.putNumber(keyMotorState_DevId_FloatB, m_motorFloatB.getDeviceId());
-    SmartDashboard.putNumber(keyMotorState_Temp_FloatB, m_motorFloatB.getMotorTemperature());
-    SmartDashboard.putNumber(keyMotorState_BusVolt_FloatB, m_motorFloatB.getBusVoltage());
-    SmartDashboard.putNumber(keyMotorState_OutAmps_FloatB, m_motorFloatB.getOutputCurrent());
-    SmartDashboard.putNumber(keyMotorState_SetSpeed_FloatB, m_motorFloatB.get());
+  public void setIdleBreak() {
+    stop();
+    for (CANSparkMax motor : m_motors) {
+      motor.setIdleMode(IdleMode.kBrake);
+    }
   }
 
   @Override
   public void periodic() {
-    _logState();
+    _check();
   }
 
   @Override
   public void initDefaultCommand() {
+    setDefaultCommand(new Command_DriveManually());
   }
 
   public static Subsystem_DriveTrain create() {
@@ -200,5 +172,118 @@ public class Subsystem_DriveTrain extends Subsystem {
     CANSparkMax motorFloatB = new CANSparkMax(RobotMap.driveMotor_Float_B, MotorType.kBrushless);
 
     return new Subsystem_DriveTrain(motorFixedA, motorFixedB, motorMiddleA, motorMiddleB, motorFloatA, motorFloatB);
+  }
+
+  // ===============================================================================================
+  // We implement our own tank drive code below so we can take advantage of
+  // CANSparxMax features. Also by way of attribution we stole librally from
+  // WPILIBJ to make sure
+  // we had all of the safety features available. Wouldn't want the robot running
+  // accross the
+  // field at full speed uncontrolled! :)
+  // ===============================================================================================
+  /**
+   * Tank Drive
+   * 
+   * @param leftSpeed    is a value in the interval [-1,1]
+   * @param rightSpeed   is a value in the interval [-1,1]
+   * @param squareInputs is a boolean indicating whether or not to square inputs
+   *                     to reduce sensitivity to low values.
+   */
+  private void _tankDrive(double leftSpeed, double rightSpeed, boolean squareInputs) {
+
+    leftSpeed = _limit(leftSpeed);
+    leftSpeed = _applyDeadband(leftSpeed, m_deadband);
+
+    rightSpeed = _limit(rightSpeed);
+    rightSpeed = _applyDeadband(rightSpeed, m_deadband);
+
+    // Square the inputs (while preserving the sign) to increase fine control
+    // while permitting full power.
+    if (squareInputs) {
+      leftSpeed = Math.copySign(leftSpeed * leftSpeed, leftSpeed);
+      rightSpeed = Math.copySign(rightSpeed * rightSpeed, rightSpeed);
+    }
+
+    for (int i = 0; i < 3; i++) {
+      m_motorsSideA[i].set(leftSpeed);
+      m_motorsSideB[i].set(rightSpeed);
+    }
+
+    _feed();
+  }
+
+  /**
+   * Limit motor values to the -1.0 to +1.0 range.
+   */
+  private double _limit(double value) {
+    if (value > 1.0) {
+      return 1.0;
+    }
+    if (value < -1.0) {
+      return -1.0;
+    }
+    return value;
+  }
+
+  /**
+   * Returns 0.0 if the given value is within the specified range around zero. The
+   * remaining range between the deadband and 1.0 is scaled from 0.0 to 1.0.
+   *
+   * @param value    value to clip
+   * @param deadband range around zero
+   */
+  protected double _applyDeadband(double value, double deadband) {
+    if (Math.abs(value) > deadband) {
+      if (value > 0.0) {
+        return (value - deadband) / (1.0 - deadband);
+      } else {
+        return (value + deadband) / (1.0 - deadband);
+      }
+    } else {
+      return 0.0;
+    }
+  }
+
+  //
+  // Motor safety methods.
+  //
+
+  /**
+   * Feed the motor safety object.
+   *
+   * <p>
+   * Resets the timer on this object that is used to do the timeouts.
+   */
+  public void _feed() {
+    synchronized (m_thisMutex) {
+      m_stopTime = RobotController.getFPGATime() + m_expiration;
+    }
+  }
+
+  /**
+   * Check if this motor has exceeded its timeout. This method is called
+   * periodically to determine if this motor has exceeded its timeout value. If it
+   * has, the stop method is called, and the motor is shut down until its value is
+   * updated again.
+   */
+  private void _check() {
+    long stopTime;
+
+    synchronized (m_thisMutex) {
+      stopTime = m_stopTime;
+    }
+
+    if (RobotState.isDisabled() || RobotState.isTest()) {
+      return;
+    }
+
+    if (stopTime < RobotController.getFPGATime()) {
+      DriverStation.reportError("Drive Train... Output not updated often enough.", false);
+
+      for (CANSparkMax motor : m_motors) {
+        motor.stopMotor();
+      }
+    }
   }
 }

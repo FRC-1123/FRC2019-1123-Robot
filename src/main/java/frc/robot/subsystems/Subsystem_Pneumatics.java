@@ -8,7 +8,9 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Logger;
 import frc.robot.RobotMap;
@@ -128,50 +130,24 @@ public class Subsystem_Pneumatics extends Subsystem {
     this.m_floatUp.set(false);
   }
 
-  public void extendBothAxles() {
-    log.debug("***extendBothAxles");
-    extendAxle(AXLE.FLOAT);
-    extendAxle(AXLE.MIDDLE);
-  }
-
-  public void retractBothAxles() {
-    log.debug("***retractBothAxles");
-    retractAxle(AXLE.MIDDLE);
-    retractAxle(AXLE.FLOAT);
-  }
-
-  public void extendAxle(AXLE axle) {
-    log.debug("***extendAxle(" + axle.name() + ")");
-    if (axle == AXLE.FLOAT) {
-      this.m_floatUp.set(false);
-      this.m_floatDown.set(true);
-    } else {
-      this.m_middleUp.set(false);
-      this.m_middleDown.set(true);
-    }
-  }
-
-  public void retractAxle(AXLE axle) {
-    log.debug("***retractAxle(" + axle.name() + ")");
-    if (axle == AXLE.FLOAT) {
-      this.m_floatDown.set(false);
-      this.m_floatUp.set(true);
-    } else {
-      this.m_middleDown.set(false);
-      this.m_middleUp.set(true);
-    }
-  }
-
-  public void moveMassForward() {
-    log.debug("***moveMassForward");
-    this.m_massBack.set(false);
+  public void moveMassForwardStart() {
+    log.debug("***moveMassForwardStart");
     this.m_massForward.set(true);
   }
 
-  public void moveMassBack() {
-    log.debug("***movMassBack");
+  public void moveMassForwardStop() {
+    log.debug("***moveMassForwardStop");
     this.m_massForward.set(false);
+  }
+
+  public void moveMassBackStart() {
+    log.debug("***movMassBackStart");
     this.m_massBack.set(true);
+  }
+
+  public void moveMassBackStop() {
+    log.debug("***movMassBackStop");
+    this.m_massBack.set(false);
   }
 
   public void startCompressor() {

@@ -10,13 +10,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Logger;
 import frc.robot.Robot;
-import frc.robot.subsystems.Subsystem_Pneumatics.AXLE;
 
-public class Command_RetractFloatAxle extends Command {
-  private static final Logger log = new Logger(Command_RetractFloatAxle.class);
+public class Command_MoveMassBackStop extends Command {
+  private static final Logger log = new Logger(Command_MoveMassBackStop.class);
   private boolean isFinished;
 
-  public Command_RetractFloatAxle() {
+  public Command_MoveMassBackStop() {
     requires(Robot.m_subsystemPneumatics);
     log.debug("***constructor");
   }
@@ -24,15 +23,15 @@ public class Command_RetractFloatAxle extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    this.isFinished = false;
     log.debug("***initialize");
+    this.isFinished = false;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
     log.debug("***execute");
-    Robot.m_subsystemPneumatics.retractAxle(AXLE.FLOAT);
+    Robot.m_subsystemPneumatics.moveMassBackStop();
     this.isFinished = true;
   }
 

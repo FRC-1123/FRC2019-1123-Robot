@@ -11,12 +11,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Logger;
 import frc.robot.Robot;
 
-public class Command_MassMoveForward extends Command {
-  private static final Logger log = new Logger(Command_MassMoveForward.class);
-  private boolean isFinished;
-
-  public Command_MassMoveForward() {
-    requires(Robot.m_subsystemPneumatics);
+public class Command_DriveManually extends Command {
+  private static final Logger log = new Logger(Command_DriveManually.class);
+  public Command_DriveManually() {
+    requires(Robot.m_subsystemDriveTrain);
     log.debug("***constructor");
   }
 
@@ -24,21 +22,18 @@ public class Command_MassMoveForward extends Command {
   @Override
   protected void initialize() {
     log.debug("***initialize");
-    isFinished = false;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    log.debug("***exucute");
-    Robot.m_subsystemPneumatics.moveMassForward();
-    isFinished = true;
+    Robot.m_subsystemDriveTrain.drive(Robot.m_oi.getLeftStickY(), Robot.m_oi.getRightStickY());
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return isFinished;
+    return false;
   }
 
   // Called once after isFinished returns true
@@ -52,5 +47,7 @@ public class Command_MassMoveForward extends Command {
   @Override
   protected void interrupted() {
     log.debug("***interrupted");
+    Robot.m_subsystemDriveTrain.stop();
   }
+
 }

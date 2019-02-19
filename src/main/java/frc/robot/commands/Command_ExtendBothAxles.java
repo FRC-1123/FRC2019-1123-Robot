@@ -7,56 +7,35 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Logger;
-import frc.robot.Robot;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class Command_ExtendBothAxles extends Command {
-  private static final Logger log = new Logger(Command_ExtendBothAxles.class);
-  private boolean isFinished = false;
-
+public class Command_ExtendBothAxles extends CommandGroup {
+  /**
+   * Add your docs here.
+   */
   public Command_ExtendBothAxles() {
-    requires(Robot.m_subsystemPneumatics);
-    log.debug("***constructor");
-  }
+    // Add Commands here:
+    // e.g. addSequential(new Command1());
+    // addSequential(new Command2());
+    // these will run in order.
 
-  // Called just before this Command runs the first time
-  @Override
-  protected void initialize() {
-    log.debug("***initialize");
-    this.isFinished = false;
-  }
+    // To run multiple commands at the same time,
+    // use addParallel()
+    // e.g. addParallel(new Command1());
+    // addSequential(new Command2());
+    // Command1 and Command2 will run in parallel.
 
-  // Called repeatedly when this Command is scheduled to run
-  @Override
-  protected void execute() {
-    log.debug("***execute");
-    Robot.m_subsystemPneumatics.extendBothAxles();
-    this.isFinished = true;
-  }
+    // A command group will require all of the subsystems that each member
+    // would require.
+    // e.g. if Command1 requires chassis, and Command2 requires arm,
+    // a CommandGroup containing them would require both the chassis and the
+    // arm.
 
-  @Override
-  public synchronized void start() {
-    log.debug("***start");
-    super.start();
-  }
-
-  // Make this return true when this Command no longer needs to run execute()
-  @Override
-  protected boolean isFinished() {
-    return this.isFinished;
-  }
-
-  // Called once after isFinished returns true
-  @Override
-  protected void end() {
-    log.debug("***end");
-  }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
-    log.debug("***interrupted");
+    addSequential(new Command_ExtendMiddleAxleStart());
+    addSequential(new Command_Wait(1000));
+    addSequential(new Command_ExtendFloatAxleStart());
+    addSequential(new Command_Wait(3000));
+    addSequential(new Command_ExtendMiddleAxleStop());
+    addSequential(new Command_ExtendFloatAxleStop());
   }
 }

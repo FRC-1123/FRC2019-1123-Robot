@@ -10,16 +10,18 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.Command_DriveManually;
 import frc.robot.commands.Command_ExtendBothAxlesStart;
 import frc.robot.commands.Command_ExtendBothAxlesStop;
 import frc.robot.commands.Command_ExtendFloatAxleStart;
 import frc.robot.commands.Command_ExtendFloatAxleStop;
 import frc.robot.commands.Command_ExtendMiddleAxleStart;
 import frc.robot.commands.Command_ExtendMiddleAxleStop;
-import frc.robot.commands.Command_MassMoveBack;
-import frc.robot.commands.Command_MassMoveForward;
+import frc.robot.commands.Command_MoveMassBackStart;
+import frc.robot.commands.Command_MoveMassBackStop;
+import frc.robot.commands.Command_MoveMassForwardStart;
+import frc.robot.commands.Command_MoveMassForwardStop;
 import frc.robot.commands.Command_RetractBothAxlesStart;
 import frc.robot.commands.Command_RetractBothAxlesStop;
 import frc.robot.commands.Command_RetractFloatAxleStart;
@@ -40,20 +42,22 @@ import frc.robot.subsystems.Subsystem_Pneumatics;
  */
 public class Robot extends TimedRobot {
   private static final Logger log = new Logger(Robot.class);
-
-  // public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
-  public static Subsystem_Pneumatics m_subsystemPneumatics = Subsystem_Pneumatics.create();
-  // public static Subsystem_DriveTrain m_subsystemDriveTrain = Subsystem_DriveTrain.create();
+  //
+  // Initialize when Robot object is constructed.
+  //
   public static OI m_oi = OI.create();
 
-  Command m_autonomousCommand;
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
+  //
+  // Initialize when robotInit is called.
+  //
+  public static Subsystem_Pneumatics m_subsystemPneumatics = null;
+  public static Subsystem_DriveTrain m_subsystemDriveTrain = null;
 
-  // Command_ExtendBothAxles extendBothAxles = new Command_ExtendBothAxles();
-  // Command_RetractBothAxles retractBothAxles = new Command_RetractBothAxles();
-  // Command_RetractMiddleAxle retractMiddleAxle = new
-  // Command_RetractMiddleAxle();
-  // Command_RetractFloatAxle retractFloatAxle = new Command_RetractFloatAxle();
+  //
+  // Autonoumous Command
+  //
+  Command m_autonomousCommand = new Command_DriveManually();
+
   Command_ExtendBothAxlesStart extendBothAxlesStart = new Command_ExtendBothAxlesStart();
   Command_ExtendBothAxlesStop extendBothAxlesStop = new Command_ExtendBothAxlesStop();
   Command_RetractBothAxlesStart retractBothAxlesStart = new Command_RetractBothAxlesStart();
@@ -66,9 +70,11 @@ public class Robot extends TimedRobot {
   Command_ExtendMiddleAxleStop extendMiddleAxleStop = new Command_ExtendMiddleAxleStop();
   Command_ExtendFloatAxleStart extendFloatAxleStart = new Command_ExtendFloatAxleStart();
   Command_ExtendFloatAxleStop extendFloatAxleStop = new Command_ExtendFloatAxleStop();
+  Command_MoveMassForwardStart moveMassForwardStart = new Command_MoveMassForwardStart();
+  Command_MoveMassForwardStop moveMassForwardStop = new Command_MoveMassForwardStop();
+  Command_MoveMassBackStart moveMassBackStart = new Command_MoveMassBackStart();
+  Command_MoveMassBackStop moveMassBackStop = new Command_MoveMassBackStop();
 
-  Command_MassMoveForward moveMassForward = new Command_MassMoveForward();
-  Command_MassMoveBack moveMassBack = new Command_MassMoveBack();
   Command_StartCompressor startCompressor = new Command_StartCompressor();
   Command_StopCompressor stopCompressor = new Command_StopCompressor();
 
@@ -80,10 +86,22 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     log.debug("Begin robotInit");
 
-    // SmartDashboard.putData("Extend Both Axles", extendBothAxles);
-    // SmartDashboard.putData("Retract Both Axles", retractBothAxles);
-    // SmartDashboard.putData("Retract Middle Axle", retractMiddleAxle);
-    // SmartDashboard.putData("Retract Float Axle", retractFloatAxle);
+    //
+    // Initialize subsystems and add to dashboard.
+    //
+    m_subsystemPneumatics = Subsystem_Pneumatics.create();
+    m_subsystemDriveTrain = Subsystem_DriveTrain.create();
+
+    //
+    // Put the subsystems onto the dashboard.
+    //
+    SmartDashboard.putData(m_subsystemDriveTrain);
+    SmartDashboard.putData(m_subsystemPneumatics);
+  
+
+    //
+    // Test dashboard widgets.
+    //
     SmartDashboard.putData("Extend Both Axles Start", extendBothAxlesStart);
     SmartDashboard.putData("Extend Both Axles Stop", extendBothAxlesStop);
     SmartDashboard.putData("Retract Both Axles Start", retractBothAxlesStart);
@@ -97,8 +115,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Extend Float Axle Start", extendFloatAxleStart);
     SmartDashboard.putData("Extend Float Axle Stop", extendFloatAxleStop);
 
-    SmartDashboard.putData("Move Mass Forward", moveMassForward);
-    SmartDashboard.putData("Move Mass Back", moveMassBack);
+    SmartDashboard.putData("Move Mass Forward Start", moveMassForwardStart);
+    SmartDashboard.putData("Move Mass Forward Stop", moveMassForwardStop);
+    SmartDashboard.putData("Move Mass Back Start", moveMassBackStart);
+    SmartDashboard.putData("Move Mass Back Stop", moveMassBackStop);
+
     SmartDashboard.putData("Start Compressor", startCompressor);
     SmartDashboard.putData("Stop Compressor", stopCompressor);
 
@@ -127,6 +148,11 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     log.debug("disabledInit");
+    
+    //
+    // Make sure we don't have any commands sitting in the scheduler that will execute when the robot is enabled.
+    //
+    Scheduler.getInstance().removeAll();
   }
 
   @Override
@@ -150,6 +176,15 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     log.debug("autonomouseInit");
+    //
+    // Make sure we don't have any commands sitting in the scheduler that will execute.
+    //
+    Scheduler.getInstance().removeAll();
+
+    //
+    // Schedule the autonomous command.
+    //
+    this.m_autonomousCommand.start();
   }
 
   /**
@@ -164,6 +199,16 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     log.debug("teleopInit");
+    
+    //
+    // Cancel the autonomous command.
+    //
+    this.m_autonomousCommand.cancel();
+
+    //
+    // Make sure we don't have any commands sitting in the scheduler that will execute.
+    //
+    Scheduler.getInstance().removeAll();
   }
 
   /**
