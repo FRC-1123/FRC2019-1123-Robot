@@ -56,27 +56,7 @@ public class Robot extends TimedRobot {
   //
   // Autonoumous Command
   //
-  Command m_autonomousCommand = new Command_DriveManually();
-
-  Command_ExtendBothAxlesStart extendBothAxlesStart = new Command_ExtendBothAxlesStart();
-  Command_ExtendBothAxlesStop extendBothAxlesStop = new Command_ExtendBothAxlesStop();
-  Command_RetractBothAxlesStart retractBothAxlesStart = new Command_RetractBothAxlesStart();
-  Command_RetractBothAxlesStop retractBothAxlesStop = new Command_RetractBothAxlesStop();
-  Command_RetractMiddleAxleStart retractMiddleAxleStart = new Command_RetractMiddleAxleStart();
-  Command_RetractMiddleAxleStop retractMiddleAxleStop = new Command_RetractMiddleAxleStop();
-  Command_RetractFloatAxleStart retractFloatAxleStart = new Command_RetractFloatAxleStart();
-  Command_RetractFloatAxleStop retractFloatAxleStop = new Command_RetractFloatAxleStop();
-  Command_ExtendMiddleAxleStart extendMiddleAxleStart = new Command_ExtendMiddleAxleStart();
-  Command_ExtendMiddleAxleStop extendMiddleAxleStop = new Command_ExtendMiddleAxleStop();
-  Command_ExtendFloatAxleStart extendFloatAxleStart = new Command_ExtendFloatAxleStart();
-  Command_ExtendFloatAxleStop extendFloatAxleStop = new Command_ExtendFloatAxleStop();
-  Command_MoveMassForwardStart moveMassForwardStart = new Command_MoveMassForwardStart();
-  Command_MoveMassForwardStop moveMassForwardStop = new Command_MoveMassForwardStop();
-  Command_MoveMassBackStart moveMassBackStart = new Command_MoveMassBackStart();
-  Command_MoveMassBackStop moveMassBackStop = new Command_MoveMassBackStop();
-
-  Command_StartCompressor startCompressor = new Command_StartCompressor();
-  Command_StopCompressor stopCompressor = new Command_StopCompressor();
+  Command m_autonomousCommand = null;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -92,6 +72,34 @@ public class Robot extends TimedRobot {
     m_subsystemPneumatics = Subsystem_Pneumatics.create();
     m_subsystemDriveTrain = Subsystem_DriveTrain.create();
 
+    //
+    // Init autonomous command.
+    //
+    this.m_autonomousCommand = new Command_DriveManually();
+
+    //
+    // Init commands for testing.
+    //
+    Command_ExtendBothAxlesStart extendBothAxlesStart = new Command_ExtendBothAxlesStart();
+    Command_ExtendBothAxlesStop extendBothAxlesStop = new Command_ExtendBothAxlesStop();
+    Command_RetractBothAxlesStart retractBothAxlesStart = new Command_RetractBothAxlesStart();
+    Command_RetractBothAxlesStop retractBothAxlesStop = new Command_RetractBothAxlesStop();
+    Command_RetractMiddleAxleStart retractMiddleAxleStart = new Command_RetractMiddleAxleStart();
+    Command_RetractMiddleAxleStop retractMiddleAxleStop = new Command_RetractMiddleAxleStop();
+    Command_RetractFloatAxleStart retractFloatAxleStart = new Command_RetractFloatAxleStart();
+    Command_RetractFloatAxleStop retractFloatAxleStop = new Command_RetractFloatAxleStop();
+    Command_ExtendMiddleAxleStart extendMiddleAxleStart = new Command_ExtendMiddleAxleStart();
+    Command_ExtendMiddleAxleStop extendMiddleAxleStop = new Command_ExtendMiddleAxleStop();
+    Command_ExtendFloatAxleStart extendFloatAxleStart = new Command_ExtendFloatAxleStart();
+    Command_ExtendFloatAxleStop extendFloatAxleStop = new Command_ExtendFloatAxleStop();
+    Command_MoveMassForwardStart moveMassForwardStart = new Command_MoveMassForwardStart();
+    Command_MoveMassForwardStop moveMassForwardStop = new Command_MoveMassForwardStop();
+    Command_MoveMassBackStart moveMassBackStart = new Command_MoveMassBackStart();
+    Command_MoveMassBackStop moveMassBackStop = new Command_MoveMassBackStop();
+  
+    Command_StartCompressor startCompressor = new Command_StartCompressor();
+    Command_StopCompressor stopCompressor = new Command_StopCompressor();
+  
     //
     // Put the subsystems onto the dashboard.
     //

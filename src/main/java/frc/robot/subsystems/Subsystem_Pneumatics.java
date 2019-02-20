@@ -8,9 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Logger;
 import frc.robot.RobotMap;
@@ -29,7 +27,6 @@ public class Subsystem_Pneumatics extends Subsystem {
     public Solenoid m_massForward;
     public Solenoid m_massBack;
     public Compressor m_compressor;
-
   }
 
   public enum AXLE {
