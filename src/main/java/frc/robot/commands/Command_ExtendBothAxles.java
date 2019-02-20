@@ -32,10 +32,6 @@ public class Command_ExtendBothAxles extends CommandGroup {
     // arm.
 
     addSequential(new Command_ExtendMiddleAxleStart());
-    addSequential(new Command_Wait(1000));
     addSequential(new Command_ExtendFloatAxleStart());
-    addSequential(new Command_Wait(3000));
-    addSequential(new Command_ExtendMiddleAxleStop());
-    addSequential(new Command_ExtendFloatAxleStop());
   }
 }

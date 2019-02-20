@@ -78,6 +78,11 @@ public class Subsystem_Pneumatics extends Subsystem {
     this.m_middleDown.set(false);
   }
 
+  public boolean isExtendMiddleAxleOn() {
+    log.debug("***isExtendMiddleAxleOn");
+    return this.m_middleDown.get();
+  }
+
   public void extendMiddleAxleStart() {
     log.debug("***extendMiddleAxleStart");
     this.m_middleDown.set(true);
@@ -86,6 +91,11 @@ public class Subsystem_Pneumatics extends Subsystem {
   public void extendMiddleAxleStop() {
     log.debug("***extendMiddleAxleStop");
     this.m_middleDown.set(false);
+  }
+
+  public boolean isExtendFloatAxleOn() {
+    log.debug("***isExtendFloatAxleOn");
+    return this.m_floatDown.get();
   }
 
   public void extendFloatAxleStart() {
@@ -110,6 +120,11 @@ public class Subsystem_Pneumatics extends Subsystem {
     this.m_middleUp.set(false);
   }
 
+  public boolean isRetractMiddleAxleOn() {
+    log.debug("***isRetractMiddleAxleOn");
+    return this.m_middleUp.get();
+  }
+
   public void retractMiddleAxleStart() {
     log.debug("***retractMiddleAxlesStart");
     this.m_middleUp.set(true);
@@ -118,6 +133,11 @@ public class Subsystem_Pneumatics extends Subsystem {
   public void retractMiddleAxleStop() {
     log.debug("***retractMiddleAxlesStop");
     this.m_middleUp.set(false);
+  }
+
+  public boolean isRetractFloatAxleOn() {
+    log.debug("***isRetractFloatAxleOn");
+    return this.m_floatUp.get();  
   }
 
   public void retractFloatAxleStart() {
