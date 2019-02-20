@@ -33,14 +33,14 @@ public class RobotMap {
   // Middle motors are mounted with the drive spendle pointing towards the inside of the robot.
   //
   public static final int driveMotor_Fixed_A = 11;
-  public static final int driveMotor_Middle_A = 13;
-  public static final int driveMotor_Float_A = 15;
+  public static final int driveMotor_Middle_A = 15;
+  public static final int driveMotor_Float_A = 13;
   public static final int driveMotor_Fixed_B = 12;
   public static final int driveMotor_Middle_B = 14;
   public static final int driveMotor_Float_B = 16;
 
-  public static final boolean invertedFlag_Side_A = false;
-  public static final boolean invertedFlag_Side_B = true;
+  public static final boolean invertedFlag_Side_A = true;
+  public static final boolean invertedFlag_Side_B = false;
 
   //
   // Wheel radius for drive train.
