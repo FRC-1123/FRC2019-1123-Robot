@@ -10,9 +10,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Command_ExtendBothAxles;
-import frc.robot.commands.Command_RetractBothAxles;
-import frc.robot.commands.Command_RetractFloatAxle;
-import frc.robot.commands.Command_RetractMiddleAxle;
 import edu.wpi.first.wpilibj.XboxController;
 
 /**
