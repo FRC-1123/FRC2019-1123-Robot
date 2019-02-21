@@ -7,13 +7,12 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Logger;
 import frc.robot.RobotMap;
@@ -25,9 +24,36 @@ import frc.robot.commands.Command_DriveManually;
  * correct.
  */
 public class Subsystem_DriveTrain extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
   private static final String subsystemName = "Drive Train";
+
+  private static final double wheelCircumference = Math.PI * 6.0d;
+  private static final double axleToMotorSpinRatio = 1.0d / 25.0d;
+  private static final double motorSingleRotationDistance = wheelCircumference * axleToMotorSpinRatio;
+
+  /**
+   * The {@link MotorSafety} object is reference in the
+   * {@link edu.wpi.first.wpilibj.DriverStation DriverStation}. An independent
+   * thread is started by the {@link edu.wpi.first.wpilibj.DriverStation
+   * DriverStation} object when it is instantiated at Robot creation time. This
+   * thread looks for driver station input as well as calls {@link MotorSafety}
+   * methods to make sure that we don't have a runaway robot.
+   */
+  private class DriveTrainSafety extends MotorSafety {
+    @Override
+    public void stopMotor() {
+      m_logger.notice("Drive Train Safety is stopping motors.");
+      for (CANSparkMax motor : m_motors) {
+        motor.stopMotor();
+      }
+    }
+
+    @Override
+    public String getDescription() {
+      return subsystemName;
+    }
+  }
+
+  private DriveTrainSafety m_motorSafety;
 
   //
   // Drive train motors.
@@ -42,6 +68,20 @@ public class Subsystem_DriveTrain extends Subsystem {
   private final CANSparkMax[] m_motorsSideA;
   private final CANSparkMax[] m_motorsSideB;
 
+  //
+  // Drive train motor encoders.
+  //
+  CANEncoder m_motorFixedAEncoder;
+  CANEncoder m_motorFixedBEncoder;
+  CANEncoder m_motorMiddleAEncoder;
+  CANEncoder m_motorMiddleBEncoder;
+  CANEncoder m_motorFloatAEncoder;
+  CANEncoder m_motorFloatBEncoder;
+  CANEncoder[] m_motorEncoders;
+
+  //
+  // Dead band and max output values for motor control.
+  //
   public static final double kDefaultDeadband = 0.02;
   public static final double kDefaultMaxOutput = 1.0;
 
@@ -53,21 +93,15 @@ public class Subsystem_DriveTrain extends Subsystem {
   //
   private final Logger m_logger;
 
-  //
-  // Motor safety members
-  //
-  private static final long kDefaultSafetyExpiration = 100;
-
-  private long m_expiration = kDefaultSafetyExpiration;
-  private long m_stopTime = RobotController.getFPGATime();
-  private final Object m_thisMutex = new Object();
-
   public Subsystem_DriveTrain(CANSparkMax motorFixedA, CANSparkMax motorFixedB, CANSparkMax motorMiddleA,
       CANSparkMax motorMiddleB, CANSparkMax motorFloatA, CANSparkMax motorFloatB) {
     super(subsystemName);
 
     this.m_logger = new Logger(Subsystem_DriveTrain.class);
 
+    //
+    // Setup drive train motors.
+    //
     this.m_motors = new CANSparkMax[6];
     this.m_motorFixedA = motorFixedA;
     this.m_motors[0] = motorFixedA;
@@ -108,9 +142,22 @@ public class Subsystem_DriveTrain extends Subsystem {
     m_motorsSideB[2] = this.m_motorFloatB;
 
     //
-    // Use speed controller groups to create a differential drive.
+    // Get motor encoders.
     //
-    m_logger.debug("Creating Differential Drive.");
+    m_motorEncoders = new CANEncoder[6];
+    m_motorFixedAEncoder = m_motorFixedA.getEncoder();
+    m_motorEncoders[0] = m_motorFixedAEncoder;
+    m_motorFixedBEncoder = m_motorFixedB.getEncoder();
+    m_motorEncoders[1] = m_motorFixedBEncoder;
+    m_motorMiddleAEncoder = m_motorMiddleA.getEncoder();
+    m_motorEncoders[2] = m_motorMiddleAEncoder;
+    m_motorMiddleBEncoder = m_motorMiddleB.getEncoder();
+    m_motorEncoders[3] = m_motorMiddleBEncoder;
+    m_motorFloatAEncoder = m_motorFloatA.getEncoder();
+    m_motorEncoders[4] = m_motorFixedAEncoder;
+    m_motorFloatBEncoder = m_motorFloatB.getEncoder();
+    m_motorEncoders[5] = m_motorFloatBEncoder;
+    resetMotorEncoders();
 
     //
     // Add sendables for Dashboard reporting.
@@ -122,10 +169,32 @@ public class Subsystem_DriveTrain extends Subsystem {
     addChild(this.m_motorMiddleB);
     addChild(this.m_motorFloatB);
 
+    //
+    // Instantiate motor safety object.
+    //
+    m_motorSafety = this.new DriveTrainSafety();
+    m_motorSafety.setExpiration(0.2);
+    m_motorSafety.setSafetyEnabled(true);
   }
 
   public void drive(double leftSpeed, double rightSpeed) {
     this._tankDrive(leftSpeed, rightSpeed, true);
+  }
+
+  public void driveStraightDistance(double distance, double speed) {
+    if (distance <= this.distanceTraveled()) {
+      drive(speed, speed);
+    } else {
+      stop();
+    }
+  }
+
+  public boolean isStopped() {
+    boolean rtn = true;
+    for (CANSparkMax motor : m_motors) {
+      rtn = rtn && (motor.get() == 0);
+    }
+    return rtn;
   }
 
   public void stop() {
@@ -133,6 +202,24 @@ public class Subsystem_DriveTrain extends Subsystem {
     for (CANSparkMax motor : m_motors) {
       motor.stopMotor();
     }
+    m_motorSafety.feed();
+  }
+
+  public void resetMotorEncoders() {
+    stop();
+    for (CANEncoder encoder : m_motorEncoders) {
+      encoder.setPosition(0);
+    }
+  }
+
+  public double distanceTraveled() {
+    double motorTurns = 0;
+    for (CANEncoder encoder : m_motorEncoders) {
+      double cturns = encoder.getPosition();
+      if (cturns > motorTurns)
+        motorTurns = cturns;
+    }
+    return motorTurns * motorSingleRotationDistance;
   }
 
   public void setIdleCost() {
@@ -147,11 +234,6 @@ public class Subsystem_DriveTrain extends Subsystem {
     for (CANSparkMax motor : m_motors) {
       motor.setIdleMode(IdleMode.kBrake);
     }
-  }
-
-  @Override
-  public void periodic() {
-    _check();
   }
 
   @Override
@@ -173,13 +255,25 @@ public class Subsystem_DriveTrain extends Subsystem {
     return new Subsystem_DriveTrain(motorFixedA, motorFixedB, motorMiddleA, motorMiddleB, motorFloatA, motorFloatB);
   }
 
+  /**
+   * Determine the number of motor turns necessary to move the robot wheels a
+   * number of linear inches.
+   * 
+   * @param inches the number of linear inches to move.
+   * @return the number of motor turns necessary to move the requested number of
+   *         inches.
+   */
+  private double _calcMotorTurnsFor(double inches) {
+    double motorRotatations = inches/motorSingleRotationDistance;
+    return motorRotatations;
+  }
+
   // ===============================================================================================
   // We implement our own tank drive code below so we can take advantage of
-  // CANSparxMax features. Also by way of attribution we stole librally from
-  // WPILIBJ to make sure
-  // we had all of the safety features available. Wouldn't want the robot running
-  // accross the
-  // field at full speed uncontrolled! :)
+  // CANSparxMax features and handle our physical motor configuration. Also by way
+  // of attribution we stole librally from WPILIBJ to make sure we had all of the
+  // safety features available. Wouldn't want the robot running accross the field
+  // at full speed uncontrolled! :)
   // ===============================================================================================
   /**
    * Tank Drive
@@ -197,8 +291,10 @@ public class Subsystem_DriveTrain extends Subsystem {
     rightSpeed = _limit(rightSpeed);
     rightSpeed = _applyDeadband(rightSpeed, m_deadband);
 
+    //
     // Square the inputs (while preserving the sign) to increase fine control
     // while permitting full power.
+    //
     if (squareInputs) {
       leftSpeed = Math.copySign(leftSpeed * leftSpeed, leftSpeed);
       rightSpeed = Math.copySign(rightSpeed * rightSpeed, rightSpeed);
@@ -209,7 +305,7 @@ public class Subsystem_DriveTrain extends Subsystem {
       m_motorsSideB[i].set(rightSpeed);
     }
 
-    _feed();
+    m_motorSafety.feed();
   }
 
   /**
@@ -244,45 +340,4 @@ public class Subsystem_DriveTrain extends Subsystem {
     }
   }
 
-  //
-  // Motor safety methods.
-  //
-
-  /**
-   * Feed the motor safety object.
-   *
-   * <p>
-   * Resets the timer on this object that is used to do the timeouts.
-   */
-  public void _feed() {
-    synchronized (m_thisMutex) {
-      m_stopTime = RobotController.getFPGATime() + m_expiration;
-    }
-  }
-
-  /**
-   * Check if this motor has exceeded its timeout. This method is called
-   * periodically to determine if this motor has exceeded its timeout value. If it
-   * has, the stop method is called, and the motor is shut down until its value is
-   * updated again.
-   */
-  private void _check() {
-    long stopTime;
-
-    synchronized (m_thisMutex) {
-      stopTime = m_stopTime;
-    }
-
-    if (RobotState.isDisabled() || RobotState.isTest()) {
-      return;
-    }
-
-    if (stopTime < RobotController.getFPGATime()) {
-      DriverStation.reportError("Drive Train... Output not updated often enough.", false);
-
-      for (CANSparkMax motor : m_motors) {
-        motor.stopMotor();
-      }
-    }
-  }
 }

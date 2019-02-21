@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.Command_ClimbGoldBox;
+import frc.robot.commands.Command_ClimbSilverBox;
 import frc.robot.commands.Command_DriveManually;
 import frc.robot.commands.Command_ExtendBothAxlesStart;
 import frc.robot.commands.Command_ExtendBothAxlesStop;
@@ -130,6 +132,9 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Start Compressor", startCompressor);
     SmartDashboard.putData("Stop Compressor", stopCompressor);
+
+    SmartDashboard.putData("Get on the Gold Box", new Command_ClimbGoldBox());
+    SmartDashboard.putData("Get on the Silver Box", new Command_ClimbSilverBox());
 
     log.debug("End robotInit");
   }

@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
-   * The {@link Command_Wait} will wait for a number of milliseconds before
-   * finishing. This is useful if you want a
-   * {@link edu.wpi.first.wpilibj.command.CommandGroup CommandGroup} to pause for
-   * a moment. Note that the wait is not exact in that it is within the period
-   * cycle of about 20ms.
+ * The {@link Command_Wait} will wait for a number of milliseconds before
+ * finishing. This is useful if you want a
+ * {@link edu.wpi.first.wpilibj.command.CommandGroup CommandGroup} to pause for
+ * a moment. Note that the wait is not exact in that it is within the period
+ * cycle of about 20ms.
  */
 public class Command_Wait extends Command {
   private long m_waitTime;
@@ -23,7 +23,7 @@ public class Command_Wait extends Command {
 
   /**
    * Instantiate the command giving the number of milliseconds to wait.
-   *  
+   * 
    * @param milliseconds
    */
   public Command_Wait(long milliseconds) {
@@ -42,14 +42,23 @@ public class Command_Wait extends Command {
     //
     // Get roboRIO FPGA time as our initialized time.
     //
-    m_initTime = RobotController.getFPGATime();
+    m_initTime = getFPGATimeMilliseconds();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    long currentTime = RobotController.getFPGATime();
+    long currentTime = getFPGATimeMilliseconds();
     long timeSinceInit = (m_initTime < 0) ? 0 : currentTime - m_initTime;
     return timeSinceInit >= m_waitTime;
+  }
+
+  /**
+   * Gets the FPGA time and converts it from microseconds to milliseconds.
+   * 
+   * @return FPGA time in milliseconds.
+   */
+  private long getFPGATimeMilliseconds() {
+    return RobotController.getFPGATime() / 1000;
   }
 }
