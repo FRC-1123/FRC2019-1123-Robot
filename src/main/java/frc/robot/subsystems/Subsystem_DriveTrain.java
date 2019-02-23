@@ -157,7 +157,7 @@ public class Subsystem_DriveTrain extends Subsystem {
     m_motorEncoders[4] = m_motorFixedAEncoder;
     m_motorFloatBEncoder = m_motorFloatB.getEncoder();
     m_motorEncoders[5] = m_motorFloatBEncoder;
-    resetMotorEncoders();
+    resetMotorDistance();
 
     //
     // Add sendables for Dashboard reporting.
@@ -182,7 +182,7 @@ public class Subsystem_DriveTrain extends Subsystem {
   }
 
   public void driveStraightDistance(double distance, double speed) {
-    if (distance <= this.distanceTraveled()) {
+    if (distance < this.distanceTraveled()) {
       drive(speed, speed);
     } else {
       stop();
@@ -205,7 +205,7 @@ public class Subsystem_DriveTrain extends Subsystem {
     m_motorSafety.feed();
   }
 
-  public void resetMotorEncoders() {
+  public void resetMotorDistance() {
     stop();
     for (CANEncoder encoder : m_motorEncoders) {
       encoder.setPosition(0);

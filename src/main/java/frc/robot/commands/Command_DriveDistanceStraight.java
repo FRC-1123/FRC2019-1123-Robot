@@ -34,7 +34,7 @@ public class Command_DriveDistanceStraight extends Command {
   @Override
   protected void initialize() {
     log.debug("***initialize");
-    Robot.m_subsystemDriveTrain.resetMotorEncoders();
+    Robot.m_subsystemDriveTrain.resetMotorDistance();
   }
 
   // Called repeatedly when this Command is scheduled to run

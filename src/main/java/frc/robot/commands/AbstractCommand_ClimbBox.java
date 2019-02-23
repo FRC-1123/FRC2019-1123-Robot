@@ -16,7 +16,9 @@ public abstract class AbstractCommand_ClimbBox extends CommandGroup {
   protected static final double fixedAxleToMiddleAxle = 8.0d;
   protected static final double middleAxleToFloatAxle = 8.0d;
   protected static final double pad = 1.5d;
-  protected static final double speed = 0.10;
+  protected static final double speed = 0.10d;
+  protected static final double backupDistance = 2.0d;
+  protected static final double backupSpeed = speed * -1.0d;
 
   /**
    * Add your docs here.
@@ -26,6 +28,7 @@ public abstract class AbstractCommand_ClimbBox extends CommandGroup {
 
   protected void climbTheBox(double waitTimeForBothAxleExtends, double waitTimeRetractMiddleAxle, double waitTimeRetractFloatAxle) {
     addSequential(new Command_StartCompressor());
+    addSequential(new Command_DriveDistanceStraight(backupDistance , backupSpeed));
     addSequential(new Command_ExtendBothAxlesStart());
     addSequential(new WaitCommand(waitTimeForBothAxleExtends));
     addSequential(new Command_StartCompressor());
