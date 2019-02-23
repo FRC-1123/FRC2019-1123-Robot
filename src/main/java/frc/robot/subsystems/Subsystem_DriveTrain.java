@@ -157,13 +157,6 @@ public class Subsystem_DriveTrain extends Subsystem {
     m_motorEncoders[4] = m_motorFixedAEncoder;
     m_motorFloatBEncoder = m_motorFloatB.getEncoder();
     m_motorEncoders[5] = m_motorFloatBEncoder;
-    resetMotorDistance();
-
-
-    //
-    // Set idle behavior to break.
-    //
-    this.setIdleBreak();
 
     //
     // Add sendables for Dashboard reporting.
@@ -181,6 +174,12 @@ public class Subsystem_DriveTrain extends Subsystem {
     m_motorSafety = this.new DriveTrainSafety();
     m_motorSafety.setExpiration(0.2);
     m_motorSafety.setSafetyEnabled(true);
+
+    //
+    // Set idle behavior to break and reset motor distance on the encoders.
+    //
+    setIdleBreak();
+    resetMotorDistance();
   }
 
   public void drive(double leftSpeed, double rightSpeed) {
