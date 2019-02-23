@@ -115,7 +115,6 @@ public class Subsystem_DriveTrain extends Subsystem {
     this.m_motors[4] = motorFloatA;
     this.m_motorFloatB = motorFloatB;
     this.m_motors[5] = motorFloatB;
-    this.setIdleBreak();
 
     //
     // Set the inverted flags on the motors individually
@@ -159,6 +158,12 @@ public class Subsystem_DriveTrain extends Subsystem {
     m_motorFloatBEncoder = m_motorFloatB.getEncoder();
     m_motorEncoders[5] = m_motorFloatBEncoder;
     resetMotorDistance();
+
+
+    //
+    // Set idle behavior to break.
+    //
+    this.setIdleBreak();
 
     //
     // Add sendables for Dashboard reporting.
