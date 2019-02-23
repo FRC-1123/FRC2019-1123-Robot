@@ -13,7 +13,6 @@ import frc.robot.Robot;
 
 public class Command_ExtendBothAxlesStop extends Command {
   private static final Logger log = new Logger(Command_ExtendBothAxlesStop.class);
-  private boolean isFinished;
 
   public Command_ExtendBothAxlesStop() {
     requires(Robot.m_subsystemPneumatics);
@@ -25,7 +24,6 @@ public class Command_ExtendBothAxlesStop extends Command {
   @Override
   protected void initialize() {
     log.debug("***initialize");
-    this.isFinished = false;
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -33,13 +31,12 @@ public class Command_ExtendBothAxlesStop extends Command {
   protected void execute() {
     log.debug("***execute");
     Robot.m_subsystemPneumatics.extendBothAxlesStop();
-    this.isFinished = true;
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return this.isFinished;
+    return true;
   }
 
   // Called once after isFinished returns true

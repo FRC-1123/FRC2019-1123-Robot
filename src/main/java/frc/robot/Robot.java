@@ -78,29 +78,6 @@ public class Robot extends TimedRobot {
     // Init autonomous command.
     //
     this.m_autonomousCommand = new Command_DriveManually();
-
-    //
-    // Init commands for testing.
-    //
-    Command_ExtendBothAxlesStart extendBothAxlesStart = new Command_ExtendBothAxlesStart();
-    Command_ExtendBothAxlesStop extendBothAxlesStop = new Command_ExtendBothAxlesStop();
-    Command_RetractBothAxlesStart retractBothAxlesStart = new Command_RetractBothAxlesStart();
-    Command_RetractBothAxlesStop retractBothAxlesStop = new Command_RetractBothAxlesStop();
-    Command_RetractMiddleAxleStart retractMiddleAxleStart = new Command_RetractMiddleAxleStart();
-    Command_RetractMiddleAxleStop retractMiddleAxleStop = new Command_RetractMiddleAxleStop();
-    Command_RetractFloatAxleStart retractFloatAxleStart = new Command_RetractFloatAxleStart();
-    Command_RetractFloatAxleStop retractFloatAxleStop = new Command_RetractFloatAxleStop();
-    Command_ExtendMiddleAxleStart extendMiddleAxleStart = new Command_ExtendMiddleAxleStart();
-    Command_ExtendMiddleAxleStop extendMiddleAxleStop = new Command_ExtendMiddleAxleStop();
-    Command_ExtendFloatAxleStart extendFloatAxleStart = new Command_ExtendFloatAxleStart();
-    Command_ExtendFloatAxleStop extendFloatAxleStop = new Command_ExtendFloatAxleStop();
-    Command_MoveMassForwardStart moveMassForwardStart = new Command_MoveMassForwardStart();
-    Command_MoveMassForwardStop moveMassForwardStop = new Command_MoveMassForwardStop();
-    Command_MoveMassBackStart moveMassBackStart = new Command_MoveMassBackStart();
-    Command_MoveMassBackStop moveMassBackStop = new Command_MoveMassBackStop();
-  
-    Command_StartCompressor startCompressor = new Command_StartCompressor();
-    Command_StopCompressor stopCompressor = new Command_StopCompressor();
   
     //
     // Put the subsystems onto the dashboard.
@@ -108,30 +85,29 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(m_subsystemDriveTrain);
     SmartDashboard.putData(m_subsystemPneumatics);
   
-
     //
     // Test dashboard widgets.
     //
-    SmartDashboard.putData("Extend Both Axles Start", extendBothAxlesStart);
-    SmartDashboard.putData("Extend Both Axles Stop", extendBothAxlesStop);
-    SmartDashboard.putData("Retract Both Axles Start", retractBothAxlesStart);
-    SmartDashboard.putData("Retract Both Axles Stop", retractBothAxlesStop);
-    SmartDashboard.putData("Retract Middle Axle Start", retractMiddleAxleStart);
-    SmartDashboard.putData("Retract Middle Axle Stop", retractMiddleAxleStop);
-    SmartDashboard.putData("Retract Float Axle Start", retractFloatAxleStart);
-    SmartDashboard.putData("Retract Float Axle Stop", retractFloatAxleStop);
-    SmartDashboard.putData("Extend Middle Axle Start", extendMiddleAxleStart);
-    SmartDashboard.putData("Extend Middle Axle Stop", extendMiddleAxleStop);
-    SmartDashboard.putData("Extend Float Axle Start", extendFloatAxleStart);
-    SmartDashboard.putData("Extend Float Axle Stop", extendFloatAxleStop);
+    SmartDashboard.putData("Extend Both Axles Start", new Command_ExtendBothAxlesStart());
+    SmartDashboard.putData("Extend Both Axles Stop", new Command_ExtendBothAxlesStop());
+    SmartDashboard.putData("Retract Both Axles Start", new Command_RetractBothAxlesStart());
+    SmartDashboard.putData("Retract Both Axles Stop", new Command_RetractBothAxlesStop());
+    SmartDashboard.putData("Retract Middle Axle Start", new Command_RetractMiddleAxleStart());
+    SmartDashboard.putData("Retract Middle Axle Stop", new Command_RetractMiddleAxleStop());
+    SmartDashboard.putData("Retract Float Axle Start", new Command_RetractFloatAxleStart());
+    SmartDashboard.putData("Retract Float Axle Stop", new Command_RetractFloatAxleStop());
+    SmartDashboard.putData("Extend Middle Axle Start", new Command_ExtendMiddleAxleStart());
+    SmartDashboard.putData("Extend Middle Axle Stop", new Command_ExtendMiddleAxleStop());
+    SmartDashboard.putData("Extend Float Axle Start", new Command_ExtendFloatAxleStart());
+    SmartDashboard.putData("Extend Float Axle Stop", new Command_ExtendFloatAxleStop());
 
-    SmartDashboard.putData("Move Mass Forward Start", moveMassForwardStart);
-    SmartDashboard.putData("Move Mass Forward Stop", moveMassForwardStop);
-    SmartDashboard.putData("Move Mass Back Start", moveMassBackStart);
-    SmartDashboard.putData("Move Mass Back Stop", moveMassBackStop);
+    SmartDashboard.putData("Move Mass Forward Start", new Command_MoveMassForwardStart());
+    SmartDashboard.putData("Move Mass Forward Stop", new Command_MoveMassForwardStop());
+    SmartDashboard.putData("Move Mass Back Start", new Command_MoveMassBackStart());
+    SmartDashboard.putData("Move Mass Back Stop", new Command_MoveMassBackStop());
 
-    SmartDashboard.putData("Start Compressor", startCompressor);
-    SmartDashboard.putData("Stop Compressor", stopCompressor);
+    SmartDashboard.putData("Start Compressor", new Command_StartCompressor());
+    SmartDashboard.putData("Stop Compressor", new Command_StopCompressor());
 
     SmartDashboard.putData("Get on the Gold Box", new Command_ClimbGoldBox());
     SmartDashboard.putData("Get on the Silver Box", new Command_ClimbSilverBox());
