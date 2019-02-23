@@ -30,20 +30,38 @@ public abstract class AbstractCommand_ClimbBox extends CommandGroup {
 
   protected void climbTheBox(double waitTimeForBothAxleExtends, double waitTimeRetractMiddleAxle, double waitTimeRetractFloatAxle) {
     addSequential(new Command_StartCompressor());
+    
     addSequential(new Command_DriveDistanceStraight(backupDistance , backupSpeed));
+    
+    addSequential(new Command_MoveMassBackStart());
+    addSequential(new WaitCommand(2));
+    addSequential(new Command_MoveMassBackStop());
+    
     addSequential(new Command_ExtendBothAxlesStart());
     addSequential(new WaitCommand(waitTimeForBothAxleExtends));
+    
     addSequential(new Command_StartCompressor());
+    
     addSequential(new Command_DriveDistanceStraight(bumperPad+frameToFixed+pad, speed));
+    
+    addSequential(new Command_MoveMassForwardStart());
+    addSequential(new WaitCommand(2));
+    addSequential(new Command_MoveMassForwardStop());
+   
     addSequential(new Command_ExtendMiddleAxleStop());
+  
     addSequential(new Command_RetractMiddleAxleStart());
     addSequential(new WaitCommand(waitTimeRetractMiddleAxle));
-    addSequential(new Command_StartCompressor());
     addSequential(new Command_RetractMiddleAxleStop());
+    
+    addSequential(new Command_StartCompressor());
+
     addSequential(new Command_DriveDistanceStraight(fixedAxleToMiddleAxle+pad, speed));
+
     addSequential(new Command_RetractFloatAxleStart());
     addSequential(new WaitCommand(waitTimeRetractFloatAxle));
     addSequential(new Command_RetractFloatAxleStop());
+
     addSequential(new Command_DriveDistanceStraight(middleAxleToFloatAxle+(pad*2),speed));
   }
 }
