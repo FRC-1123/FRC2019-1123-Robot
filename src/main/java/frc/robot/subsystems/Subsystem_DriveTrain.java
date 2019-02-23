@@ -28,7 +28,7 @@ public class Subsystem_DriveTrain extends Subsystem {
 
   private static final double wheelCircumference = Math.PI * 6.0d;
   private static final double axleToMotorSpinRatio = 1.0d / 25.0d;
-  private static final double motorSingleRotationDistance = wheelCircumference * axleToMotorSpinRatio;
+  private static final double inchesPerMotorRotation = wheelCircumference * axleToMotorSpinRatio;
 
   /**
    * The {@link MotorSafety} object is reference in the
@@ -115,6 +115,7 @@ public class Subsystem_DriveTrain extends Subsystem {
     this.m_motors[4] = motorFloatA;
     this.m_motorFloatB = motorFloatB;
     this.m_motors[5] = motorFloatB;
+    this.setIdleBreak();
 
     //
     // Set the inverted flags on the motors individually
@@ -219,7 +220,7 @@ public class Subsystem_DriveTrain extends Subsystem {
       if (cturns > motorTurns)
         motorTurns = cturns;
     }
-    return motorTurns * motorSingleRotationDistance;
+    return motorTurns * inchesPerMotorRotation;
   }
 
   public void setIdleCost() {
@@ -253,19 +254,6 @@ public class Subsystem_DriveTrain extends Subsystem {
     CANSparkMax motorFloatB = new CANSparkMax(RobotMap.driveMotor_Float_B, MotorType.kBrushless);
 
     return new Subsystem_DriveTrain(motorFixedA, motorFixedB, motorMiddleA, motorMiddleB, motorFloatA, motorFloatB);
-  }
-
-  /**
-   * Determine the number of motor turns necessary to move the robot wheels a
-   * number of linear inches.
-   * 
-   * @param inches the number of linear inches to move.
-   * @return the number of motor turns necessary to move the requested number of
-   *         inches.
-   */
-  private double _calcMotorTurnsFor(double inches) {
-    double motorRotatations = inches/motorSingleRotationDistance;
-    return motorRotatations;
   }
 
   // ===============================================================================================
