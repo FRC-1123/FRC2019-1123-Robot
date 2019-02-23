@@ -11,13 +11,15 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 
 public abstract class AbstractCommand_ClimbBox extends CommandGroup {
-  protected static final double bumperPad = 5.0d;
-  protected static final double frameToFixed = 5.0d;
-  protected static final double fixedAxleToMiddleAxle = 8.0d;
-  protected static final double middleAxleToFloatAxle = 8.0d;
+  protected static final double bumperPad = 3.0d + (3.0d/8.0d);
+  protected static final double frameToFixed = 3.5d;
+  protected static final double frameToMiddle = 10.0d;
+  protected static final double frameToFloat = 16.0d;
+  protected static final double fixedAxleToMiddleAxle = frameToMiddle - frameToFixed;
+  protected static final double middleAxleToFloatAxle = frameToFloat - frameToMiddle;
   protected static final double pad = 1.5d;
   protected static final double speed = 0.10d;
-  protected static final double backupDistance = 2.0d;
+  protected static final double backupDistance = 1.0d;
   protected static final double backupSpeed = speed * -1.0d;
 
   /**
@@ -42,7 +44,6 @@ public abstract class AbstractCommand_ClimbBox extends CommandGroup {
     addSequential(new Command_RetractFloatAxleStart());
     addSequential(new WaitCommand(waitTimeRetractFloatAxle));
     addSequential(new Command_RetractFloatAxleStop());
-    addSequential(new Command_StopCompressor());
     addSequential(new Command_DriveDistanceStraight(middleAxleToFloatAxle+(pad*2),speed));
   }
 }
