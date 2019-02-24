@@ -16,6 +16,7 @@ import frc.robot.commands.Command_ClimbSilverBox;
 import frc.robot.commands.Command_DriveManually;
 import frc.robot.commands.Command_ExtendBothAxlesStart;
 import frc.robot.commands.Command_ExtendBothAxlesStop;
+import frc.robot.commands.Command_ExtendBothAxlesWithDelays;
 import frc.robot.commands.Command_ExtendFloatAxleStart;
 import frc.robot.commands.Command_ExtendFloatAxleStop;
 import frc.robot.commands.Command_ExtendMiddleAxleStart;
@@ -88,6 +89,7 @@ public class Robot extends TimedRobot {
     //
     // Test dashboard widgets.
     //
+    SmartDashboard.putData("Extend Both With Delays", new Command_ExtendBothAxlesWithDelays());
     SmartDashboard.putData("Extend Both Axles Start", new Command_ExtendBothAxlesStart());
     SmartDashboard.putData("Extend Both Axles Stop", new Command_ExtendBothAxlesStop());
     SmartDashboard.putData("Retract Both Axles Start", new Command_RetractBothAxlesStart());
