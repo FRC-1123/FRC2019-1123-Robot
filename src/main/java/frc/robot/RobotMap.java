@@ -42,6 +42,9 @@ public class RobotMap {
   public static final boolean invertedFlag_Side_A = true;
   public static final boolean invertedFlag_Side_B = false;
 
+  public static final double driveRampRateNormal = 0.5d;
+  public static final double driveRampRateCreep = 1.0d;
+
   //
   // Wheel radius for drive train.
   //

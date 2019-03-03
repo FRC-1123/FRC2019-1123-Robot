@@ -7,9 +7,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Command_ClimbGoldBox;
 import frc.robot.commands.Command_ClimbSilverBox;
@@ -17,6 +19,8 @@ import frc.robot.commands.Command_DriveManually;
 import frc.robot.commands.Command_ExtendBothAxlesStart;
 import frc.robot.commands.Command_ExtendBothAxlesStop;
 import frc.robot.commands.Command_ExtendBothAxlesWithDelays;
+import frc.robot.commands.Command_ExtendBothAxlesWithRackStart;
+import frc.robot.commands.Command_ExtendBothAxlesWithRackStop;
 import frc.robot.commands.Command_ExtendFloatAxleStart;
 import frc.robot.commands.Command_ExtendFloatAxleStop;
 import frc.robot.commands.Command_ExtendMiddleAxleStart;
@@ -33,6 +37,7 @@ import frc.robot.commands.Command_RetractMiddleAxleStart;
 import frc.robot.commands.Command_RetractMiddleAxleStop;
 import frc.robot.commands.Command_StartCompressor;
 import frc.robot.commands.Command_StopCompressor;
+import frc.robot.commands.Command_ToggleOpenLoopRampRate;
 import frc.robot.subsystems.Subsystem_DriveTrain;
 import frc.robot.subsystems.Subsystem_Pneumatics;
 
@@ -45,6 +50,8 @@ import frc.robot.subsystems.Subsystem_Pneumatics;
  */
 public class Robot extends TimedRobot {
   private static final Logger log = new Logger(Robot.class);
+  public static final Accelerometer m_accelerometer = new BuiltInAccelerometer();
+  
   //
   // Initialize when Robot object is constructed.
   //
@@ -79,6 +86,11 @@ public class Robot extends TimedRobot {
     // Init autonomous command.
     //
     this.m_autonomousCommand = new Command_DriveManually();
+
+    //
+    // Init driver control button commands
+    //
+    m_oi.getBumperRight().whenPressed(new Command_ToggleOpenLoopRampRate());
   
     //
     // Put the subsystems onto the dashboard.
@@ -89,9 +101,11 @@ public class Robot extends TimedRobot {
     //
     // Test dashboard widgets.
     //
-    SmartDashboard.putData("Extend Both With Delays", new Command_ExtendBothAxlesWithDelays());
-    SmartDashboard.putData("Extend Both Axles Start", new Command_ExtendBothAxlesStart());
-    SmartDashboard.putData("Extend Both Axles Stop", new Command_ExtendBothAxlesStop());
+    // SmartDashboard.putData("Extend Both With Delays", new Command_ExtendBothAxlesWithDelays());
+    // SmartDashboard.putData("Extend Both Axles Start", new Command_ExtendBothAxlesStart());
+    // SmartDashboard.putData("Extend Both Axles Stop", new Command_ExtendBothAxlesStop());
+    SmartDashboard.putData("Extend Both Axles Start", new Command_ExtendBothAxlesWithRackStart());
+    SmartDashboard.putData("Extend Both Axles Stop", new Command_ExtendBothAxlesWithRackStop());
     SmartDashboard.putData("Retract Both Axles Start", new Command_RetractBothAxlesStart());
     SmartDashboard.putData("Retract Both Axles Stop", new Command_RetractBothAxlesStop());
     SmartDashboard.putData("Retract Middle Axle Start", new Command_RetractMiddleAxleStart());
@@ -112,7 +126,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Stop Compressor", new Command_StopCompressor());
 
     SmartDashboard.putData("Get on the Gold Box", new Command_ClimbGoldBox());
-    SmartDashboard.putData("Get on the Silver Box", new Command_ClimbSilverBox());
+    // SmartDashboard.putData("Get on the Silver Box", new Command_ClimbSilverBox());
 
     log.debug("End robotInit");
   }
@@ -129,6 +143,13 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // log.debug("robotPeriodic");
+    double x = m_accelerometer.getX();
+    double y = m_accelerometer.getY();
+    double z = m_accelerometer.getZ();
+    SmartDashboard.putNumber("Accelerometer X = ", x);
+    SmartDashboard.putNumber("Accelerometer Y = ", y);
+    SmartDashboard.putNumber("Accelerometer Z = ", z);
+    SmartDashboard.putNumber("Ramp Rate = ", m_subsystemDriveTrain.getOpenLoopRampRate());
   }
 
   /**

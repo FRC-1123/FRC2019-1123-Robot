@@ -8,6 +8,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
 
 /**
@@ -16,11 +18,31 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public class OI {
   private static final int driveControllerPort = 0;
+  private enum _XBoxButton {
+    kBumperLeft(5),
+    kBumperRight(6),
+    kStickLeft(9),
+    kStickRight(10),
+    kA(1),
+    kB(2),
+    kX(3),
+    kY(4),
+    kBack(7),
+    kStart(8);
+    private final int value;
+    _XBoxButton(int value) {
+      this.value = value;
+    }
+  }
+
 
   private XboxController controller;
+  private JoystickButton buttonRightBumper;
 
   public OI() {
     controller = new XboxController(driveControllerPort);
+
+    buttonRightBumper = new JoystickButton(controller,_XBoxButton.kBumperRight.value);
   }
 
   public double getLeftStickX() {
@@ -37,6 +59,10 @@ public class OI {
 
   public double getRightStickY() { 
    return controller.getY(Hand.kRight);
+  }
+
+  public JoystickButton getBumperRight() {
+    return this.buttonRightBumper;
   }
 
   public static OI create() {

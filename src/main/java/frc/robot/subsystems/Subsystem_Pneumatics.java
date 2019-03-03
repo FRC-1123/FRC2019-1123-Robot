@@ -9,8 +9,10 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Logger;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 /**
@@ -27,6 +29,58 @@ public class Subsystem_Pneumatics extends Subsystem {
     public Solenoid m_massForward;
     public Solenoid m_massBack;
     public Compressor m_compressor;
+  }
+
+  public static class ControlBlock {
+    double operStartTime;
+    double lastPulsedStartTime;
+    double pulseDuration;
+    Solenoid lastPulsedSolenoid;
+    double maxCommandTime;
+    double[] axisValueRange;
+    double tiltAdjustment;
+    boolean isFinished;
+    public ControlBlock() {
+      this.operStartTime = Timer.getFPGATimestamp();
+      this.lastPulsedSolenoid = null;
+      this.lastPulsedStartTime = 0.0d; 
+      this.pulseDuration = 0.1d;
+      this.maxCommandTime = 3.0d;
+      this.axisValueRange = new double[] {-0.05d,0.05d};
+      this.tiltAdjustment = 1.0d;
+      this.isFinished = false;
+    }
+    public ControlBlock setPulseDuration(double seconds) {
+      this.pulseDuration = seconds;
+      return this;
+    }
+    public ControlBlock setMaxCommandTime(double seconds) {
+      this.maxCommandTime = seconds;
+      return this;
+    }
+    public ControlBlock setAxisValueTargetRange(double[] range) {
+      this.axisValueRange = range;
+      return this;
+    }
+    public ControlBlock setTiltAdjustment(double value) {
+      this.tiltAdjustment = value;
+      return this;
+    }
+    public double getPulseDuration() {
+      return this.pulseDuration;
+    }
+    public double getMaxCommandTime() {
+      return this.maxCommandTime;
+    }
+    public double[] getAxisValueTargetRange() {
+      return this.axisValueRange;
+    }
+    public double getTiltAdjustment() {
+      return this.tiltAdjustment;
+    }
+    public boolean isFinished() {
+      return this.isFinished;
+    }
   }
 
   public enum AXLE {
@@ -61,6 +115,53 @@ public class Subsystem_Pneumatics extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
+  }
+
+  /**
+   * Called from command so we expect it to get called approx. every 20 milliseconds
+   * @param startTime
+   */
+  public void extendBothAxlesWithControl(ControlBlock ctrlBlk) {
+    log.debug("***extendBothAxlesWithControl");
+    double ctrlAxisValue = Robot.m_accelerometer.getX()*ctrlBlk.tiltAdjustment;
+    Solenoid solenoid = null;
+    if (ctrlAxisValue<ctrlBlk.axisValueRange[0] || ctrlAxisValue>ctrlBlk.axisValueRange[1]) {
+      //
+      // We are out of acceptable tilt range so lets try to correct by pulsing the appropriate solenoid.
+      //
+      if (ctrlAxisValue<0) {
+        solenoid = m_middleDown;
+        log.debug("*** tilting forward using solenoid m_middleDown");
+      } else {
+        solenoid = m_floatDown;
+        log.debug("*** titlting back using solenoid m_floatDown");
+      }
+    } else {
+      //
+      // We are in range so lets pulse the alternate solenoid.
+      //
+      if (ctrlBlk.lastPulsedSolenoid==m_floatDown) {
+        solenoid = m_middleDown;
+        log.debug("*** Using alternate solenoid m_middleDown.");
+      } else {
+        solenoid = m_floatDown;
+        log.debug("*** Using alternamte solenoid m_floatDown");
+      }
+    }
+
+    double c_time = Timer.getFPGATimestamp();
+    if ((c_time-ctrlBlk.lastPulsedStartTime>=0.25) && (!solenoid.get())) {
+      solenoid.setPulseDuration(ctrlBlk.pulseDuration);
+      solenoid.startPulse();
+      ctrlBlk.lastPulsedSolenoid = solenoid;
+      ctrlBlk.lastPulsedStartTime = c_time;
+    }
+
+    if (c_time-ctrlBlk.operStartTime>ctrlBlk.maxCommandTime) {
+      m_floatDown.set(true);
+      m_middleDown.set(true);
+      ctrlBlk.isFinished = true;
+    }
   }
 
   public void extendBothAxlesStart() {

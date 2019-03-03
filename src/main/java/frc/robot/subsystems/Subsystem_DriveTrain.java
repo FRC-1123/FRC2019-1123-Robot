@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANEncoder;
+import com.revrobotics.CANError;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -180,6 +181,7 @@ public class Subsystem_DriveTrain extends Subsystem {
     //
     setIdleBreak();
     resetMotorDistance();
+    setOpenLoopRampRate(RobotMap.driveRampRateNormal);
   }
 
   public void drive(double leftSpeed, double rightSpeed) {
@@ -192,6 +194,23 @@ public class Subsystem_DriveTrain extends Subsystem {
     } else {
       stop();
     }
+  }
+
+  public void rackAxlesStart() {
+    stop();
+
+    double pSpeed = 0.2d;
+    double nSpeed = pSpeed * -1.0d;
+
+    m_motorFloatA.set(pSpeed);
+    m_motorFloatB.set(pSpeed);
+    m_motorMiddleA.set(nSpeed);
+    m_motorMiddleB.set(nSpeed);
+
+  }
+
+  public void rackAxlesStop() {
+    stop();
   }
 
   public boolean isStopped() {
@@ -239,6 +258,26 @@ public class Subsystem_DriveTrain extends Subsystem {
     for (CANSparkMax motor : m_motors) {
       motor.setIdleMode(IdleMode.kBrake);
     }
+  }
+
+  public void setOpenLoopRampRate(double rate) {
+    stop();
+    for (CANSparkMax motor : m_motors) {
+      CANError condCode = motor.setOpenLoopRampRate(rate);
+      if (condCode != CANError.kOK) {
+        m_logger.error("@@@ Error setOpenLoopRampRate(" + rate + ") for motor " + _motorName(motor));
+      }
+    }
+  }
+
+  public double getOpenLoopRampRate() {
+    double rtn = 0.0d;
+    for (CANSparkMax motor : m_motors) {
+      if (rtn<motor.getOpenLoopRampRate()) {
+        rtn = motor.getOpenLoopRampRate();
+      }
+    }
+    return rtn;
   }
 
   @Override
@@ -330,6 +369,24 @@ public class Subsystem_DriveTrain extends Subsystem {
     } else {
       return 0.0;
     }
+  }
+
+  private String _motorName(CANSparkMax motor) {
+    String rtn = "Unknown";
+    if (motor == m_motorFixedA) {
+      rtn = "m_motorFixedA";
+    } else if (motor == m_motorFixedB) {
+      rtn = "m_motorFixedB";
+    } else if (motor == m_motorMiddleA) {
+      rtn = "m_motorMiddleA";
+    } else if (motor == m_motorMiddleB) {
+      rtn = "m_motorMiddleB";
+    } else if (motor == m_motorFloatA) {
+      rtn = "m_motorFloatA";
+    } else if (motor == m_motorFloatB) {
+      rtn = "m_motorFloatB";
+    }
+    return rtn;
   }
 
 }
