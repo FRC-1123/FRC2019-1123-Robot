@@ -7,14 +7,8 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
-
-public class Command_ExtendBothAxlesWithRackStop extends CommandGroup {
-  /**
-   * Add your docs here.
-   */
-  public Command_ExtendBothAxlesWithRackStop() {
-    addSequential(new Command_ExtendBothAxlesStop());
-    addSequential(new Command_RackAxlesStop());
+public class Command_MoveForwardOneInch extends Command_DriveDistanceStraight {
+  public Command_MoveForwardOneInch() {
+    super(1.0d, 0.05d);
   }
 }

@@ -8,7 +8,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -38,6 +37,7 @@ public class OI {
 
   private XboxController controller;
   private JoystickButton buttonRightBumper;
+  private double axleDelay;
 
   public OI() {
     controller = new XboxController(driveControllerPort);
@@ -63,6 +63,14 @@ public class OI {
 
   public JoystickButton getBumperRight() {
     return this.buttonRightBumper;
+  }
+
+  public double getAxleDelay() {
+    return this.axleDelay;
+  }
+
+  public void setAxleDelay(double axleDelay) {
+    this.axleDelay = axleDelay;
   }
 
   public static OI create() {

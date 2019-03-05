@@ -7,12 +7,8 @@
 
 package frc.robot.commands;
 
-public class Command_ClimbSilverBox extends AbstractCommand_ClimbBox {
-  /**
-   * Add your docs here.
-   */
-  public Command_ClimbSilverBox() {
-    super();
-    climbTheBox(0.75, 1.0, 1.0);
+public class Command_MoveBackOneInch extends Command_DriveDistanceStraight {
+  public Command_MoveBackOneInch() {
+    super(1.0d, -0.05d);
   }
 }

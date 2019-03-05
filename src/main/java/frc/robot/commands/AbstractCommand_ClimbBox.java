@@ -19,8 +19,11 @@ public abstract class AbstractCommand_ClimbBox extends CommandGroup {
   protected static final double middleAxleToFloatAxle = frameToFloat - frameToMiddle;
   protected static final double pad = 1.5d;
   protected static final double speed = 0.10d;
-  protected static final double backupDistance = 1.0d;
+  protected static final double backupDistance = 2.0d;
   protected static final double backupSpeed = speed * -1.0d;
+  protected static final double massMoverWait = 3.0d;
+  protected static final double timeToRetractMiddleAxle = 5.0d;
+  protected static final double timeToRetractFloatAxle = 5.0d;
 
   /**
    * Add your docs here.
@@ -30,38 +33,65 @@ public abstract class AbstractCommand_ClimbBox extends CommandGroup {
 
   protected void climbTheBox(double waitTimeForBothAxleExtends, double waitTimeRetractMiddleAxle, double waitTimeRetractFloatAxle) {
     addSequential(new Command_StartCompressor());
+
+    //
+    // Make sure we are in "creep mode."
+    addSequential(new Command_EnableCreepMode());
     
-    addSequential(new Command_DriveDistanceStraight(backupDistance , backupSpeed));
-    
+    //
+    // Move the mass to the back of the robot.
+    //
     addSequential(new Command_MoveMassBackStart());
-    addSequential(new WaitCommand(2));
+    addSequential(new WaitCommand(massMoverWait));
     addSequential(new Command_MoveMassBackStop());
     
-    addSequential(new Command_ExtendBothAxlesStart());
+    //
+    // Backup a little
+    //
+    addSequential(new Command_DriveDistanceStraight(backupDistance , backupSpeed));
+        
+    addSequential(new Command_ExtendFloatAxleAndFootStart());
     addSequential(new WaitCommand(waitTimeForBothAxleExtends));
     
     addSequential(new Command_StartCompressor());
     
-    addSequential(new Command_DriveDistanceStraight(bumperPad+frameToFixed+pad, speed));
+    //
+    // Try to get the front axle on the box.
+    //
+    addSequential(new Command_DriveDistanceStraight(backupDistance+bumperPad+frameToFixed+pad, speed));
     
+    //
+    // Move the mass to the front of the robot.
+    //
     addSequential(new Command_MoveMassForwardStart());
-    addSequential(new WaitCommand(2));
+    addSequential(new WaitCommand(massMoverWait));
     addSequential(new Command_MoveMassForwardStop());
-   
+
+    //
+    // Raise the middle axle
+    //
     addSequential(new Command_ExtendMiddleAxleStop());
-  
     addSequential(new Command_RetractMiddleAxleStart());
     addSequential(new WaitCommand(waitTimeRetractMiddleAxle));
     addSequential(new Command_RetractMiddleAxleStop());
     
     addSequential(new Command_StartCompressor());
 
+    //
+    // Try to get the middle axle over the box.
+    //
     addSequential(new Command_DriveDistanceStraight(fixedAxleToMiddleAxle+pad, speed));
 
+    //
+    // Raise the rear axle
+    //
     addSequential(new Command_RetractFloatAxleStart());
     addSequential(new WaitCommand(waitTimeRetractFloatAxle));
     addSequential(new Command_RetractFloatAxleStop());
 
+    //
+    // Try to get the rest of the robot onto the box.
+    //
     addSequential(new Command_DriveDistanceStraight(middleAxleToFloatAxle+(pad*2),speed));
   }
 }

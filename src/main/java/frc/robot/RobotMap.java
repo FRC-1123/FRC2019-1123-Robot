@@ -45,6 +45,8 @@ public class RobotMap {
   public static final double driveRampRateNormal = 0.5d;
   public static final double driveRampRateCreep = 1.0d;
 
+  public static final double axleDelay = 0.05d;
+
   //
   // Wheel radius for drive train.
   //
@@ -69,6 +71,11 @@ public class RobotMap {
   public static final int solenoid_Channel_MassMover_Forward = 4;
   public static final int solenoid_Module_MassMover_Back = 21;
   public static final int solenoid_Channel_MassMover_Back = 5;
+
+  public static final int solenoid_Module_Foot_Down = 21;
+  public static final int solenoid_Channel_Foot_Down = 6;
+  public static final int solenoid_Module_Foot_Up = 21;
+  public static final int solenoid_Channel_Foot_Up  = 7;
 
   //
   // Power distribution panel port.

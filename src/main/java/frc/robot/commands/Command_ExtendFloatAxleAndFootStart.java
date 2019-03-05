@@ -9,18 +9,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
+import frc.robot.Robot;
 
-public class Command_ExtendBothAxlesWithDelays extends CommandGroup {
+public class Command_ExtendFloatAxleAndFootStart extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public Command_ExtendBothAxlesWithDelays() {
-    addSequential(new Command_ExtendMiddleAxleStart());
-    addSequential(new WaitCommand(0.2d));
+  public Command_ExtendFloatAxleAndFootStart() {
     addSequential(new Command_ExtendFloatAxleStart());
-    addSequential(new WaitCommand(0.2d));
-    addSequential(new Command_ExtendFloatAxleStop());
-    addSequential(new WaitCommand(0.2d));
-    addSequential(new Command_ExtendFloatAxleStart());
+    addSequential(new Command_ExtendFootStart());
   }
 }

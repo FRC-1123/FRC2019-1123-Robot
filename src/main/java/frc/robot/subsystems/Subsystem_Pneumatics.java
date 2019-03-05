@@ -28,6 +28,8 @@ public class Subsystem_Pneumatics extends Subsystem {
     public Solenoid m_floatDown;
     public Solenoid m_massForward;
     public Solenoid m_massBack;
+    public Solenoid m_footDown;
+    public Solenoid m_footUp;
     public Compressor m_compressor;
   }
 
@@ -93,6 +95,8 @@ public class Subsystem_Pneumatics extends Subsystem {
   private Solenoid m_floatDown;
   private Solenoid m_massForward;
   private Solenoid m_massBack;
+  private Solenoid m_footDown;
+  private Solenoid m_footUp;
   private Compressor m_compressor;
 
   public Subsystem_Pneumatics(ConstructorArgs args) {
@@ -102,7 +106,9 @@ public class Subsystem_Pneumatics extends Subsystem {
     this.m_floatDown = args.m_floatDown;
     this.m_massForward = args.m_massForward;
     this.m_massBack = args.m_massBack;
-    this.m_compressor = args.m_compressor;
+    this.m_footDown = args.m_footDown;
+    this.m_footUp = args.m_footUp;
+    this.m_compressor = args.m_compressor; 
 
     addChild(this.m_middleUp);
     addChild(this.m_middleDown);
@@ -268,6 +274,26 @@ public class Subsystem_Pneumatics extends Subsystem {
     this.m_massBack.set(false);
   }
 
+  public void extendFootStart() {
+    log.debug("**extendFootStart");
+    this.m_footDown.set(true);
+  }
+
+  public void extendFootStop() {
+    log.debug("**extendFootStop");
+    this.m_footDown.set(false);
+  }
+
+  public void retractFootStart() {
+    log.debug("**retractFootStart");
+    this.m_footUp.set(true);
+  }
+
+  public void retractFootStop() {
+    log.debug("**retractFootStop");
+    this.m_footUp.set(false);
+  }
+
   public void startCompressor() {
     log.debug("***startCompressor");
     this.m_compressor.start();
@@ -280,14 +306,21 @@ public class Subsystem_Pneumatics extends Subsystem {
 
   public static Subsystem_Pneumatics create() {
     ConstructorArgs args = new ConstructorArgs();
+
     args.m_middleUp = new Solenoid(RobotMap.solenoid_Module_Axle_MiddleUp, RobotMap.solenoid_Channel_Axle_MiddleUp);
     args.m_middleDown = new Solenoid(RobotMap.solenoid_Module_Axle_MiddleDown,
         RobotMap.solenoid_Channel_Axle_MiddleDown);
+
     args.m_floatUp = new Solenoid(RobotMap.solenoid_Module_Axle_FloatUp, RobotMap.solenoid_Channel_Axle_FloatUp);
     args.m_floatDown = new Solenoid(RobotMap.solenoid_Module_Axle_FloatDown, RobotMap.solenoid_Channel_Axle_FloatDown);
+
     args.m_massForward = new Solenoid(RobotMap.solenoid_Module_MassMover_Forward,
         RobotMap.solenoid_Channel_MassMover_Forward);
     args.m_massBack = new Solenoid(RobotMap.solenoid_Module_MassMover_Back, RobotMap.solenoid_Channel_MassMover_Back);
+
+    args.m_footDown = new Solenoid(RobotMap.solenoid_Module_Foot_Down, RobotMap.solenoid_Channel_Foot_Down);
+    args.m_footUp = new Solenoid(RobotMap.solenoid_Module_Foot_Up,RobotMap.solenoid_Channel_Foot_Up);
+
     args.m_compressor = new Compressor(RobotMap.compressor_Module);
 
     return new Subsystem_Pneumatics(args);
