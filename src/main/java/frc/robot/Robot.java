@@ -12,6 +12,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Command_ClimbGoldStep1_Prepare;
 import frc.robot.commands.Command_ClimbGoldStep2_RaiseRobot;
@@ -114,29 +118,29 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Retract Both Axles Start", new Command_RetractBothAxlesStart());
     SmartDashboard.putData("Retract Both Axles Stop", new Command_RetractBothAxlesStop());
 
-    SmartDashboard.putData("Retract Middle Axle Start", new Command_RetractMiddleAxleStart());
-    SmartDashboard.putData("Retract Middle Axle Stop", new Command_RetractMiddleAxleStop());
-
-    SmartDashboard.putData("Retract Float Axle Start", new Command_RetractFloatAxleStart());
-    SmartDashboard.putData("Retract Float Axle Stop", new Command_RetractFloatAxleStop());
-
     SmartDashboard.putData("Extend Middle Axle Start", new Command_ExtendMiddleAxleStart());
     SmartDashboard.putData("Extend Middle Axle Stop", new Command_ExtendMiddleAxleStop());
+
+    SmartDashboard.putData("Retract Middle Axle Start", new Command_RetractMiddleAxleStart());
+    SmartDashboard.putData("Retract Middle Axle Stop", new Command_RetractMiddleAxleStop());
 
     SmartDashboard.putData("Extend Float Axle Start", new Command_ExtendFloatAxleStart());
     SmartDashboard.putData("Extend Float Axle Stop", new Command_ExtendFloatAxleStop());
 
-    SmartDashboard.putData("Move Mass Forward Start", new Command_MoveMassForwardStart());
-    SmartDashboard.putData("Move Mass Forward Stop", new Command_MoveMassForwardStop());
-
-    SmartDashboard.putData("Move Mass Back Start", new Command_MoveMassBackStart());
-    SmartDashboard.putData("Move Mass Back Stop", new Command_MoveMassBackStop());
+    SmartDashboard.putData("Retract Float Axle Start", new Command_RetractFloatAxleStart());
+    SmartDashboard.putData("Retract Float Axle Stop", new Command_RetractFloatAxleStop());
 
     SmartDashboard.putData("Extend Foot Start", new Command_ExtendFootStart());
     SmartDashboard.putData("Extend Foot Stop", new Command_ExtendFootStop());
 
     SmartDashboard.putData("Retract Foot Start", new Command_RetractFootStart());
     SmartDashboard.putData("Retract Foot Stop", new Command_RetractFootStop());
+
+    SmartDashboard.putData("Move Mass Forward Start", new Command_MoveMassForwardStart());
+    SmartDashboard.putData("Move Mass Forward Stop", new Command_MoveMassForwardStop());
+
+    SmartDashboard.putData("Move Mass Back Start", new Command_MoveMassBackStart());
+    SmartDashboard.putData("Move Mass Back Stop", new Command_MoveMassBackStop());
 
     SmartDashboard.putData("Start Compressor", new Command_StartCompressor());
     SmartDashboard.putData("Stop Compressor", new Command_StopCompressor());
@@ -150,6 +154,19 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Climb Box Step4 - Fixed On", new Command_ClimbGoldStep4_GetFixedAxleOn());
     SmartDashboard.putData("Climb Box Step5 - Middle On", new Command_ClimbGoldStep5_GetMiddleAxleOn());
     SmartDashboard.putData("Climb Box Step6 - Float On", new Command_ClimbGoldStep6_GetFloatAxleOn());
+
+    ShuffleboardTab tabClimbAndMove = Shuffleboard.getTab("Climb And Move");
+    ShuffleboardLayout climbGoldBoxSteps = tabClimbAndMove.getLayout("Climb Gold Box Steps", BuiltInLayouts.kList);
+    climbGoldBoxSteps.add("Climb Box Step1 - Prepare", new Command_ClimbGoldStep1_Prepare());
+    climbGoldBoxSteps.add("Climb Box Step2 - Raise Bot", new Command_ClimbGoldStep2_RaiseRobot());
+    climbGoldBoxSteps.add("Climb Box Step3 - Stabilize", new Command_ClimbGoldStep3_StabilizeRobot());
+    climbGoldBoxSteps.add("Climb Box Step4 - Fixed On", new Command_ClimbGoldStep4_GetFixedAxleOn());
+    climbGoldBoxSteps.add("Climb Box Step5 - Middle On", new Command_ClimbGoldStep5_GetMiddleAxleOn());
+    climbGoldBoxSteps.add("Climb Box Step6 - Float On", new Command_ClimbGoldStep6_GetFloatAxleOn());
+
+    ShuffleboardLayout moveInchFowardAndBack = tabClimbAndMove.getLayout("Move Inch Forward or Back", BuiltInLayouts.kList);
+    moveInchFowardAndBack.add("Move Forward 1 Inch", new Command_MoveForwardOneInch());
+    moveInchFowardAndBack.add("Move Back 1 Inch", new Command_MoveBackOneInch());
 
     log.debug("End robotInit");
   }

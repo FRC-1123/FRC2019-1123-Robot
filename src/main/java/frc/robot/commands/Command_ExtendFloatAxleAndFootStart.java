@@ -8,8 +8,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.command.WaitCommand;
-import frc.robot.Robot;
 
 public class Command_ExtendFloatAxleAndFootStart extends CommandGroup {
   /**
