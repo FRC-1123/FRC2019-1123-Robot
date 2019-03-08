@@ -28,6 +28,7 @@ public class Command_PulseMassMoveBack extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    log.debug("***execute");
     Robot.m_subsystemPneumatics.pulseMassBack(durationSeconds);
   }
 

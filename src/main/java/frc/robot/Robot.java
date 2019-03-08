@@ -54,7 +54,7 @@ import frc.robot.subsystems.Subsystem_Pneumatics;
  */
 public class Robot extends TimedRobot {
   private static final Logger log = new Logger(Robot.class);
-  private long aliveCount = 0;
+  // private long aliveCount = 0;
 
   //
   // Initialize when Robot object is constructed.
