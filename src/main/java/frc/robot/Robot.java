@@ -7,22 +7,15 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.interfaces.Accelerometer;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Command_ClimbGoldStep1_Prepare;
 import frc.robot.commands.Command_ClimbGoldStep2_RaiseRobot;
-import frc.robot.commands.Command_ClimbGoldStep3_StabilizeRobot;
-import frc.robot.commands.Command_ClimbGoldStep4_GetFixedAxleOn;
-import frc.robot.commands.Command_ClimbGoldStep5_GetMiddleAxleOn;
-import frc.robot.commands.Command_ClimbGoldStep6_GetFloatAxleOn;
+import frc.robot.commands.Command_ClimbGoldStep3_GetFixedAxleOn;
+import frc.robot.commands.Command_ClimbGoldStep4_GetMiddleAxleOn;
+import frc.robot.commands.Command_ClimbGoldStep5_GetFloatAxleOn;
 import frc.robot.commands.Command_DriveManually;
 import frc.robot.commands.Command_ExtendFloatAxleAndFootStart;
 import frc.robot.commands.Command_ExtendFloatAxleAndFootStop;
@@ -38,8 +31,8 @@ import frc.robot.commands.Command_MoveMassBackStart;
 import frc.robot.commands.Command_MoveMassBackStop;
 import frc.robot.commands.Command_MoveMassForwardStart;
 import frc.robot.commands.Command_MoveMassForwardStop;
-import frc.robot.commands.Command_RetractBothAxlesStart;
-import frc.robot.commands.Command_RetractBothAxlesStop;
+import frc.robot.commands.Command_RetractFloatAxleAndFootStart;
+import frc.robot.commands.Command_RetractFloatAxleAndFootStop;
 import frc.robot.commands.Command_RetractFloatAxleStart;
 import frc.robot.commands.Command_RetractFloatAxleStop;
 import frc.robot.commands.Command_RetractFootStart;
@@ -61,7 +54,7 @@ import frc.robot.subsystems.Subsystem_Pneumatics;
  */
 public class Robot extends TimedRobot {
   private static final Logger log = new Logger(Robot.class);
-  public static final Accelerometer m_accelerometer = new BuiltInAccelerometer();
+  private long aliveCount = 0;
 
   //
   // Initialize when Robot object is constructed.
@@ -69,13 +62,13 @@ public class Robot extends TimedRobot {
   public static OI m_oi = OI.create();
 
   //
-  // Initialize when robotInit is called.
+  // Initialized when robotInit is called.
   //
   public static Subsystem_Pneumatics m_subsystemPneumatics = null;
   public static Subsystem_DriveTrain m_subsystemDriveTrain = null;
 
   //
-  // Autonoumous Command
+  // Autonoumous Command initialized wwhen robotInit is called.
   //
   Command m_autonomousCommand = null;
 
@@ -104,19 +97,13 @@ public class Robot extends TimedRobot {
     m_oi.getBumperRight().whenPressed(new Command_ToggleOpenLoopRampRate());
   
     //
-    // Put the subsystems onto the dashboard.
-    //
-    // SmartDashboard.putData(m_subsystemDriveTrain);
-    // SmartDashboard.putData(m_subsystemPneumatics);
-  
-    //
     // Dashboard widgets.
     //
     SmartDashboard.putData("Extend Both Axles Start", new Command_ExtendFloatAxleAndFootStart());
     SmartDashboard.putData("Extend Both Axles Stop", new Command_ExtendFloatAxleAndFootStop());
 
-    SmartDashboard.putData("Retract Both Axles Start", new Command_RetractBothAxlesStart());
-    SmartDashboard.putData("Retract Both Axles Stop", new Command_RetractBothAxlesStop());
+    SmartDashboard.putData("Retract Both Axles Start", new Command_RetractFloatAxleAndFootStart());
+    SmartDashboard.putData("Retract Both Axles Stop", new Command_RetractFloatAxleAndFootStop());
 
     SmartDashboard.putData("Extend Middle Axle Start", new Command_ExtendMiddleAxleStart());
     SmartDashboard.putData("Extend Middle Axle Stop", new Command_ExtendMiddleAxleStop());
@@ -150,23 +137,9 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Climb Box Step1 - Prepare", new Command_ClimbGoldStep1_Prepare());
     SmartDashboard.putData("Climb Box Step2 - Raise Bot", new Command_ClimbGoldStep2_RaiseRobot());
-    SmartDashboard.putData("Climb Box Step3 - Stabilize", new Command_ClimbGoldStep3_StabilizeRobot());
-    SmartDashboard.putData("Climb Box Step4 - Fixed On", new Command_ClimbGoldStep4_GetFixedAxleOn());
-    SmartDashboard.putData("Climb Box Step5 - Middle On", new Command_ClimbGoldStep5_GetMiddleAxleOn());
-    SmartDashboard.putData("Climb Box Step6 - Float On", new Command_ClimbGoldStep6_GetFloatAxleOn());
-
-    ShuffleboardTab tabClimbAndMove = Shuffleboard.getTab("Climb And Move");
-    ShuffleboardLayout climbGoldBoxSteps = tabClimbAndMove.getLayout("Climb Gold Box Steps", BuiltInLayouts.kList);
-    climbGoldBoxSteps.add("Climb Box Step1 - Prepare", new Command_ClimbGoldStep1_Prepare());
-    climbGoldBoxSteps.add("Climb Box Step2 - Raise Bot", new Command_ClimbGoldStep2_RaiseRobot());
-    climbGoldBoxSteps.add("Climb Box Step3 - Stabilize", new Command_ClimbGoldStep3_StabilizeRobot());
-    climbGoldBoxSteps.add("Climb Box Step4 - Fixed On", new Command_ClimbGoldStep4_GetFixedAxleOn());
-    climbGoldBoxSteps.add("Climb Box Step5 - Middle On", new Command_ClimbGoldStep5_GetMiddleAxleOn());
-    climbGoldBoxSteps.add("Climb Box Step6 - Float On", new Command_ClimbGoldStep6_GetFloatAxleOn());
-
-    ShuffleboardLayout moveInchFowardAndBack = tabClimbAndMove.getLayout("Move Inch Forward or Back", BuiltInLayouts.kList);
-    moveInchFowardAndBack.add("Move Forward 1 Inch", new Command_MoveForwardOneInch());
-    moveInchFowardAndBack.add("Move Back 1 Inch", new Command_MoveBackOneInch());
+    SmartDashboard.putData("Climb Box Step3 - Fixed On", new Command_ClimbGoldStep3_GetFixedAxleOn());
+    SmartDashboard.putData("Climb Box Step4 - Middle On", new Command_ClimbGoldStep4_GetMiddleAxleOn());
+    SmartDashboard.putData("Climb Box Step5 - Float On", new Command_ClimbGoldStep5_GetFloatAxleOn());
 
     log.debug("End robotInit");
   }
@@ -182,15 +155,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // log.debug("robotPeriodic");
-    // double x = m_accelerometer.getX();
-    // double y = m_accelerometer.getY();
-    // double z = m_accelerometer.getZ();
-    // SmartDashboard.putNumber("Accelerometer X = ", x);
-    // SmartDashboard.putNumber("Accelerometer Y = ", y);
-    // SmartDashboard.putNumber("Accelerometer Z = ", z);
-    SmartDashboard.putNumber("Ramp Rate = ", m_subsystemDriveTrain.getOpenLoopRampRate());
-    // SmartDashboard.putNumber("Axle Delay = ", m_oi.getAxleDelay());
+    // System.out.println("I'm alive ("+Long.toString(++this.aliveCount)+")");
   }
 
   /**

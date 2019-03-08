@@ -9,42 +9,39 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.WaitCommand;
 
-public class Command_ClimbGoldStep5_GetMiddleAxleOn extends AbstractCommand_ClimbBox {
+public class Command_ClimbGoldStep3_GetFixedAxleOn extends AbstractCommand_ClimbBox {
   /**
-   * Get the middle axle over the box.
+   * Get the fixed axle over the box.
    * <p>
    * State of Robot pre-command:
    * <ol>
    * <li>Creep mode has been enabled</li>
    * <li>Mass mover back stop command has been issued and mass is in the back of the robot</li>
-   * <li>Robot fixed axle is over the box</li>
-   * <li>The float axle and middle axle extend start are active.</li>
-   * <li>The foot retract start is active.</li>
+   * <li>Robot is a set distance from the box</li>
+   * <li>The float axle, middle axle, and foot extend start are active.</li>
    * </ol>
    */
-  public Command_ClimbGoldStep5_GetMiddleAxleOn() {
+  public Command_ClimbGoldStep3_GetFixedAxleOn() {
     //
     // Make sure the compressor is running to help keep up pressure on pneumatics.
     //
     addSequential(new Command_StartCompressor());
 
-    //
-    // Move the mass to the front of the robot.
-    //
-    addSequential(new Command_MoveMassForwardStart());
+
+    addSequential(new Command_MoveMassBackStart());
     addSequential(new WaitCommand(massMoverWait));
+    addSequential(new Command_MoveMassBackStop());
 
     //
-    // Raise the middle axle
+    // Retract the foot.
     //
-    addSequential(new Command_ExtendMiddleAxleStop());
-    addSequential(new Command_RetractMiddleAxleStart());
-    addSequential(new WaitCommand(timeToRetractMiddleAxle));
-    
+    addSequential(new Command_ExtendFootStop());
+    addSequential(new Command_RetractFootStart());
+
     //
-    // Try to get the middle axle over the box.
+    // Drive forward enough to get the front axle over the box.
     //
-    addSequential(new Command_DriveDistanceStraight(fixedAxleToMiddleAxle+pad, speed));
+    // addSequential(new Command_DriveDistanceStraight(backupDistance+bumperPad+frameToFixed+pad, speed));
 
   }
 }

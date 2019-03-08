@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Logger;
-import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 /**
@@ -42,44 +41,54 @@ public class Subsystem_Pneumatics extends Subsystem {
     double[] axisValueRange;
     double tiltAdjustment;
     boolean isFinished;
+
     public ControlBlock() {
       this.operStartTime = Timer.getFPGATimestamp();
       this.lastPulsedSolenoid = null;
-      this.lastPulsedStartTime = 0.0d; 
+      this.lastPulsedStartTime = 0.0d;
       this.pulseDuration = 0.1d;
       this.maxCommandTime = 3.0d;
-      this.axisValueRange = new double[] {-0.05d,0.05d};
+      this.axisValueRange = new double[] { -0.05d, 0.05d };
       this.tiltAdjustment = 1.0d;
       this.isFinished = false;
     }
+
     public ControlBlock setPulseDuration(double seconds) {
       this.pulseDuration = seconds;
       return this;
     }
+
     public ControlBlock setMaxCommandTime(double seconds) {
       this.maxCommandTime = seconds;
       return this;
     }
+
     public ControlBlock setAxisValueTargetRange(double[] range) {
       this.axisValueRange = range;
       return this;
     }
+
     public ControlBlock setTiltAdjustment(double value) {
       this.tiltAdjustment = value;
       return this;
     }
+
     public double getPulseDuration() {
       return this.pulseDuration;
     }
+
     public double getMaxCommandTime() {
       return this.maxCommandTime;
     }
+
     public double[] getAxisValueTargetRange() {
       return this.axisValueRange;
     }
+
     public double getTiltAdjustment() {
       return this.tiltAdjustment;
     }
+
     public boolean isFinished() {
       return this.isFinished;
     }
@@ -108,7 +117,7 @@ public class Subsystem_Pneumatics extends Subsystem {
     this.m_massBack = args.m_massBack;
     this.m_footDown = args.m_footDown;
     this.m_footUp = args.m_footUp;
-    this.m_compressor = args.m_compressor; 
+    this.m_compressor = args.m_compressor;
 
     addChild(this.m_middleUp);
     addChild(this.m_middleDown);
@@ -123,63 +132,27 @@ public class Subsystem_Pneumatics extends Subsystem {
   public void initDefaultCommand() {
   }
 
-  /**
-   * Called from command so we expect it to get called approx. every 20 milliseconds
-   * @param startTime
-   */
-  public void extendBothAxlesWithControl(ControlBlock ctrlBlk) {
-    log.debug("***extendBothAxlesWithControl");
-    double ctrlAxisValue = Robot.m_accelerometer.getX()*ctrlBlk.tiltAdjustment;
-    Solenoid solenoid = null;
-    if (ctrlAxisValue<ctrlBlk.axisValueRange[0] || ctrlAxisValue>ctrlBlk.axisValueRange[1]) {
-      //
-      // We are out of acceptable tilt range so lets try to correct by pulsing the appropriate solenoid.
-      //
-      if (ctrlAxisValue<0) {
-        solenoid = m_middleDown;
-        log.debug("*** tilting forward using solenoid m_middleDown");
-      } else {
-        solenoid = m_floatDown;
-        log.debug("*** titlting back using solenoid m_floatDown");
-      }
-    } else {
-      //
-      // We are in range so lets pulse the alternate solenoid.
-      //
-      if (ctrlBlk.lastPulsedSolenoid==m_floatDown) {
-        solenoid = m_middleDown;
-        log.debug("*** Using alternate solenoid m_middleDown.");
-      } else {
-        solenoid = m_floatDown;
-        log.debug("*** Using alternamte solenoid m_floatDown");
-      }
-    }
-
-    double c_time = Timer.getFPGATimestamp();
-    if ((c_time-ctrlBlk.lastPulsedStartTime>=0.25) && (!solenoid.get())) {
-      solenoid.setPulseDuration(ctrlBlk.pulseDuration);
-      solenoid.startPulse();
-      ctrlBlk.lastPulsedSolenoid = solenoid;
-      ctrlBlk.lastPulsedStartTime = c_time;
-    }
-
-    if (c_time-ctrlBlk.operStartTime>ctrlBlk.maxCommandTime) {
-      m_floatDown.set(true);
-      m_middleDown.set(true);
-      ctrlBlk.isFinished = true;
-    }
-  }
-
-  public void extendBothAxlesStart() {
-    log.debug("***extendBothAxlesStart");
-    this.m_floatDown.set(true);
-    this.m_middleDown.set(true);
-  }
-
-  public void extendBothAxlesStop() {
-    log.debug("***extendBothAxlesStop");
-    this.m_floatDown.set(false);
+  public void resetStart() {
+    log.debug("***reset");
+    this.m_footDown.set(false);
     this.m_middleDown.set(false);
+    this.m_floatDown.set(false);
+
+    this.m_massBack.set(false);
+
+    this.m_footUp.set(true);
+    this.m_middleUp.set(true);
+    this.m_floatUp.set(true);
+
+    this.m_massForward.set(true);
+  }
+
+  public void resetStop() {
+    this.m_footUp.set(false);
+    this.m_middleUp.set(false);
+    this.m_floatUp.set(false);
+
+    this.m_massForward.set(false);
   }
 
   public boolean isExtendMiddleAxleOn() {
@@ -212,18 +185,6 @@ public class Subsystem_Pneumatics extends Subsystem {
     this.m_floatDown.set(false);
   }
 
-  public void retractBothAxlesStart() {
-    log.debug("***retractBothAxlesStart");
-    this.m_floatUp.set(true);
-    this.m_middleUp.set(true);
-  }
-
-  public void retractBothAxlesStop() {
-    log.debug("***retractBothAxlesStop");
-    this.m_floatUp.set(false);
-    this.m_middleUp.set(false);
-  }
-
   public boolean isRetractMiddleAxleOn() {
     log.debug("***isRetractMiddleAxleOn");
     return this.m_middleUp.get();
@@ -241,7 +202,7 @@ public class Subsystem_Pneumatics extends Subsystem {
 
   public boolean isRetractFloatAxleOn() {
     log.debug("***isRetractFloatAxleOn");
-    return this.m_floatUp.get();  
+    return this.m_floatUp.get();
   }
 
   public void retractFloatAxleStart() {
@@ -272,6 +233,16 @@ public class Subsystem_Pneumatics extends Subsystem {
   public void moveMassBackStop() {
     log.debug("***movMassBackStop");
     this.m_massBack.set(false);
+  }
+
+  public void pulseMassForward(double durationSeconds) {
+    this.m_massForward.setPulseDuration(durationSeconds);
+    this.m_massForward.startPulse();
+  }
+
+  public void pulseMassBack(double durationSeconds) {
+    this.m_massBack.setPulseDuration(durationSeconds);
+    this.m_massBack.startPulse();
   }
 
   public void extendFootStart() {
@@ -305,6 +276,7 @@ public class Subsystem_Pneumatics extends Subsystem {
   }
 
   public static Subsystem_Pneumatics create() {
+    log.debug("***Begin creating pneumatics subsystem.");
     ConstructorArgs args = new ConstructorArgs();
 
     args.m_middleUp = new Solenoid(RobotMap.solenoid_Module_Axle_MiddleUp, RobotMap.solenoid_Channel_Axle_MiddleUp);
@@ -319,10 +291,12 @@ public class Subsystem_Pneumatics extends Subsystem {
     args.m_massBack = new Solenoid(RobotMap.solenoid_Module_MassMover_Back, RobotMap.solenoid_Channel_MassMover_Back);
 
     args.m_footDown = new Solenoid(RobotMap.solenoid_Module_Foot_Down, RobotMap.solenoid_Channel_Foot_Down);
-    args.m_footUp = new Solenoid(RobotMap.solenoid_Module_Foot_Up,RobotMap.solenoid_Channel_Foot_Up);
+    args.m_footUp = new Solenoid(RobotMap.solenoid_Module_Foot_Up, RobotMap.solenoid_Channel_Foot_Up);
 
     args.m_compressor = new Compressor(RobotMap.compressor_Module);
 
-    return new Subsystem_Pneumatics(args);
+    Subsystem_Pneumatics rtn = new Subsystem_Pneumatics(args);
+    log.debug("***End creating pneumatics subsystem.");
+    return rtn;
   }
 }

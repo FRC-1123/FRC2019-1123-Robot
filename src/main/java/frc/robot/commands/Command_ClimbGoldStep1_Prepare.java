@@ -31,11 +31,7 @@ public class Command_ClimbGoldStep1_Prepare extends AbstractCommand_ClimbBox {
     //
     addSequential(new Command_MoveMassBackStart());
     addSequential(new WaitCommand(massMoverWait));
-    
-    //
-    // Backup a little
-    //
-    addSequential(new Command_DriveDistanceStraight(backupDistance , backupSpeed));
+    addSequential(new Command_MoveMassBackStart());
         
   }
 }

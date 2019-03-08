@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.WaitCommand;
 
-public class Command_ClimbGoldStep6_GetFloatAxleOn extends AbstractCommand_ClimbBox {
+public class Command_ClimbGoldStep5_GetFloatAxleOn extends AbstractCommand_ClimbBox {
   /**
    * Get the middle axle over the box.
    * <p>
@@ -23,7 +23,7 @@ public class Command_ClimbGoldStep6_GetFloatAxleOn extends AbstractCommand_Climb
    * <li>The middle retract start is active.</li>
    * </ol>
    */
-  public Command_ClimbGoldStep6_GetFloatAxleOn() {
+  public Command_ClimbGoldStep5_GetFloatAxleOn() {
     //
     // Make sure the compressor is running to help keep up pressure on pneumatics.
     //
@@ -44,7 +44,7 @@ public class Command_ClimbGoldStep6_GetFloatAxleOn extends AbstractCommand_Climb
     //
     // Try to get the rest of the robot onto the box.
     //
-    addSequential(new Command_DriveDistanceStraight(middleAxleToFloatAxle+(pad*2),speed));
+    // addSequential(new Command_DriveDistanceStraight(middleAxleToFloatAxle+(pad*2),speed));
 
     //
     // Clean up

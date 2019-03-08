@@ -11,25 +11,24 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Logger;
 import frc.robot.Robot;
 
-public class Command_RetractBothAxlesStart extends Command {
-  private static final Logger log = new Logger(Command_RetractBothAxlesStart.class);
+public class Command_PulseMassMoveBack extends Command {
+  private static final Logger log = new Logger(Command_PulseMassMoveForward.class);
+  private double durationSeconds;
 
-  public Command_RetractBothAxlesStart() {
+  public Command_PulseMassMoveBack(double durationSeconds) {
     requires(Robot.m_subsystemPneumatics);
-    log.debug("***constructor");
+    this.durationSeconds = durationSeconds;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    log.debug("***initialize");
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    log.debug("***execute");
-    Robot.m_subsystemPneumatics.retractBothAxlesStart();
+    Robot.m_subsystemPneumatics.pulseMassBack(durationSeconds);
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -41,13 +40,11 @@ public class Command_RetractBothAxlesStart extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    log.debug("***end");
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    log.debug("***interrupted");
   }
 }

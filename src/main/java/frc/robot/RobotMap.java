@@ -77,6 +77,9 @@ public class RobotMap {
   public static final int solenoid_Module_Foot_Up = 21;
   public static final int solenoid_Channel_Foot_Up  = 7;
 
+  public static final double solenoid_AxleFoot_Reset_Wait = 3.0d;
+  public static final double solenoid_MassMover_Reset_Wait = 4.0d;
+
   //
   // Power distribution panel port.
   //

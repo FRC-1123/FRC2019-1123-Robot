@@ -27,11 +27,12 @@ public class Command_ClimbGoldStep2_RaiseRobot extends AbstractCommand_ClimbBox 
     //
     // Stop the mass mover back to pair mass mover back start in step 1.
     //
-    addSequential(new Command_MoveMassBackStop());
+    // addSequential(new Command_MoveMassBackStop());
 
     //
     // Extend Float Axle and Foot
     //
     addSequential(new Command_ExtendFloatAxleAndFootStart());
+    addSequential(new Command_ExtendMiddleAxleStart());
   }
 }

@@ -8,12 +8,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.Logger;
 import frc.robot.Robot;
 
-public class Command_ExendBothAxlesWithControl extends Command {
-  
-  public Command_ExendBothAxlesWithControl() {
+public class Command_PulseMassMoveForward extends Command {
+  private static final Logger log = new Logger(Command_PulseMassMoveForward.class);
+  private double durationSeconds;
+
+  public Command_PulseMassMoveForward(double durationSeconds) {
     requires(Robot.m_subsystemPneumatics);
+    this.durationSeconds = durationSeconds;
   }
 
   // Called just before this Command runs the first time
@@ -24,12 +28,13 @@ public class Command_ExendBothAxlesWithControl extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    Robot.m_subsystemPneumatics.pulseMassForward(durationSeconds);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return true;
   }
 
   // Called once after isFinished returns true

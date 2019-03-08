@@ -11,25 +11,24 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Logger;
 import frc.robot.Robot;
 
-public class Command_ExtendBothAxlesStart extends Command {
-  private static final Logger log = new Logger(Command_ExtendBothAxlesStart.class);
-
-  public Command_ExtendBothAxlesStart() {
+public class Command_ResetRobotStart extends Command {
+  private static final Logger log = new Logger(Command_ResetRobotStart.class);
+  public Command_ResetRobotStart() {
     requires(Robot.m_subsystemPneumatics);
-    log.debug("***constructor");
+    requires(Robot.m_subsystemDriveTrain);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    log.debug("***initialize");
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
     log.debug("***execute");
-    Robot.m_subsystemPneumatics.extendBothAxlesStart();
+    Robot.m_subsystemDriveTrain.stop();
+    Robot.m_subsystemPneumatics.resetStart();
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -41,13 +40,11 @@ public class Command_ExtendBothAxlesStart extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    log.debug("***end");
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    log.debug("***interrupted");
   }
 }
