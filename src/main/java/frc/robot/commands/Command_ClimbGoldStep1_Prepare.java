@@ -12,12 +12,6 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class Command_ClimbGoldStep1_Prepare extends AbstractCommand_ClimbBox {
   /**
    * Prepare robot to climb the gold box. 
-   * <p>
-   * State of Robot pre-command:
-   * <ol>
-   * <li>Robot font bumper is against the gold box</li>
-   * <li>Robot is still</li>
-   * </ol>
    */
   public Command_ClimbGoldStep1_Prepare() {
     addSequential(new Command_StartCompressor());
@@ -31,7 +25,7 @@ public class Command_ClimbGoldStep1_Prepare extends AbstractCommand_ClimbBox {
     //
     addSequential(new Command_MoveMassBackStart());
     addSequential(new WaitCommand(massMoverWait));
-    addSequential(new Command_MoveMassBackStart());
-        
+    addSequential(new Command_MoveMassBackStop());
+
   }
 }

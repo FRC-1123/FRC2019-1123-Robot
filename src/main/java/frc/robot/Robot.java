@@ -31,6 +31,7 @@ import frc.robot.commands.Command_MoveMassBackStart;
 import frc.robot.commands.Command_MoveMassBackStop;
 import frc.robot.commands.Command_MoveMassForwardStart;
 import frc.robot.commands.Command_MoveMassForwardStop;
+import frc.robot.commands.Command_ResetRobot;
 import frc.robot.commands.Command_RetractFloatAxleAndFootStart;
 import frc.robot.commands.Command_RetractFloatAxleAndFootStop;
 import frc.robot.commands.Command_RetractFloatAxleStart;
@@ -140,6 +141,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Climb Box Step3 - Fixed On", new Command_ClimbGoldStep3_GetFixedAxleOn());
     SmartDashboard.putData("Climb Box Step4 - Middle On", new Command_ClimbGoldStep4_GetMiddleAxleOn());
     SmartDashboard.putData("Climb Box Step5 - Float On", new Command_ClimbGoldStep5_GetFloatAxleOn());
+
+    SmartDashboard.putData("Reset the Robot", new Command_ResetRobot());
 
     log.debug("End robotInit");
   }

@@ -7,19 +7,9 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.WaitCommand;
-
 public class Command_ClimbGoldStep3_GetFixedAxleOn extends AbstractCommand_ClimbBox {
   /**
    * Get the fixed axle over the box.
-   * <p>
-   * State of Robot pre-command:
-   * <ol>
-   * <li>Creep mode has been enabled</li>
-   * <li>Mass mover back stop command has been issued and mass is in the back of the robot</li>
-   * <li>Robot is a set distance from the box</li>
-   * <li>The float axle, middle axle, and foot extend start are active.</li>
-   * </ol>
    */
   public Command_ClimbGoldStep3_GetFixedAxleOn() {
     //
@@ -27,21 +17,11 @@ public class Command_ClimbGoldStep3_GetFixedAxleOn extends AbstractCommand_Climb
     //
     addSequential(new Command_StartCompressor());
 
-
-    addSequential(new Command_MoveMassBackStart());
-    addSequential(new WaitCommand(massMoverWait));
-    addSequential(new Command_MoveMassBackStop());
-
     //
     // Retract the foot.
     //
     addSequential(new Command_ExtendFootStop());
     addSequential(new Command_RetractFootStart());
-
-    //
-    // Drive forward enough to get the front axle over the box.
-    //
-    // addSequential(new Command_DriveDistanceStraight(backupDistance+bumperPad+frameToFixed+pad, speed));
 
   }
 }

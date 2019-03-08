@@ -12,15 +12,6 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class Command_ClimbGoldStep4_GetMiddleAxleOn extends AbstractCommand_ClimbBox {
   /**
    * Get the middle axle over the box.
-   * <p>
-   * State of Robot pre-command:
-   * <ol>
-   * <li>Creep mode has been enabled</li>
-   * <li>Mass mover back stop command has been issued and mass is in the back of the robot</li>
-   * <li>Robot fixed axle is over the box</li>
-   * <li>The float axle and middle axle extend start are active.</li>
-   * <li>The foot retract start is active.</li>
-   * </ol>
    */
   public Command_ClimbGoldStep4_GetMiddleAxleOn() {
     //
@@ -33,18 +24,13 @@ public class Command_ClimbGoldStep4_GetMiddleAxleOn extends AbstractCommand_Clim
     //
     addSequential(new Command_MoveMassForwardStart());
     addSequential(new WaitCommand(massMoverWait));
+    addSequential(new Command_MoveMassForwardStop());
 
     //
     // Raise the middle axle
     //
     addSequential(new Command_ExtendMiddleAxleStop());
     addSequential(new Command_RetractMiddleAxleStart());
-    addSequential(new WaitCommand(timeToRetractMiddleAxle));
-    
-    //
-    // Try to get the middle axle over the box.
-    //
-    // addSequential(new Command_DriveDistanceStraight(fixedAxleToMiddleAxle+pad, speed));
 
   }
 }
