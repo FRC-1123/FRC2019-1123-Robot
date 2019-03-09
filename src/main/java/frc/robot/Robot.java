@@ -16,6 +16,7 @@ import frc.robot.commands.Command_ClimbGoldStep2_RaiseRobot;
 import frc.robot.commands.Command_ClimbGoldStep3_GetFixedAxleOn;
 import frc.robot.commands.Command_ClimbGoldStep4_GetMiddleAxleOn;
 import frc.robot.commands.Command_ClimbGoldStep5_GetFloatAxleOn;
+import frc.robot.commands.Command_ClimbGoldStepX_GetFloatAxleOnHelper;
 import frc.robot.commands.Command_DriveManually;
 import frc.robot.commands.Command_ExtendFloatAxleAndFootStart;
 import frc.robot.commands.Command_ExtendFloatAxleAndFootStop;
@@ -141,8 +142,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Climb Box Step3 - Fixed On", new Command_ClimbGoldStep3_GetFixedAxleOn());
     SmartDashboard.putData("Climb Box Step4 - Middle On", new Command_ClimbGoldStep4_GetMiddleAxleOn());
     SmartDashboard.putData("Climb Box Step5 - Float On", new Command_ClimbGoldStep5_GetFloatAxleOn());
+    SmartDashboard.putData("Climb Box StepX - Float On Helper", new Command_ClimbGoldStepX_GetFloatAxleOnHelper());
 
     SmartDashboard.putData("Reset the Robot", new Command_ResetRobot());
+
+    SmartDashboard.putData(Scheduler.getInstance());
 
     log.debug("End robotInit");
   }

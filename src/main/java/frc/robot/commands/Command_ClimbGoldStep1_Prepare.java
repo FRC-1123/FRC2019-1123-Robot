@@ -18,14 +18,15 @@ public class Command_ClimbGoldStep1_Prepare extends AbstractCommand_ClimbBox {
 
     //
     // Make sure we are in "creep mode."
+    //
     addSequential(new Command_EnableCreepMode());
     
     //
     // Move the mass to the back of the robot.
     //
-    addSequential(new Command_MoveMassBackStart());
+    addSequential(new Command_MoveMassForwardStart());
     addSequential(new WaitCommand(massMoverWait));
-    addSequential(new Command_MoveMassBackStop());
+    addSequential(new Command_MoveMassForwardStop());
 
   }
 }

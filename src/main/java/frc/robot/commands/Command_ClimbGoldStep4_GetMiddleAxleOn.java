@@ -20,7 +20,7 @@ public class Command_ClimbGoldStep4_GetMiddleAxleOn extends AbstractCommand_Clim
     addSequential(new Command_StartCompressor());
 
     //
-    // Move the mass to the front of the robot.
+    // Move the mass to the back of the robot.
     //
     addSequential(new Command_MoveMassForwardStart());
     addSequential(new WaitCommand(massMoverWait));

@@ -7,6 +7,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.command.WaitCommand;
+
 public class Command_ClimbGoldStep2_RaiseRobot extends AbstractCommand_ClimbBox {
   /**
    * Raise up the robot body to box height.
@@ -22,5 +24,13 @@ public class Command_ClimbGoldStep2_RaiseRobot extends AbstractCommand_ClimbBox 
     //
     addSequential(new Command_ExtendFloatAxleAndFootStart());
     addSequential(new Command_ExtendMiddleAxleStart());
+    addSequential(new WaitCommand(2.0d));
+
+    //
+    // Move the mass to the back of the robot.
+    //
+    addSequential(new Command_MoveMassBackStart());
+    addSequential(new WaitCommand(massMoverWait));
+    addSequential(new Command_MoveMassBackStop());
   }
 }

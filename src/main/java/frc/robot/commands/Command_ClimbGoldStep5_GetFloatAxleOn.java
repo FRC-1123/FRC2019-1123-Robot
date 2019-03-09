@@ -26,9 +26,9 @@ public class Command_ClimbGoldStep5_GetFloatAxleOn extends AbstractCommand_Climb
     //
     // Clean up
     //
-    addSequential(new Command_RetractFootStop());
-    addSequential(new Command_RetractMiddleAxleStop());
-    addSequential(new Command_RetractFloatAxleStop());
-    addSequential(new Command_StopCompressor());
+    // addSequential(new Command_RetractFootStop());
+    // addSequential(new Command_RetractMiddleAxleStop());
+    // addSequential(new Command_RetractFloatAxleStop());
+    // addSequential(new Command_StopCompressor());
  }
 }
