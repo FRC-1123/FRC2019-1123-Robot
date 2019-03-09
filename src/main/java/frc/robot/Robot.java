@@ -32,6 +32,7 @@ import frc.robot.commands.Command_MoveMassBackStart;
 import frc.robot.commands.Command_MoveMassBackStop;
 import frc.robot.commands.Command_MoveMassForwardStart;
 import frc.robot.commands.Command_MoveMassForwardStop;
+import frc.robot.commands.Command_PulseExtendFoot;
 import frc.robot.commands.Command_ResetRobot;
 import frc.robot.commands.Command_RetractFloatAxleAndFootStart;
 import frc.robot.commands.Command_RetractFloatAxleAndFootStop;
@@ -44,6 +45,7 @@ import frc.robot.commands.Command_RetractMiddleAxleStop;
 import frc.robot.commands.Command_StartCompressor;
 import frc.robot.commands.Command_StopCompressor;
 import frc.robot.commands.Command_ToggleOpenLoopRampRate;
+import frc.robot.sensors.AIMRoboticsCamera;
 import frc.robot.subsystems.Subsystem_DriveTrain;
 import frc.robot.subsystems.Subsystem_Pneumatics;
 
@@ -73,6 +75,11 @@ public class Robot extends TimedRobot {
   // Autonoumous Command initialized wwhen robotInit is called.
   //
   Command m_autonomousCommand = null;
+
+  //
+  // Camera
+  //
+  private AIMRoboticsCamera camera;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -145,8 +152,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Climb Box StepX - Float On Helper", new Command_ClimbGoldStepX_GetFloatAxleOnHelper());
 
     SmartDashboard.putData("Reset the Robot", new Command_ResetRobot());
+    SmartDashboard.putData("Pulse Extend Foot", new Command_PulseExtendFoot(0.25d));
 
     SmartDashboard.putData("Scheduler", Scheduler.getInstance());
+
+    this.camera = AIMRoboticsCamera.getInstance();
 
     log.debug("End robotInit");
   }

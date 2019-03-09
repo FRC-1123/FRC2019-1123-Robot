@@ -267,6 +267,15 @@ public class Subsystem_Pneumatics extends Subsystem {
     this.m_footDown.set(false);
   }
 
+  public void pulseExtendFoot(double durationSeconds) {
+    log.debug("***pulseExendFoot");
+    if (this.m_footUp.get()) {
+      this.m_footUp.set(false);
+    }
+    this.m_footDown.setPulseDuration(durationSeconds);
+    this.m_footDown.startPulse();
+  }
+
   public void retractFootStart() {
     log.debug("**retractFootStart");
     this.m_footUp.set(true);
