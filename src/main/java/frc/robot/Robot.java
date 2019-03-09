@@ -79,6 +79,7 @@ public class Robot extends TimedRobot {
   //
   // Camera
   //
+  @SuppressWarnings("unused")
   private AIMRoboticsCamera camera;
 
   /**
