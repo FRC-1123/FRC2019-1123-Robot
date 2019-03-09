@@ -146,7 +146,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Reset the Robot", new Command_ResetRobot());
 
-    SmartDashboard.putData(Scheduler.getInstance());
+    SmartDashboard.putData("Scheduler", Scheduler.getInstance());
 
     log.debug("End robotInit");
   }

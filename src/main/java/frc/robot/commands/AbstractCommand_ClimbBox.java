@@ -21,7 +21,7 @@ public abstract class AbstractCommand_ClimbBox extends CommandGroup {
   protected static final double speed = 0.10d;
   protected static final double backupDistance = 2.0d;
   protected static final double backupSpeed = speed * -1.0d;
-  protected static final double massMoverWait = 5.0d;
+  protected static final double massMoverWait = 3.0d;
   protected static final double timeToRetractMiddleAxle = 5.0d;
   protected static final double timeToRetractFloatAxle = 5.0d;
 

@@ -172,6 +172,9 @@ public class Subsystem_Pneumatics extends Subsystem {
 
   public void pulseExtendMiddleAxle(double durationSeconds) {
     log.debug("***pulseExtendMiddleAxle");
+    if(this.m_middleUp.get()) {
+      this.m_middleUp.set(false);
+    }
     this.m_middleDown.setPulseDuration(durationSeconds);
     this.m_middleDown.startPulse();
   }
@@ -247,6 +250,9 @@ public class Subsystem_Pneumatics extends Subsystem {
   }
 
   public void pulseMassBack(double durationSeconds) {
+    if (this.m_massForward.get()) {
+      this.m_massForward.set(false);
+    }
     this.m_massBack.setPulseDuration(durationSeconds);
     this.m_massBack.startPulse();
   }
