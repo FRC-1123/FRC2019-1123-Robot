@@ -194,6 +194,14 @@ public class Subsystem_Pneumatics extends Subsystem {
     this.m_floatDown.set(false);
   }
 
+  public void pulseExtendFloatAxle(double durationSeconds) {
+    if (this.m_floatUp.get()) {
+      this.m_floatUp.set(false);
+    }
+    this.m_floatDown.setPulseDuration(durationSeconds);
+    this.m_floatDown.startPulse();
+  }
+
   public boolean isRetractMiddleAxleOn() {
     log.debug("***isRetractMiddleAxleOn");
     return this.m_middleUp.get();

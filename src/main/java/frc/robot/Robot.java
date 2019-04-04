@@ -32,6 +32,7 @@ import frc.robot.commands.Command_MoveMassBackStart;
 import frc.robot.commands.Command_MoveMassBackStop;
 import frc.robot.commands.Command_MoveMassForwardStart;
 import frc.robot.commands.Command_MoveMassForwardStop;
+import frc.robot.commands.Command_PulseExtendFloatAxle;
 import frc.robot.commands.Command_PulseExtendFoot;
 import frc.robot.commands.Command_ResetRobot;
 import frc.robot.commands.Command_RetractFloatAxleAndFootStart;
@@ -154,6 +155,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Reset the Robot", new Command_ResetRobot());
     SmartDashboard.putData("Pulse Extend Foot", new Command_PulseExtendFoot(0.25d));
+    SmartDashboard.putData("Pulse Extend Float", new Command_PulseExtendFloatAxle(0.25d));
 
     SmartDashboard.putData("Scheduler", Scheduler.getInstance());
 
