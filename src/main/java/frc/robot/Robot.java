@@ -46,9 +46,9 @@ import frc.robot.commands.Command_RetractMiddleAxleStop;
 import frc.robot.commands.Command_StartCompressor;
 import frc.robot.commands.Command_StopCompressor;
 import frc.robot.commands.Command_ToggleOpenLoopRampRate;
-import frc.robot.sensors.AIMRoboticsCamera;
 import frc.robot.subsystems.Subsystem_DriveTrain;
 import frc.robot.subsystems.Subsystem_Pneumatics;
+import frc.team1123.camera.AIMRoboticsCameraServer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -78,10 +78,9 @@ public class Robot extends TimedRobot {
   Command m_autonomousCommand = null;
 
   //
-  // Camera
+  // Our Camera Server.
   //
-  @SuppressWarnings("unused")
-  private AIMRoboticsCamera camera;
+  AIMRoboticsCameraServer cameraServer;
 
   /**
    * This function is run when the robot is first started up and should be used
@@ -106,6 +105,13 @@ public class Robot extends TimedRobot {
     // Init driver control button commands
     //
     m_oi.getBumperRight().whenPressed(new Command_ToggleOpenLoopRampRate());
+
+    //
+    // Initialize the cameras
+    //
+    cameraServer = AIMRoboticsCameraServer.getInstance();
+    for (int devId=0; devId<RobotMap.cameraCount;devId++)
+      cameraServer.addCamera(devId, "camera_"+String.valueOf(devId), 640, 480, 30);
   
     //
     // Dashboard widgets.
@@ -158,8 +164,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Pulse Extend Float", new Command_PulseExtendFloatAxle(0.25d));
 
     SmartDashboard.putData("Scheduler", Scheduler.getInstance());
-
-    this.camera = AIMRoboticsCamera.getInstance();
 
     log.debug("End robotInit");
   }

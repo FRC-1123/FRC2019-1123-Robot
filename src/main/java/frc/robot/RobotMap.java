@@ -86,13 +86,7 @@ public class RobotMap {
   public static final int powerDistributionPanel = 1;
 
   //
-  // Ultrasonic distance sensors
+  // Camera count.
   //
-  public static final int frontDistanceSensorPingChannel = 0;
-  public static final int frontDistanceSensorEchoChannel = 1;
-  public static final int fixedAxleDistanceSensorPingChannel = 2;
-  public static final int fixedAxleDistanceSensorEchoChannel = 3;
-  public static final int middleAxleDistanceSensorPingChannel = 4;
-  public static final int middleAxleDistanceSensorEchoChannel = 5;
-
+  public static final int cameraCount = 5;
 }
