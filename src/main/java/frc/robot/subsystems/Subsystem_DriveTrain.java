@@ -71,6 +71,13 @@ public class Subsystem_DriveTrain extends Subsystem {
   private final CANSparkMax[] m_motorsSideB;
 
   //
+  // Drive Train Axle Motor Enable Flags
+  //
+  private boolean isFixedAxleEnabled;
+  private boolean isMiddleAxleEnabled;
+  private boolean isFloatAxleEnabled;
+
+  //
   // Drive train motor encoders.
   //
   CANEncoder m_motorFixedAEncoder;
@@ -109,6 +116,13 @@ public class Subsystem_DriveTrain extends Subsystem {
     this.m_motors[4] = motorFloatA;
     this.m_motorFloatB = motorFloatB;
     this.m_motors[5] = motorFloatB;
+
+    //
+    // Setting Axle Enable Flags
+    //
+    this.isFixedAxleEnabled = true;
+    this.isFloatAxleEnabled = true;
+    this.isMiddleAxleEnabled = true;
 
     //
     // Set the inverted flags on the motors individually
@@ -179,6 +193,30 @@ public class Subsystem_DriveTrain extends Subsystem {
 
   public void drive(double leftSpeed, double rightSpeed) {
     this._tankDrive(leftSpeed, rightSpeed, true);
+  }
+
+  public void enableFixedAxleMotors(boolean flag) {
+    this.isFixedAxleEnabled = flag;
+  }
+
+  public boolean isFixedAxleEnabled() {
+    return this.isFixedAxleEnabled;
+  }
+
+  public void enableMiddleAxleMotors(boolean flag) {
+    this.isMiddleAxleEnabled = flag;
+  }
+
+ public boolean isMiddleAxleEnabled() {
+   return this.isMiddleAxleEnabled;
+ }
+
+  public void enableFloatAxleMotors(boolean flag) {
+    this.isFloatAxleEnabled = flag;
+  }
+
+  public boolean isFloatAxleEnabled() {
+    return this.isFloatAxleEnabled;
   }
 
   public void driveStraightDistance(double distance, double speed) {
@@ -253,6 +291,13 @@ public class Subsystem_DriveTrain extends Subsystem {
     stop();
     for (CANSparkMax motor : m_motors) {
       motor.setIdleMode(IdleMode.kBrake);
+    }
+  }
+
+  public void setIdleCoast() {
+    stop();
+    for (CANSparkMax motor : m_motors) {
+      motor.setIdleMode(IdleMode.kCoast);
     }
   }
 
@@ -336,10 +381,34 @@ public class Subsystem_DriveTrain extends Subsystem {
       rightSpeed = Math.copySign(rightSpeed * rightSpeed, rightSpeed);
     }
 
-    for (int i = 0; i < 3; i++) {
-      m_motorsSideA[i].set(leftSpeed);
-      m_motorsSideB[i].set(rightSpeed);
+    // for (int i = 0; i < 3; i++) {
+    //   m_motorsSideA[i].set(leftSpeed);
+    //   m_motorsSideB[i].set(rightSpeed);
+    // }
+
+    if (isFixedAxleEnabled) {
+      this.m_motorFixedA.set(leftSpeed);
+      this.m_motorFixedB.set(rightSpeed);
+    } else {
+      this.m_motorFixedA.set(0);
+      this.m_motorFixedB.set(0);
+    } 
+    
+    if (isMiddleAxleEnabled) {
+      this.m_motorMiddleA.set(leftSpeed);
+      this.m_motorMiddleB.set(rightSpeed);
+    } else {
+      this.m_motorMiddleA.set(0);
+      this.m_motorMiddleB.set(0);
     }
+
+  if (isFloatAxleEnabled) {
+    this.m_motorFloatA.set(leftSpeed);
+    this.m_motorFloatB.set(rightSpeed);
+  } else {
+    this.m_motorFloatA.set(0);
+    this.m_motorFloatB.set(0);
+  }
 
     m_motorSafety.feed();
   }
