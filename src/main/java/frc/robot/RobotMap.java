@@ -53,7 +53,7 @@ public class RobotMap {
   public static final double driveTrain_Wheel_Radius = 3d;
 
   //
-  // Solenoid ports for floating axles and mass mover.
+  // Solenoid ports for floating axles and mass mover, etc.
   //
   public static final int compressor_Module = 21;
   
@@ -77,8 +77,39 @@ public class RobotMap {
   public static final int solenoid_Module_Foot_Up = 21;
   public static final int solenoid_Channel_Foot_Up  = 7;
 
+  public static final int solenoid_Module_Hatch_Extend = 22;
+  public static final int solenoid_Channel_Hatch_Extend = 0;
+  public static final int solenoid_Module_Hatch_Retract = 22;
+  public static final int solenoid_Channel_Hatch_Retract = 1;
+
+  public static final int solenoid_Module_Antenna_Extend = 22;
+  public static final int solenoid_Channel_Antenna_Extend = 2;
+  public static final int solenoid_Module_Antenna_Retract = 22;
+  public static final int solenoid_Channel_Antenna_Retract = 3;
+
   public static final double solenoid_AxleFoot_Reset_Wait = 3.0d;
   public static final double solenoid_MassMover_Reset_Wait = 4.0d;
+
+  //
+  // Solenoid pulse times in seconds.
+  //
+  public static final double solenoidPulseTime_MiddleAxle_Down = 2.55d;
+  public static final double solenoidPulseTime_MiddleAxle_Up = 2.55d;
+
+  public static final double solenoidPulseTime_FloatAxle_Down = 2.55d;
+  public static final double solenoidPulseTime_FloatAxle_Up = 2.55d;
+
+  public static final double solenoidPulseTime_Foot_Down = 2.55d;
+  public static final double solenoidPulseTime_Foot_Up = 1.5d;
+
+  public static final double solenoidPulseTime_MassMover_Forward = 2.55d;
+  public static final double solenoidPulseTime_MassMover_Back = 2.55d;
+
+  public static final double solenoidPulseTime_Hatch_Extend = 1.5d;
+  public static final double solenoidPulseTime_Hatch_Retract = 1.5d;
+
+  public static final double solenoidPulseTime_Antenna_Extend = 1.5d;
+  public static final double solenoidPulseTime_Antenna_Retract = 1.5d;
 
   //
   // Power distribution panel port.
@@ -88,5 +119,5 @@ public class RobotMap {
   //
   // Camera count.
   //
-  public static final int cameraCount = 5;
+  public static final int cameraCount = 4;
 }
