@@ -9,14 +9,12 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.Logger;
 import frc.robot.RobotMap;
 
 /**
  * Add your docs here.
  */
 public class Subsystem_Compressor extends Subsystem {
-  private static Logger log = new Logger(Subsystem_Compressor.class);
 
   private Compressor m_compressor;
 
