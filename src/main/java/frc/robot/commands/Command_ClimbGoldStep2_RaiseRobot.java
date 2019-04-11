@@ -7,13 +7,19 @@
 
 package frc.robot.commands;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class Command_ClimbGoldStep2_RaiseRobot extends CommandGroup {
+  private static final Logger log = LoggerFactory.getLogger(Command_ClimbGoldStep2_RaiseRobot.class);
+
   /**
    * Raise up the robot body to box height.
    */
   public Command_ClimbGoldStep2_RaiseRobot() {
+    log.debug("Begin");
     //
     // Make sure the compressor is running to help keep up pressure on pneumatics.
     //
@@ -35,5 +41,7 @@ public class Command_ClimbGoldStep2_RaiseRobot extends CommandGroup {
     // Move the mass to the back of the robot.
     //
     addSequential(new Command_MoveMassBack());
+    
+    log.debug("End");
   }
 }
