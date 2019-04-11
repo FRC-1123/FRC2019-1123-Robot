@@ -106,11 +106,11 @@ public class RobotMap {
   public static final double solenoidPulseTime_MassMover_Forward = 2.55d;
   public static final double solenoidPulseTime_MassMover_Back = 2.55d;
 
-  public static final double solenoidPulseTime_Hatch_Extend = 1.5d;
-  public static final double solenoidPulseTime_Hatch_Retract = 1.5d;
+  public static final double solenoidPulseTime_Hatch_Extend = 2.0d;
+  public static final double solenoidPulseTime_Hatch_Retract = 2.0d;
 
-  public static final double solenoidPulseTime_Antenna_Extend = 1.5d;
-  public static final double solenoidPulseTime_Antenna_Retract = 1.5d;
+  public static final double solenoidPulseTime_Antenna_Extend = 2.0d;
+  public static final double solenoidPulseTime_Antenna_Retract = 2.0d;
 
   //
   // Power distribution panel port.
