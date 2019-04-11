@@ -11,6 +11,7 @@ package frc.robot;
 // DC-GMU Rick Mods
 //
 //  1. Commented out camera code to see if this fixes 20ms timeout issue.
+//  2. Removed "logging" thread so logging is now a no-op.
 //
 
 /**

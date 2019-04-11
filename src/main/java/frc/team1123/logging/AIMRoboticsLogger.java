@@ -127,7 +127,7 @@ class AIMRoboticsLogger extends MarkerIgnoringBase {
 				e.printStackTrace(System.err);
 			}
 		});
-		consumer.start();
+		//consumer.start();
 	}
 
 	/**
@@ -411,9 +411,9 @@ class AIMRoboticsLogger extends MarkerIgnoringBase {
 	 * @param t       The exception whose stack trace should be logged
 	 */
 	private void log(Level level, String message, Throwable t) {
-		_Msg msg = new _Msg(level, Thread.currentThread().getId(), Thread.currentThread().getName(), callingMethod(),
-				this.name, message, t);
-		AIMRoboticsLogger.msgQueue.add(msg);
+		// _Msg msg = new _Msg(level, Thread.currentThread().getId(), Thread.currentThread().getName(), callingMethod(),
+		// 		this.name, message, t);
+		// AIMRoboticsLogger.msgQueue.add(msg);
 	}
 
 	/**
@@ -425,7 +425,7 @@ class AIMRoboticsLogger extends MarkerIgnoringBase {
 	 * @param t
 	 */
 	private void _log(Level level, String message, Throwable t) {
-		log(level, message, t);
+		// log(level, message, t);
 	}
 
 	/**
@@ -437,8 +437,8 @@ class AIMRoboticsLogger extends MarkerIgnoringBase {
 	 * @param arg2
 	 */
 	private void formatAndLog(Level level, String format, Object arg1, Object arg2) {
-		FormattingTuple tp = MessageFormatter.format(format, arg1, arg2);
-		log(level, tp.getMessage(), tp.getThrowable());
+		// FormattingTuple tp = MessageFormatter.format(format, arg1, arg2);
+		// log(level, tp.getMessage(), tp.getThrowable());
 	}
 
 	/**
@@ -449,8 +449,8 @@ class AIMRoboticsLogger extends MarkerIgnoringBase {
 	 * @param arguments a list of 3 ore more arguments
 	 */
 	private void formatAndLog(Level level, String format, Object... arguments) {
-		FormattingTuple tp = MessageFormatter.arrayFormat(format, arguments);
-		log(level, tp.getMessage(), tp.getThrowable());
+		// FormattingTuple tp = MessageFormatter.arrayFormat(format, arguments);
+		// log(level, tp.getMessage(), tp.getThrowable());
 	}
 
 	// ========================================================================================
