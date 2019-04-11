@@ -10,7 +10,6 @@ package frc.robot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -151,9 +150,9 @@ public class Robot extends TimedRobot {
     //
     // Initialize the cameras
     //
-    cameraServer = AIMRoboticsCameraServer.getInstance();
-    for (int devId = 0; devId < RobotMap.cameraCount; devId++)
-      cameraServer.addCamera(devId, "camera_" + String.valueOf(devId), 640, 480, 30);
+    // cameraServer = AIMRoboticsCameraServer.getInstance();
+    // for (int devId = 0; devId < RobotMap.cameraCount; devId++)
+    //   cameraServer.addCamera(devId, "camera_" + String.valueOf(devId), 640, 480, 30);
 
     //
     // Dashboard widgets.
@@ -284,10 +283,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // System.out.println("I'm alive ("+Long.toString(++this.aliveCount)+")");
-    if (DriverStation.getInstance().isFMSAttached() && !gameReported) {
-      _getDSGameInformation();
-      gameReported = true;
-    }
+    // if (DriverStation.getInstance().isFMSAttached() && !gameReported) {
+    //   _getDSGameInformation();
+    //   gameReported = true;
+    // }
     SmartDashboard.putBoolean("Creep Mode", m_subsystemDriveTrain.getOpenLoopRampRate() == RobotMap.driveRampRateCreep);
   }
 

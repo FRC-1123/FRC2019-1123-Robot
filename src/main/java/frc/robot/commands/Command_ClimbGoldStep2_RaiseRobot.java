@@ -30,7 +30,7 @@ public class Command_ClimbGoldStep2_RaiseRobot extends CommandGroup {
     // Adjust the mass mover
     //
     addSequential(new Command_PulseMassMoveBack(0.5d));
-+
+
     //
     // Extend Float Axle and Foot
     //

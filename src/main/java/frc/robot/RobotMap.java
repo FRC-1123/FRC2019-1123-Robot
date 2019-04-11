@@ -7,6 +7,12 @@
 
 package frc.robot;
 
+//----------------------------------------------------------------------------
+// DC-GMU Rick Mods
+//
+//  1. Commented out camera code to see if this fixes 20ms timeout issue.
+//
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
