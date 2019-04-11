@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
 public class Command_ClimbGoldStep2_RaiseRobot extends CommandGroup {
   private static final Logger log = LoggerFactory.getLogger(Command_ClimbGoldStep2_RaiseRobot.class);
@@ -29,17 +30,20 @@ public class Command_ClimbGoldStep2_RaiseRobot extends CommandGroup {
     // Adjust the mass mover
     //
     addSequential(new Command_PulseMassMoveBack(0.5d));
-
++
     //
     // Extend Float Axle and Foot
     //
     addSequential(new Command_ExtendFloatAxleStop());
     addSequential(new Command_ExtendFoot());
     addSequential(new Command_ExtendMiddleAxle());
+    addSequential(new Command_ExtendFloatAxleStart());
+    addSequential(new Command_ExtendMiddleAxleStart());
 
     //
     // Move the mass to the back of the robot.
     //
+    addSequential(new WaitCommand(0.5));
     addSequential(new Command_MoveMassBack());
     
     log.debug("End");

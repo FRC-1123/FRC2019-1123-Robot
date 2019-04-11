@@ -12,15 +12,6 @@
 #
 # Log level for Commands
 #
-frc.robot.commands: trace
+frc.robot: error
 
-#
-# Log level for Subsystems
-#
-frc.robot.commands: trace
-
-#
-# Log level for Robot.java
-#
-frc.robot.Robot: trace
 
