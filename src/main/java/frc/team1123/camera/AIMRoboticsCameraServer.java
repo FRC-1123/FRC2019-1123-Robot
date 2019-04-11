@@ -8,10 +8,14 @@ package frc.team1123.camera;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+
+import edu.wpi.cscore.VideoSource;
 
 /**
  * The AIM Robotics camera server wraps the WPILIB camera server API and
@@ -129,5 +133,13 @@ public class AIMRoboticsCameraServer {
 		AIMRoboticsUsbCamera c  = devNameMap.get(devName);
 		if (c!=null)
 			c.setEnabled(isEnabled);
+	}
+
+	public List<VideoSource> getCameras() {
+		ArrayList<VideoSource> rtn = new ArrayList<>();
+		for (AIMRoboticsUsbCamera vs : devIdMap.values()) {
+			rtn.add(vs.getVideoSource());
+		}
+		return rtn;
 	}
 }

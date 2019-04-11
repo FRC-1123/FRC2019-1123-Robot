@@ -14,6 +14,7 @@ import org.opencv.imgproc.Imgproc;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.cameraserver.CameraServer;
 
 /**
@@ -68,4 +69,7 @@ public class AIMRoboticsUsbCamera implements AIMRoboticsCameraFrameProcessor {
 		this.isEnabled.set(isEnabled);
 	}
 
+	public VideoSource getVideoSource() {
+		return this.usbCamera;
+	}
 }

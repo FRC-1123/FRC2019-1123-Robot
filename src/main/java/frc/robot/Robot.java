@@ -10,11 +10,13 @@ package frc.robot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Command_ClimbGoldStep1_Prepare;
 import frc.robot.commands.Command_ClimbGoldStep2_RaiseRobot;
@@ -30,12 +32,16 @@ import frc.robot.commands.Command_ExtendFootStart;
 import frc.robot.commands.Command_ExtendFootStop;
 import frc.robot.commands.Command_ExtendMiddleAxleStart;
 import frc.robot.commands.Command_ExtendMiddleAxleStop;
+import frc.robot.commands.Command_MoveMassBack;
 import frc.robot.commands.Command_MoveMassBackStart;
 import frc.robot.commands.Command_MoveMassBackStop;
+import frc.robot.commands.Command_MoveMassForward;
 import frc.robot.commands.Command_MoveMassForwardStart;
 import frc.robot.commands.Command_MoveMassForwardStop;
 import frc.robot.commands.Command_PulseExtendFloatAxle;
 import frc.robot.commands.Command_PulseExtendFoot;
+import frc.robot.commands.Command_PulseMassMoveBack;
+import frc.robot.commands.Command_PulseMassMoveForward;
 import frc.robot.commands.Command_ResetRobot;
 import frc.robot.commands.Command_RetractFloatAxleStart;
 import frc.robot.commands.Command_RetractFloatAxleStop;
@@ -142,65 +148,93 @@ public class Robot extends TimedRobot {
     //
     // Dashboard widgets.
     //
-    // SmartDashboard.putData("Extend Both Axles Start", new Command_ExtendFloatAxleAndFootStart());
-    // SmartDashboard.putData("Extend Both Axles Stop", new Command_ExtendFloatAxleAndFootStop());
+    // SmartDashboard.putData("Extend Middle Axle Start", new Command_ExtendMiddleAxleStart());
+    // SmartDashboard.putData("Extend Middle Axle Stop", new Command_ExtendMiddleAxleStop());
 
-    // SmartDashboard.putData("Retract Both Axles Start", new Command_RetractFloatAxleAndFootStart());
-    // SmartDashboard.putData("Retract Both Axles Stop", new Command_RetractFloatAxleAndFootStop());
+    // SmartDashboard.putData("Retract Middle Axle Start", new Command_RetractMiddleAxleStart());
+    // SmartDashboard.putData("Retract Middle Axle Stop", new Command_RetractMiddleAxleStop());
 
-    SmartDashboard.putData("Extend Middle Axle Start", new Command_ExtendMiddleAxleStart());
-    SmartDashboard.putData("Extend Middle Axle Stop", new Command_ExtendMiddleAxleStop());
+    // SmartDashboard.putData("Extend Float Axle Start", new Command_ExtendFloatAxleStart());
+    // SmartDashboard.putData("Extend Float Axle Stop", new Command_ExtendFloatAxleStop());
 
-    SmartDashboard.putData("Retract Middle Axle Start", new Command_RetractMiddleAxleStart());
-    SmartDashboard.putData("Retract Middle Axle Stop", new Command_RetractMiddleAxleStop());
+    // SmartDashboard.putData("Retract Float Axle Start", new Command_RetractFloatAxleStart());
+    // SmartDashboard.putData("Retract Float Axle Stop", new Command_RetractFloatAxleStop());
 
-    SmartDashboard.putData("Extend Float Axle Start", new Command_ExtendFloatAxleStart());
-    SmartDashboard.putData("Extend Float Axle Stop", new Command_ExtendFloatAxleStop());
+    // SmartDashboard.putData("Extend Foot Start", new Command_ExtendFootStart());
+    // SmartDashboard.putData("Extend Foot Stop", new Command_ExtendFootStop());
 
-    SmartDashboard.putData("Retract Float Axle Start", new Command_RetractFloatAxleStart());
-    SmartDashboard.putData("Retract Float Axle Stop", new Command_RetractFloatAxleStop());
+    // SmartDashboard.putData("Retract Foot Start", new Command_RetractFootStart());
+    // SmartDashboard.putData("Retract Foot Stop", new Command_RetractFootStop());
 
-    SmartDashboard.putData("Extend Foot Start", new Command_ExtendFootStart());
-    SmartDashboard.putData("Extend Foot Stop", new Command_ExtendFootStop());
+    // SmartDashboard.putData("Move Mass Forward Start", new Command_MoveMassForwardStart());
+    // SmartDashboard.putData("Move Mass Forward Stop", new Command_MoveMassForwardStop());
 
-    SmartDashboard.putData("Retract Foot Start", new Command_RetractFootStart());
-    SmartDashboard.putData("Retract Foot Stop", new Command_RetractFootStop());
+    // SmartDashboard.putData("Move Mass Back Start", new Command_MoveMassBackStart());
+    // SmartDashboard.putData("Move Mass Back Stop", new Command_MoveMassBackStop());
 
-    SmartDashboard.putData("Move Mass Forward Start", new Command_MoveMassForwardStart());
-    SmartDashboard.putData("Move Mass Forward Stop", new Command_MoveMassForwardStop());
+    // SmartDashboard.putData("Start Compressor", new Command_StartCompressor());
+    // SmartDashboard.putData("Stop Compressor", new Command_StopCompressor());
 
-    SmartDashboard.putData("Move Mass Back Start", new Command_MoveMassBackStart());
-    SmartDashboard.putData("Move Mass Back Stop", new Command_MoveMassBackStop());
-
-    SmartDashboard.putData("Start Compressor", new Command_StartCompressor());
-    SmartDashboard.putData("Stop Compressor", new Command_StopCompressor());
-
-    SmartDashboard.putData("Climb Step1 - Prepare", new Command_ClimbGoldStep1_Prepare());
-    SmartDashboard.putData("Climb Step2 - Raise Bot", new Command_ClimbGoldStep2_RaiseRobot());
-    SmartDashboard.putData("Climb Step3 - Fixed On", new Command_ClimbGoldStep3_GetFixedAxleOn());
-    SmartDashboard.putData("Climb Step4 - Mass Forward", new Command_ClimbGoldStep4_MoveMassForward());
-    SmartDashboard.putData("Climb Step5 - Middle On", new Command_ClimbGoldStep5_GetMiddleAxleOn());
-    SmartDashboard.putData("Climb Step6 - Float On", new Command_ClimbGoldStep6_GetFloatAxleOn());
-    SmartDashboard.putData("Climb Step7 - Bump Up Float", new Command_ClimbGoldStep7_BumpUpFloatAxle());
+    // SmartDashboard.putData("Climb Step1 - Prepare", new Command_ClimbGoldStep1_Prepare());
+    // SmartDashboard.putData("Climb Step2 - Raise Bot", new Command_ClimbGoldStep2_RaiseRobot());
+    // SmartDashboard.putData("Climb Step3 - Fixed On", new Command_ClimbGoldStep3_GetFixedAxleOn());
+    // SmartDashboard.putData("Climb Step4 - Mass Forward", new Command_ClimbGoldStep4_MoveMassForward());
+    // SmartDashboard.putData("Climb Step5 - Middle On", new Command_ClimbGoldStep5_GetMiddleAxleOn());
+    // SmartDashboard.putData("Climb Step6 - Float On", new Command_ClimbGoldStep6_GetFloatAxleOn());
+    // SmartDashboard.putData("Climb Step7 - Bump Up Float", new Command_ClimbGoldStep7_BumpUpFloatAxle());
 
     SmartDashboard.putData("Reset the Robot", new Command_ResetRobot());
-    SmartDashboard.putData("Pulse Extend Foot", new Command_PulseExtendFoot(0.25d));
-    SmartDashboard.putData("Pulse Extend Float", new Command_PulseExtendFloatAxle(0.25d));
-
     SmartDashboard.putData("Scheduler", Scheduler.getInstance());
 
+    //
+    // Shuffleboard stuff.
+    //
+    ShuffleboardTab tabCameras = Shuffleboard.getTab("Cameras");
+    for (VideoSource vs : cameraServer.getCameras()) {
+      tabCameras.add(vs);
+    }
 
-    Shuffleboard.getTab("Climb").add("Climb Step1 - Prepare", new Command_ClimbGoldStep1_Prepare());
-    Shuffleboard.getTab("Climb").add("Climb Step2 - Raise Bot", new Command_ClimbGoldStep2_RaiseRobot());
-    Shuffleboard.getTab("Climb").add("Climb Step3 - Fixed On", new Command_ClimbGoldStep3_GetFixedAxleOn());
-    Shuffleboard.getTab("Climb").add("Climb Step4 - Mass Forward", new Command_ClimbGoldStep4_MoveMassForward());
-    Shuffleboard.getTab("Climb").add("Climb Step5 - Middle On", new Command_ClimbGoldStep5_GetMiddleAxleOn());
-    Shuffleboard.getTab("Climb").add("Climb Step6 - Float On", new Command_ClimbGoldStep6_GetFloatAxleOn());
-    Shuffleboard.getTab("Climb").add("Climb Step7 - Bump Up Float", new Command_ClimbGoldStep7_BumpUpFloatAxle());
+    ShuffleboardTab tabClimb = Shuffleboard.getTab("Climb");
+    tabClimb.add("Step1 - Prepare", new Command_ClimbGoldStep1_Prepare());
+    tabClimb.add("Step2 - Raise Bot", new Command_ClimbGoldStep2_RaiseRobot());
+    tabClimb.add("Step3 - Fixed On", new Command_ClimbGoldStep3_GetFixedAxleOn());
+    tabClimb.add("Step4 - Mass Forward", new Command_ClimbGoldStep4_MoveMassForward());
+    tabClimb.add("Step5 - Middle On", new Command_ClimbGoldStep5_GetMiddleAxleOn());
+    tabClimb.add("Step6 - Float On", new Command_ClimbGoldStep6_GetFloatAxleOn());
+    tabClimb.add("Step7 - Bump Up Float", new Command_ClimbGoldStep7_BumpUpFloatAxle());
+    tabClimb.add("Compressor Start", new Command_StartCompressor());
+    tabClimb.add("Compressor Stop", new Command_StopCompressor());
+
+    ShuffleboardTab tabMassMover = Shuffleboard.getTab("Mass Mover");
+    tabMassMover.add("Move Mass Forward Start", new Command_MoveMassForwardStart());
+    tabMassMover.add("Move Mass Forward Stop", new Command_MoveMassForwardStop());
+    tabMassMover.add("Move Mass Back Start", new Command_MoveMassBackStart());
+    tabMassMover.add("Move Mass Back Stop", new Command_MoveMassBackStop());
+    tabMassMover.add("Pulse Mass Forward", new Command_PulseMassMoveForward(0.25));
+    tabMassMover.add("Pulse Mass Back", new Command_PulseMassMoveBack(0.25));
+    tabMassMover.add("Move Mass Forward", new Command_MoveMassForward());
+    tabMassMover.add("Move Mass Back", new Command_MoveMassBack());
+
+    ShuffleboardTab tabRaiseRobot = Shuffleboard.getTab("Axles And Foot");
+    tabRaiseRobot.add("Extend Middle Axle Start", new Command_ExtendMiddleAxleStart());
+    tabRaiseRobot.add("Extend Middle Axle Stop", new Command_ExtendMiddleAxleStop());
+    tabRaiseRobot.add("Retract Middle Axle Start", new Command_RetractMiddleAxleStart());
+    tabRaiseRobot.add("Retract Middle Axle Stop", new Command_RetractMiddleAxleStop());
+    tabRaiseRobot.add("Extend Float Axle Start", new Command_ExtendFloatAxleStart());
+    tabRaiseRobot.add("Extend Float Axle Stop", new Command_ExtendFloatAxleStop());
+    tabRaiseRobot.add("Retract Float Axle Start", new Command_RetractFloatAxleStart());
+    tabRaiseRobot.add("Retract Float Axle Stop", new Command_RetractFloatAxleStop());
+    tabRaiseRobot.add("Extend Foot Start", new Command_ExtendFootStart());
+    tabRaiseRobot.add("Extend Foot Stop", new Command_ExtendFootStop());
+    tabRaiseRobot.add("Retract Foot Start", new Command_RetractFootStart());
+    tabRaiseRobot.add("Retract Foot Stop", new Command_RetractFootStop());
+    tabRaiseRobot.add("Pulse Extend Foot", new Command_PulseExtendFoot(0.25d));
+    tabRaiseRobot.add("Pulse Extend Float", new Command_PulseExtendFloatAxle(0.25d));
   
     log.debug("End robotInit");
   }
 
+  boolean gameReported = false;
   /**
    * This function is called every robot packet, no matter the mode. Use this for
    * items like diagnostics that you want ran during disabled, autonomous,
@@ -213,6 +247,10 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     // System.out.println("I'm alive ("+Long.toString(++this.aliveCount)+")");
+    if (DriverStation.getInstance().isFMSAttached() && !gameReported) {
+      _getDSGameInformation();
+      gameReported = true;
+    }
   }
 
   /**
