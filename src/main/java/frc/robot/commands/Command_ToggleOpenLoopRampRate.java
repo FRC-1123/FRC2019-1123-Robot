@@ -8,6 +8,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
@@ -32,6 +33,7 @@ public class Command_ToggleOpenLoopRampRate extends Command {
     } else {
       Robot.m_subsystemDriveTrain.setOpenLoopRampRate(RobotMap.driveRampRateNormal);
     }
+    SmartDashboard.putBoolean("Creep Mode", Robot.m_subsystemDriveTrain.getOpenLoopRampRate() == RobotMap.driveRampRateCreep);    
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -6,9 +6,6 @@
 /*----------------------------------------------------------------------------*/
 package frc.robot.subsystems;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
@@ -17,7 +14,6 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Subsystem_Antenna extends Subsystem {
-  private static final Logger log = LoggerFactory.getLogger(Subsystem_Antenna.class);
 
   private Solenoid m_extend;
   private Solenoid m_retract;
@@ -41,12 +37,10 @@ public class Subsystem_Antenna extends Subsystem {
   }
 
   public void extend() {
-    log.debug("*** antenna extend");
     pulseExtend(RobotMap.solenoidPulseTime_Antenna_Extend);
   }
 
   public void pulseExtend(double durationSeconds) {
-    log.debug("*** antenna pulseExtend(" + String.valueOf(durationSeconds) + ")");
     this.m_retract.set(false);
     this.m_extend.setPulseDuration(durationSeconds);
     this.m_extend.startPulse();
@@ -54,12 +48,10 @@ public class Subsystem_Antenna extends Subsystem {
   }
 
   public void retract() {
-    log.debug("*** antenna retract");
     pulseRetract(RobotMap.solenoidPulseTime_Antenna_Retract);
   }
 
   public void pulseRetract(double durationSeconds) {
-    log.debug("*** antenna pulseRetract(" + String.valueOf(durationSeconds) + ")");
     this.m_extend.set(false);
     this.m_retract.setPulseDuration(durationSeconds);
     this.m_retract.startPulse();
@@ -71,7 +63,6 @@ public class Subsystem_Antenna extends Subsystem {
   }
 
   public void reset() {
-    log.debug("*** antenna reset postion");
     retract();;
   }
 

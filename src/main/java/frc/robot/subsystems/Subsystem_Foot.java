@@ -15,7 +15,6 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Subsystem_Foot extends Subsystem {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Subsystem_Foot.class);
 
   private Solenoid m_footUp;
   private Solenoid m_footDown;
@@ -27,48 +26,40 @@ public class Subsystem_Foot extends Subsystem {
   }
 
   public void extend() {
-    log.debug("*** foot extend");
     pulseExtend(RobotMap.solenoidPulseTime_Foot_Down);
   }
 
   public void pulseExtend(double durationSeconds) {
-    log.debug("*** foot pulseExtend(" + String.valueOf(durationSeconds));
     m_footUp.set(false);
     m_footDown.setPulseDuration(durationSeconds);
     m_footDown.startPulse();
   }
 
   public void retract() {
-    log.debug("*** foot retract");
     pulseRetract(RobotMap.solenoidPulseTime_Foot_Up);
   }
 
   public void pulseRetract(double durationSeconds) {
-    log.debug("*** foot pulseRetract(" + String.valueOf(durationSeconds));
     m_footDown.set(false);
     m_footUp.setPulseDuration(durationSeconds);
     m_footUp.startPulse();
   }
 
   public void extendStart() {
-    log.debug("*** foot extendStart");
     m_footUp.set(false);
     m_footDown.set(true);
   }
 
   public void extendStop() {
-    log.debug("*** foot extendStop");
     m_footDown.set(false);
   }
 
   public void retractStart() {
-    log.debug("*** foot retractStart");
     m_footDown.set(false);
     m_footUp.set(true);
   }
 
   public void retractStop() {
-    log.debug("*** foot retractStop");
     m_footUp.set(false);
   }
 
@@ -77,7 +68,6 @@ public class Subsystem_Foot extends Subsystem {
   }
 
   public void reset() {
-    log.debug("*** foot reset");
     retract();
   }
 

@@ -15,7 +15,6 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Subsystem_HouseValve extends Subsystem {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Subsystem_HouseValve.class);
 
   private Solenoid m_valve;
 
@@ -25,12 +24,10 @@ public class Subsystem_HouseValve extends Subsystem {
   }
 
   public void open() {
-    log.debug("*** houseValve open");
     this.m_valve.set(true);
   }
 
   public void close() {
-    log.debug("*** houseValve close");
     this.m_valve.set(false);
   }
 

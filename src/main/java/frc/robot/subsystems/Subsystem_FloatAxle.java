@@ -15,7 +15,6 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Subsystem_FloatAxle extends Subsystem {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Subsystem_FloatAxle.class);
 
   private Solenoid m_floatUp;
   private Solenoid m_floatDown;
@@ -27,48 +26,40 @@ public class Subsystem_FloatAxle extends Subsystem {
   }
 
   public void extend() {
-    log.debug("*** floatAxle extend");
     pulseExtend(RobotMap.solenoidPulseTime_FloatAxle_Down);
   }
 
   public void pulseExtend(double durationSeconds) {
-    log.debug("*** floatAxle pulseExtend(" + String.valueOf(durationSeconds));
     m_floatUp.set(false);
     m_floatDown.setPulseDuration(durationSeconds);
     m_floatDown.startPulse();
   }
 
   public void retract() {
-    log.debug("*** floatAxle retract");
     pulseRetract(RobotMap.solenoidPulseTime_FloatAxle_Up);
   }
 
   public void pulseRetract(double durationSeconds) {
-    log.debug("*** floatAxle pulseRetract(" + String.valueOf(durationSeconds));
     m_floatDown.set(false);
     m_floatUp.setPulseDuration(durationSeconds);
     m_floatUp.startPulse();
   }
 
   public void extendStart() {
-    log.debug("*** floatAxle extendStart");
     m_floatUp.set(false);
     m_floatDown.set(true);
   }
 
   public void extendStop() {
-    log.debug("*** floatAxle extendStop");
     m_floatDown.set(false);
   }
 
   public void retractStart() {
-    log.debug("*** floatAxle retractStart");
     m_floatDown.set(false);
     m_floatUp.set(true);
   }
 
   public void retractStop() {
-    log.debug("*** floatAxle retractStop");
     m_floatUp.set(false);
   }
 
@@ -77,7 +68,6 @@ public class Subsystem_FloatAxle extends Subsystem {
   }
 
   public void reset() {
-    log.debug("*** floatAxle reset");
     retract();
   }
 

@@ -24,7 +24,6 @@ import frc.robot.commands.Command_DriveManually;
  * correct.
  */
 public class Subsystem_DriveTrain extends Subsystem {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Subsystem_DriveTrain.class);
   private static final String subsystemName = "Drive Train";
 
   private static final double wheelCircumference = Math.PI * 6.0d;
@@ -42,7 +41,6 @@ public class Subsystem_DriveTrain extends Subsystem {
   private class DriveTrainSafety extends MotorSafety {
     @Override
     public void stopMotor() {
-      log.warn("Drive Train Safety is stopping motors.");
       for (CANSparkMax motor : m_motors) {
         motor.stopMotor();
       }
@@ -126,7 +124,6 @@ public class Subsystem_DriveTrain extends Subsystem {
     //
     // Set the inverted flags on the motors individually
     //
-    log.debug("Setting motor inverted flags.");
     this.m_motorFixedA.setInverted(RobotMap.invertedFlag_Side_A);
     this.m_motorMiddleA.setInverted(!RobotMap.invertedFlag_Side_A);
     this.m_motorFloatA.setInverted(RobotMap.invertedFlag_Side_A);
@@ -137,7 +134,6 @@ public class Subsystem_DriveTrain extends Subsystem {
     //
     // Group side A and side B motors into speed controller groups.
     //
-    log.debug("Creating speed control groups for side A and B.");
     m_motorsSideA = new CANSparkMax[3];
     m_motorsSideA[0] = this.m_motorFixedA;
     m_motorsSideA[1] = this.m_motorMiddleA;
@@ -219,7 +215,6 @@ public class Subsystem_DriveTrain extends Subsystem {
   }
 
   public void driveStraightDistance(double distance, double speed) {
-    log.debug("distance = "+distance+", speed = "+speed+", traveled = "+this.distanceTraveled());
     if (distance < this.distanceTraveled()) {
       drive(speed, speed);
     } else {
@@ -275,7 +270,6 @@ public class Subsystem_DriveTrain extends Subsystem {
         motorTurns = cturns;
     }
     double rtn = motorTurns * inchesPerMotorRotation; 
-    log.debug("*** motorTurns = "+motorTurns+", rtn = "+rtn);
     return rtn;
   }
 
@@ -304,9 +298,6 @@ public class Subsystem_DriveTrain extends Subsystem {
     stop();
     for (CANSparkMax motor : m_motors) {
       CANError condCode = motor.setOpenLoopRampRate(rate);
-      if (condCode != CANError.kOK) {
-        log.error("@@@ Error setOpenLoopRampRate(" + rate + ") for motor " + _motorName(motor));
-      }
     }
   }
 
@@ -326,25 +317,17 @@ public class Subsystem_DriveTrain extends Subsystem {
   }
 
   public static Subsystem_DriveTrain create() {
-    log.debug("***Begin creating drive train subsystem");
     //
     // Setup the individual motor controllers.
     //
-    log.debug("new CANSparkMax("+RobotMap.driveMotor_Fixed_A+")");
     CANSparkMax motorFixedA = new CANSparkMax(RobotMap.driveMotor_Fixed_A, MotorType.kBrushless);
-    log.debug("new CANSparkMax("+RobotMap.driveMotor_Fixed_B+")");
     CANSparkMax motorFixedB = new CANSparkMax(RobotMap.driveMotor_Fixed_B, MotorType.kBrushless);
-    log.debug("new CANSparkMax("+RobotMap.driveMotor_Middle_A+")");
     CANSparkMax motorMiddleA = new CANSparkMax(RobotMap.driveMotor_Middle_A, MotorType.kBrushless);
-    log.debug("new CANSparkMax("+RobotMap.driveMotor_Middle_B+")");
     CANSparkMax motorMiddleB = new CANSparkMax(RobotMap.driveMotor_Middle_B, MotorType.kBrushless);
-    log.debug("new CANSparkMax("+RobotMap.driveMotor_Float_A+")");
     CANSparkMax motorFloatA = new CANSparkMax(RobotMap.driveMotor_Float_A, MotorType.kBrushless);
-    log.debug("new CANSparkMax("+RobotMap.driveMotor_Float_B+")");
     CANSparkMax motorFloatB = new CANSparkMax(RobotMap.driveMotor_Float_B, MotorType.kBrushless);
 
     Subsystem_DriveTrain rtn = new Subsystem_DriveTrain(motorFixedA, motorFixedB, motorMiddleA, motorMiddleB, motorFloatA, motorFloatB);
-    log.debug("***Begin creating drive train subsystem");
     return rtn;
   }
 

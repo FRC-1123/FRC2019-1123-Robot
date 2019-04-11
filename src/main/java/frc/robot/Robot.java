@@ -7,10 +7,6 @@
 
 package frc.robot;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -80,7 +76,10 @@ import frc.team1123.camera.AIMRoboticsCameraServer;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final Logger log = LoggerFactory.getLogger(Robot.class);
+
+  public Robot() {
+    m_period = 0.04;
+  }
 
   // private long aliveCount = 0;
 
@@ -122,8 +121,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    log.debug("Begin robotInit");
-
     //
     // Initialize subsystems and add to dashboard.
     //
@@ -154,6 +151,7 @@ public class Robot extends TimedRobot {
     // for (int devId = 0; devId < RobotMap.cameraCount; devId++)
     //   cameraServer.addCamera(devId, "camera_" + String.valueOf(devId), 640, 480, 30);
     cameraServer.addCamera(0, "camera_0", 640, 480, 30);
+    cameraServer.startFrameProcessor();
 
     //
     // Dashboard widgets.
@@ -214,6 +212,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Reset the Robot", new Command_ResetRobot());
     SmartDashboard.putData("Scheduler", Scheduler.getInstance());
+    SmartDashboard.putBoolean("Creep Mode", Robot.m_subsystemDriveTrain.getOpenLoopRampRate() == RobotMap.driveRampRateCreep);
 
     //
     // Shuffleboard stuff.
@@ -267,7 +266,6 @@ public class Robot extends TimedRobot {
     tabRaiseRobot.add("Retract Middle Axle", new Command_RetractMiddleAxle());
     tabRaiseRobot.add("Retract Float Axle", new Command_RetractFloatAxle());
 
-    log.debug("End robotInit");
   }
 
   boolean gameReported = false;
@@ -288,7 +286,6 @@ public class Robot extends TimedRobot {
     //   _getDSGameInformation();
     //   gameReported = true;
     // }
-    SmartDashboard.putBoolean("Creep Mode", m_subsystemDriveTrain.getOpenLoopRampRate() == RobotMap.driveRampRateCreep);
   }
 
   /**
@@ -298,7 +295,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    log.debug("disabledInit");
 
     //
     // Make sure we don't have any commands sitting in the scheduler that will
@@ -326,7 +322,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    log.debug("autonomouseInit");
     //
     // Make sure we don't have any commands sitting in the scheduler that will
     // execute.
@@ -350,8 +345,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    log.debug("teleopInit");
-
     //
     // Cancel the autonomous command.
     //
@@ -381,19 +374,19 @@ public class Robot extends TimedRobot {
     // log.debug("testPeriodic");
   }
 
-  private StringBuilder _getDSGameInformation() {
-    DriverStation ds = DriverStation.getInstance();
-    StringBuilder gib = new StringBuilder();
-    String crlf = System.getProperty("line.separator");
-    gib.append(crlf).append("** DS Information ***************************************");
-    gib.append(crlf).append("*  location.......: ").append(ds.getLocation());
-    gib.append(crlf).append("*  match number...: ").append(ds.getMatchNumber());
-    gib.append(crlf).append("*  replay number..: ").append(ds.getReplayNumber());
-    gib.append(crlf).append("*  alliance.......: ").append(ds.getAlliance().name());
-    gib.append(crlf).append("*  event name.....: ").append(ds.getEventName());
-    gib.append(crlf).append("*  match type.....: ").append(ds.getMatchType().name());
-    gib.append(crlf).append("*  game msg.......: ").append(ds.getGameSpecificMessage());
-    gib.append(crlf).append("*********************************************************");
-    return gib;
-  }
+  // private StringBuilder _getDSGameInformation() {
+  //   DriverStation ds = DriverStation.getInstance();
+  //   StringBuilder gib = new StringBuilder();
+  //   String crlf = System.getProperty("line.separator");
+  //   gib.append(crlf).append("** DS Information ***************************************");
+  //   gib.append(crlf).append("*  location.......: ").append(ds.getLocation());
+  //   gib.append(crlf).append("*  match number...: ").append(ds.getMatchNumber());
+  //   gib.append(crlf).append("*  replay number..: ").append(ds.getReplayNumber());
+  //   gib.append(crlf).append("*  alliance.......: ").append(ds.getAlliance().name());
+  //   gib.append(crlf).append("*  event name.....: ").append(ds.getEventName());
+  //   gib.append(crlf).append("*  match type.....: ").append(ds.getMatchType().name());
+  //   gib.append(crlf).append("*  game msg.......: ").append(ds.getGameSpecificMessage());
+  //   gib.append(crlf).append("*********************************************************");
+  //   return gib;
+  // }
 }

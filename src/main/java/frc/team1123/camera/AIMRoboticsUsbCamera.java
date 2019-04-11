@@ -40,7 +40,7 @@ public class AIMRoboticsUsbCamera implements AIMRoboticsCameraFrameProcessor {
 
 		CameraServer cameraServer = CameraServer.getInstance();
 		this.usbCamera = cameraServer.startAutomaticCapture(this.devName, this.devId);
-		this.usbCamera.setFPS(fps);
+		// this.usbCamera.setFPS(fps);
 		this.cvSink = cameraServer.getVideo(usbCamera);
 		this.outputStream = cameraServer.putVideo(devName, width, height);
 		this.isEnabled = new AtomicBoolean(true);

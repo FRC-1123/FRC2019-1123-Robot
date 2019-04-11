@@ -15,7 +15,6 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Subsystem_MiddleAxle extends Subsystem {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Subsystem_MiddleAxle.class);
 
   private Solenoid m_middleUp;
   private Solenoid m_middleDown;
@@ -27,48 +26,40 @@ public class Subsystem_MiddleAxle extends Subsystem {
   }
 
   public void extend() {
-    log.debug("*** middleAxle extend");
     pulseExtend(RobotMap.solenoidPulseTime_MiddleAxle_Down);
   }
 
   public void pulseExtend(double durationSeconds) {
-    log.debug("*** middleAxle pulseExtend(" + String.valueOf(durationSeconds));
     m_middleUp.set(false);
     m_middleDown.setPulseDuration(durationSeconds);
     m_middleDown.startPulse();
   }
 
   public void retract() {
-    log.debug("*** middleAxle retract");
     pulseRetract(RobotMap.solenoidPulseTime_MiddleAxle_Up);
   }
 
   public void pulseRetract(double durationSeconds) {
-    log.debug("*** middleAxle pulseRetract(" + String.valueOf(durationSeconds));
     m_middleDown.set(false);
     m_middleUp.setPulseDuration(durationSeconds);
     m_middleUp.startPulse();
   }
 
   public void extendStart() {
-    log.debug("*** middleAxle extendStart");
     m_middleUp.set(false);
     m_middleDown.set(true);
   }
 
   public void extendStop() {
-    log.debug("*** middleAxle extendStop");
     m_middleDown.set(false);
   }
 
   public void retractStart() {
-    log.debug("*** middleAxle retractStart");
     m_middleDown.set(false);
     m_middleUp.set(true);
   }
 
   public void retractStop() {
-    log.debug("*** middleAxle retractStop");
     m_middleUp.set(false);
   }
 

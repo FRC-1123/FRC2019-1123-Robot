@@ -15,7 +15,6 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Subsystem_Hatch extends Subsystem {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Subsystem_Hatch.class);
 
   private Solenoid m_extend;
   private Solenoid m_retract;
@@ -39,12 +38,10 @@ public class Subsystem_Hatch extends Subsystem {
   }
 
   public void extend() {
-    log.debug("*** hatch extend");
     pulseExtend(RobotMap.solenoidPulseTime_Hatch_Extend);
   }
 
   public void pulseExtend(double durationSeconds) {
-    log.debug("*** hatch pulseExtend(" + String.valueOf(durationSeconds) + ")");
     this.m_retract.set(false);
     this.m_extend.setPulseDuration(durationSeconds);
     this.m_extend.startPulse();
@@ -52,12 +49,10 @@ public class Subsystem_Hatch extends Subsystem {
   }
 
   public void retract() {
-    log.debug("*** hatch retract");
     pulseRetract(RobotMap.solenoidPulseTime_Hatch_Retract);
   }
 
   public void pulseRetract(double durationSeconds) {
-    log.debug("*** hatch pulseRetract(" + String.valueOf(durationSeconds) + ")");
     this.m_extend.set(false);
     this.m_retract.setPulseDuration(durationSeconds);
     this.m_retract.startPulse();
@@ -69,7 +64,6 @@ public class Subsystem_Hatch extends Subsystem {
   }
 
   public void reset() {
-    log.debug("*** hatch reset postion");
     retract();;
   }
 

@@ -15,7 +15,6 @@ import frc.robot.RobotMap;
  * Mass mover subsystem.
  */
 public class Subsystem_MassMover extends Subsystem {
-  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Subsystem_MassMover.class);
 
   private Solenoid m_massForward;
   private Solenoid m_massBack;
@@ -27,7 +26,6 @@ public class Subsystem_MassMover extends Subsystem {
   }
 
   public void moveMassForwardStart() {
-    log.debug("***massMover moveMassForwardStart");
 
     if (this.m_massBack.get())
       this.m_massBack.set(false);
@@ -36,12 +34,10 @@ public class Subsystem_MassMover extends Subsystem {
   }
 
   public void moveMassForwardStop() {
-    log.debug("***massMover moveMassForwardStop");
     this.m_massForward.set(false);
   }
 
   public void moveMassBackStart() {
-    log.debug("***massMover movMassBackStart");
 
     if (this.m_massForward.get())
       this.m_massForward.set(false);
@@ -50,31 +46,26 @@ public class Subsystem_MassMover extends Subsystem {
   }
 
   public void moveMassBackStop() {
-    log.debug("***massMover movMassBackStop");
     this.m_massBack.set(false);
   }
 
   public void pulseMassForward(double durationSeconds) {
-    log.debug("***massMover pulseMassForward("+String.valueOf(durationSeconds)+")");
       this.m_massBack.set(false);
     this.m_massForward.setPulseDuration(durationSeconds);
     this.m_massForward.startPulse();
   }
 
   public void pulseMassBack(double durationSeconds) {
-    log.debug("***massMover pulseMassBack("+String.valueOf(durationSeconds)+")");
       this.m_massForward.set(false);
     this.m_massBack.setPulseDuration(durationSeconds);
     this.m_massBack.startPulse();
   }
 
   public void moveForward() {
-    log.debug("*** massMover moveForward");
     pulseMassForward(RobotMap.solenoidPulseTime_MassMover_Forward);
   }
 
   public void moveBack() {
-    log.debug("*** massMover moveBack");
     pulseMassBack(RobotMap.solenoidPulseTime_MassMover_Back);
   }
 
@@ -83,7 +74,6 @@ public class Subsystem_MassMover extends Subsystem {
   }
 
   public void reset() {
-    log.debug("*** massMover reset");
     moveForward();
   }
 

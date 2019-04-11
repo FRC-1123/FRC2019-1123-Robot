@@ -29,26 +29,30 @@ import edu.wpi.cscore.VideoSource;
 public class AIMRoboticsCameraServer {
 	private static final int DEFAULT_MAX_CAMERAS = 8;
 	private static final ThreadGroup threadGroup = new ThreadGroup("AIMRoboticsCameraThreadGroup");
-	private final BlockingQueue<AIMRoboticsCameraFrameProcessor> cameraQueue;
-	private final Map<Integer,AIMRoboticsUsbCamera> devIdMap;
-	private final Map<String,AIMRoboticsUsbCamera> devNameMap;
+	private final ArrayList<AIMRoboticsCameraFrameProcessor> cameraList;
+	private final Map<Integer, AIMRoboticsUsbCamera> devIdMap;
+	private final Map<String, AIMRoboticsUsbCamera> devNameMap;
 	private int cameraQueueCapacity;
 	private static final Object singletonLock = new Object();
 	private static AIMRoboticsCameraServer singleton;
+	private CameraFrameProcessorThread frameConsumer;
 
 	private class CameraFrameProcessorThread extends Thread {
 		public CameraFrameProcessorThread(String name) {
 			super(threadGroup, new Runnable() {
 				@Override
 				public void run() {
-					while (!Thread.interrupted()) {
-						try {
-							AIMRoboticsCameraFrameProcessor fProcessor = cameraQueue.take();
+					int ndx = 0;
+					while (!Thread.interrupted() && !cameraList.isEmpty()) {
+						while (!Thread.interrupted()) {
+							AIMRoboticsCameraFrameProcessor fProcessor = cameraList.get(ndx++);
+							if (ndx >= cameraList.size())
+								ndx = 0;
 							fProcessor.processCameraFrame();
-							cameraQueue.offer(fProcessor);
-						} catch (InterruptedException e) {
-							break;
 						}
+						try {
+							Thread.sleep(30L);
+						} catch (InterruptedException ignor) {}
 					}
 				}
 			}, name);
@@ -69,26 +73,26 @@ public class AIMRoboticsCameraServer {
 	}
 
 	private AIMRoboticsCameraServer(int maxCameras, int maxFrameProcessorThreads) {
-		cameraQueue = new ArrayBlockingQueue<>(maxCameras);
+		cameraList = new ArrayList<>();
 		devIdMap = new HashMap<>();
 		devNameMap = new HashMap<>();
 		this.cameraQueueCapacity = maxCameras;
-		for (int i = 0; i < maxFrameProcessorThreads; i++) {
-			CameraFrameProcessorThread cThread = new CameraFrameProcessorThread("AIMRoboticsCameraThread_" + String.valueOf(i));
-			cThread.setDaemon(true);
-			cThread.start();
-		}
+		this.frameConsumer = new CameraFrameProcessorThread("AIMRoboticsCameraThread");
+	}
+
+	public void startFrameProcessor() {
+		this.frameConsumer.start();
 	}
 
 	public static AIMRoboticsCameraServer getInstance() {
 		return getInstance(DEFAULT_MAX_CAMERAS);
 	}
 
-	public static AIMRoboticsCameraServer getInstance(int maxCameras) {
+	private static AIMRoboticsCameraServer getInstance(int maxCameras) {
 		return getInstance(maxCameras, 1);
 	}
 
-	public static AIMRoboticsCameraServer getInstance(int maxCameras, int maxFrameProcessorThreads) {
+	private static AIMRoboticsCameraServer getInstance(int maxCameras, int maxFrameProcessorThreads) {
 		synchronized (singletonLock) {
 			if (singleton == null)
 				singleton = new AIMRoboticsCameraServer(maxCameras, maxFrameProcessorThreads);
@@ -97,11 +101,11 @@ public class AIMRoboticsCameraServer {
 	}
 
 	public void addCamera(int devId, String devName, int width, int height, int fps) {
-		if (cameraQueue.remainingCapacity() > 0) {
+		if (cameraList.size() < DEFAULT_MAX_CAMERAS) {
 			AIMRoboticsUsbCamera usbCamera = new AIMRoboticsUsbCamera(devId, devName, width, height, fps);
 			devIdMap.put(devId, usbCamera);
 			devNameMap.put(devName, usbCamera);
-			cameraQueue.offer(usbCamera);
+			cameraList.add(usbCamera);
 		} else
 			throw new IllegalStateException(
 					this.getClass().getSimpleName() + " exceeded max camera count of " + this.cameraQueueCapacity);
@@ -109,29 +113,29 @@ public class AIMRoboticsCameraServer {
 
 	public boolean isCameraEnabled(int devId) {
 		boolean rtn = false;
-		AIMRoboticsUsbCamera c  = devIdMap.get(devId);
-		if (c!=null)
+		AIMRoboticsUsbCamera c = devIdMap.get(devId);
+		if (c != null)
 			rtn = c.isEnabled();
 		return rtn;
 	}
 
 	public void setCameraEnabled(int devId, boolean isEnabled) {
-		AIMRoboticsUsbCamera c  = devIdMap.get(devId);
-		if (c!=null)
+		AIMRoboticsUsbCamera c = devIdMap.get(devId);
+		if (c != null)
 			c.setEnabled(isEnabled);
 	}
 
 	public boolean isCameraEnabled(String devName) {
 		boolean rtn = false;
-		AIMRoboticsUsbCamera c  = devNameMap.get(devName);
-		if (c!=null)
+		AIMRoboticsUsbCamera c = devNameMap.get(devName);
+		if (c != null)
 			rtn = c.isEnabled();
 		return rtn;
 	}
 
 	public void setCameraEnabled(String devName, boolean isEnabled) {
-		AIMRoboticsUsbCamera c  = devNameMap.get(devName);
-		if (c!=null)
+		AIMRoboticsUsbCamera c = devNameMap.get(devName);
+		if (c != null)
 			c.setEnabled(isEnabled);
 	}
 
