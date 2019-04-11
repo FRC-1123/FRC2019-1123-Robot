@@ -137,7 +137,7 @@ public class Robot extends TimedRobot {
     m_subsystemAntenna = Subsystem_Antenna.create();
     m_subsystemHatch = Subsystem_Hatch.create();
     m_subsystemHouseValve = Subsystem_HouseValve.create();
-  
+
     //
     // Init autonomous command.
     //
@@ -152,23 +152,31 @@ public class Robot extends TimedRobot {
     // Initialize the cameras
     //
     cameraServer = AIMRoboticsCameraServer.getInstance();
-    for (int devId=0; devId<RobotMap.cameraCount;devId++)
-      cameraServer.addCamera(devId, "camera_"+String.valueOf(devId), 640, 480, 30);
-  
+    for (int devId = 0; devId < RobotMap.cameraCount; devId++)
+      cameraServer.addCamera(devId, "camera_" + String.valueOf(devId), 640, 480, 30);
+
     //
     // Dashboard widgets.
     //
-    // SmartDashboard.putData("Extend Middle Axle Start", new Command_ExtendMiddleAxleStart());
-    // SmartDashboard.putData("Extend Middle Axle Stop", new Command_ExtendMiddleAxleStop());
+    // SmartDashboard.putData("Extend Middle Axle Start", new
+    // Command_ExtendMiddleAxleStart());
+    // SmartDashboard.putData("Extend Middle Axle Stop", new
+    // Command_ExtendMiddleAxleStop());
 
-    // SmartDashboard.putData("Retract Middle Axle Start", new Command_RetractMiddleAxleStart());
-    // SmartDashboard.putData("Retract Middle Axle Stop", new Command_RetractMiddleAxleStop());
+    // SmartDashboard.putData("Retract Middle Axle Start", new
+    // Command_RetractMiddleAxleStart());
+    // SmartDashboard.putData("Retract Middle Axle Stop", new
+    // Command_RetractMiddleAxleStop());
 
-    // SmartDashboard.putData("Extend Float Axle Start", new Command_ExtendFloatAxleStart());
-    // SmartDashboard.putData("Extend Float Axle Stop", new Command_ExtendFloatAxleStop());
+    // SmartDashboard.putData("Extend Float Axle Start", new
+    // Command_ExtendFloatAxleStart());
+    // SmartDashboard.putData("Extend Float Axle Stop", new
+    // Command_ExtendFloatAxleStop());
 
-    // SmartDashboard.putData("Retract Float Axle Start", new Command_RetractFloatAxleStart());
-    // SmartDashboard.putData("Retract Float Axle Stop", new Command_RetractFloatAxleStop());
+    // SmartDashboard.putData("Retract Float Axle Start", new
+    // Command_RetractFloatAxleStart());
+    // SmartDashboard.putData("Retract Float Axle Stop", new
+    // Command_RetractFloatAxleStop());
 
     // SmartDashboard.putData("Extend Foot Start", new Command_ExtendFootStart());
     // SmartDashboard.putData("Extend Foot Stop", new Command_ExtendFootStop());
@@ -176,22 +184,33 @@ public class Robot extends TimedRobot {
     // SmartDashboard.putData("Retract Foot Start", new Command_RetractFootStart());
     // SmartDashboard.putData("Retract Foot Stop", new Command_RetractFootStop());
 
-    // SmartDashboard.putData("Move Mass Forward Start", new Command_MoveMassForwardStart());
-    // SmartDashboard.putData("Move Mass Forward Stop", new Command_MoveMassForwardStop());
+    // SmartDashboard.putData("Move Mass Forward Start", new
+    // Command_MoveMassForwardStart());
+    // SmartDashboard.putData("Move Mass Forward Stop", new
+    // Command_MoveMassForwardStop());
 
-    // SmartDashboard.putData("Move Mass Back Start", new Command_MoveMassBackStart());
-    // SmartDashboard.putData("Move Mass Back Stop", new Command_MoveMassBackStop());
+    // SmartDashboard.putData("Move Mass Back Start", new
+    // Command_MoveMassBackStart());
+    // SmartDashboard.putData("Move Mass Back Stop", new
+    // Command_MoveMassBackStop());
 
     // SmartDashboard.putData("Start Compressor", new Command_StartCompressor());
     // SmartDashboard.putData("Stop Compressor", new Command_StopCompressor());
 
-    // SmartDashboard.putData("Climb Step1 - Prepare", new Command_ClimbGoldStep1_Prepare());
-    // SmartDashboard.putData("Climb Step2 - Raise Bot", new Command_ClimbGoldStep2_RaiseRobot());
-    // SmartDashboard.putData("Climb Step3 - Fixed On", new Command_ClimbGoldStep3_GetFixedAxleOn());
-    // SmartDashboard.putData("Climb Step4 - Mass Forward", new Command_ClimbGoldStep4_MoveMassForward());
-    // SmartDashboard.putData("Climb Step5 - Middle On", new Command_ClimbGoldStep5_GetMiddleAxleOn());
-    // SmartDashboard.putData("Climb Step6 - Float On", new Command_ClimbGoldStep6_GetFloatAxleOn());
-    // SmartDashboard.putData("Climb Step7 - Bump Up Float", new Command_ClimbGoldStep7_BumpUpFloatAxle());
+    // SmartDashboard.putData("Climb Step1 - Prepare", new
+    // Command_ClimbGoldStep1_Prepare());
+    // SmartDashboard.putData("Climb Step2 - Raise Bot", new
+    // Command_ClimbGoldStep2_RaiseRobot());
+    // SmartDashboard.putData("Climb Step3 - Fixed On", new
+    // Command_ClimbGoldStep3_GetFixedAxleOn());
+    // SmartDashboard.putData("Climb Step4 - Mass Forward", new
+    // Command_ClimbGoldStep4_MoveMassForward());
+    // SmartDashboard.putData("Climb Step5 - Middle On", new
+    // Command_ClimbGoldStep5_GetMiddleAxleOn());
+    // SmartDashboard.putData("Climb Step6 - Float On", new
+    // Command_ClimbGoldStep6_GetFloatAxleOn());
+    // SmartDashboard.putData("Climb Step7 - Bump Up Float", new
+    // Command_ClimbGoldStep7_BumpUpFloatAxle());
 
     SmartDashboard.putData("Reset the Robot", new Command_ResetRobot());
     SmartDashboard.putData("Scheduler", Scheduler.getInstance());
@@ -199,7 +218,7 @@ public class Robot extends TimedRobot {
     //
     // Shuffleboard stuff.
     //
-    ShuffleboardTab tabAntHatch = Shuffleboard.getTab("Antenna and Hatch"); 
+    ShuffleboardTab tabAntHatch = Shuffleboard.getTab("Antenna and Hatch");
     tabAntHatch.add("Extend Hatch", new Command_ExtendHatch());
     tabAntHatch.add("Retract Hatch", new Command_RetractHatch());
     tabAntHatch.add("Extend Antenna", new Command_ExtendAntenna());
@@ -247,11 +266,12 @@ public class Robot extends TimedRobot {
     tabRaiseRobot.add("Retract Foot", new Command_RetractFoot());
     tabRaiseRobot.add("Retract Middle Axle", new Command_RetractMiddleAxle());
     tabRaiseRobot.add("Retract Float Axle", new Command_RetractFloatAxle());
-  
+
     log.debug("End robotInit");
   }
 
   boolean gameReported = false;
+
   /**
    * This function is called every robot packet, no matter the mode. Use this for
    * items like diagnostics that you want ran during disabled, autonomous,
@@ -268,6 +288,7 @@ public class Robot extends TimedRobot {
       _getDSGameInformation();
       gameReported = true;
     }
+    SmartDashboard.putBoolean("Creep Mode", m_subsystemDriveTrain.getOpenLoopRampRate() == RobotMap.driveRampRateCreep);
   }
 
   /**
@@ -280,7 +301,8 @@ public class Robot extends TimedRobot {
     log.debug("disabledInit");
 
     //
-    // Make sure we don't have any commands sitting in the scheduler that will execute when the robot is enabled.
+    // Make sure we don't have any commands sitting in the scheduler that will
+    // execute when the robot is enabled.
     //
     Scheduler.getInstance().removeAll();
   }
@@ -306,7 +328,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     log.debug("autonomouseInit");
     //
-    // Make sure we don't have any commands sitting in the scheduler that will execute.
+    // Make sure we don't have any commands sitting in the scheduler that will
+    // execute.
     //
     Scheduler.getInstance().removeAll();
 
@@ -328,14 +351,15 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     log.debug("teleopInit");
-    
+
     //
     // Cancel the autonomous command.
     //
     this.m_autonomousCommand.cancel();
 
     //
-    // Make sure we don't have any commands sitting in the scheduler that will execute.
+    // Make sure we don't have any commands sitting in the scheduler that will
+    // execute.
     //
     Scheduler.getInstance().removeAll();
   }
