@@ -26,10 +26,15 @@ import frc.robot.commands.Command_ClimbGoldStep5_GetMiddleAxleOn;
 import frc.robot.commands.Command_ClimbGoldStep6_GetFloatAxleOn;
 import frc.robot.commands.Command_ClimbGoldStep7_BumpUpFloatAxle;
 import frc.robot.commands.Command_DriveManually;
+import frc.robot.commands.Command_ExtendAntenna;
+import frc.robot.commands.Command_ExtendFloatAxle;
 import frc.robot.commands.Command_ExtendFloatAxleStart;
 import frc.robot.commands.Command_ExtendFloatAxleStop;
+import frc.robot.commands.Command_ExtendFoot;
 import frc.robot.commands.Command_ExtendFootStart;
 import frc.robot.commands.Command_ExtendFootStop;
+import frc.robot.commands.Command_ExtendHatch;
+import frc.robot.commands.Command_ExtendMiddleAxle;
 import frc.robot.commands.Command_ExtendMiddleAxleStart;
 import frc.robot.commands.Command_ExtendMiddleAxleStop;
 import frc.robot.commands.Command_MoveMassBack;
@@ -43,10 +48,15 @@ import frc.robot.commands.Command_PulseExtendFoot;
 import frc.robot.commands.Command_PulseMassMoveBack;
 import frc.robot.commands.Command_PulseMassMoveForward;
 import frc.robot.commands.Command_ResetRobot;
+import frc.robot.commands.Command_RetractAntenna;
+import frc.robot.commands.Command_RetractFloatAxle;
 import frc.robot.commands.Command_RetractFloatAxleStart;
 import frc.robot.commands.Command_RetractFloatAxleStop;
+import frc.robot.commands.Command_RetractFoot;
 import frc.robot.commands.Command_RetractFootStart;
 import frc.robot.commands.Command_RetractFootStop;
+import frc.robot.commands.Command_RetractHatch;
+import frc.robot.commands.Command_RetractMiddleAxle;
 import frc.robot.commands.Command_RetractMiddleAxleStart;
 import frc.robot.commands.Command_RetractMiddleAxleStop;
 import frc.robot.commands.Command_StartCompressor;
@@ -189,10 +199,11 @@ public class Robot extends TimedRobot {
     //
     // Shuffleboard stuff.
     //
-    ShuffleboardTab tabCameras = Shuffleboard.getTab("Cameras");
-    for (VideoSource vs : cameraServer.getCameras()) {
-      tabCameras.add(vs);
-    }
+    ShuffleboardTab tabAntHatch = Shuffleboard.getTab("Antenna and Hatch"); 
+    tabAntHatch.add("Extend Hatch", new Command_ExtendHatch());
+    tabAntHatch.add("Retract Hatch", new Command_RetractHatch());
+    tabAntHatch.add("Extend Antenna", new Command_ExtendAntenna());
+    tabAntHatch.add("Retract Antenna", new Command_RetractAntenna());
 
     ShuffleboardTab tabClimb = Shuffleboard.getTab("Climb");
     tabClimb.add("Step1 - Prepare", new Command_ClimbGoldStep1_Prepare());
@@ -230,6 +241,12 @@ public class Robot extends TimedRobot {
     tabRaiseRobot.add("Retract Foot Stop", new Command_RetractFootStop());
     tabRaiseRobot.add("Pulse Extend Foot", new Command_PulseExtendFoot(0.25d));
     tabRaiseRobot.add("Pulse Extend Float", new Command_PulseExtendFloatAxle(0.25d));
+    tabRaiseRobot.add("Extend Foot", new Command_ExtendFoot());
+    tabRaiseRobot.add("Extend Middle Axle", new Command_ExtendMiddleAxle());
+    tabRaiseRobot.add("Extend Float Axle", new Command_ExtendFloatAxle());
+    tabRaiseRobot.add("Retract Foot", new Command_RetractFoot());
+    tabRaiseRobot.add("Retract Middle Axle", new Command_RetractMiddleAxle());
+    tabRaiseRobot.add("Retract Float Axle", new Command_RetractFloatAxle());
   
     log.debug("End robotInit");
   }

@@ -21,7 +21,7 @@ public class Subsystem_HouseValve extends Subsystem {
 
   public Subsystem_HouseValve(Solenoid m_valve) {
     this.m_valve = m_valve;
-    open();
+    close();
   }
 
   public void open() {

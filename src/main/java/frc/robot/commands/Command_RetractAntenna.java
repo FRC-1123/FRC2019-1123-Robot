@@ -10,9 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class Command_ExtendFloatAxleStop extends Command {
-  public Command_ExtendFloatAxleStop() {
-    requires(Robot.m_subsystemFloatAxle);
+public class Command_RetractAntenna extends Command {
+  public Command_RetractAntenna() {
+    requires(Robot.m_subsystemAntenna);
   }
 
   // Called just before this Command runs the first time
@@ -23,13 +23,13 @@ public class Command_ExtendFloatAxleStop extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_subsystemFloatAxle.extend();
+    Robot.m_subsystemAntenna.retract();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true

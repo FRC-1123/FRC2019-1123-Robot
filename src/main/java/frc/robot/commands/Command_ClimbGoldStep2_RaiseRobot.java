@@ -33,8 +33,8 @@ public class Command_ClimbGoldStep2_RaiseRobot extends CommandGroup {
     //
     // Extend Float Axle and Foot
     //
-    addParallel(new Command_ExtendFoot());
     addSequential(new Command_ExtendFloatAxleStop());
+    addSequential(new Command_ExtendFoot());
     addSequential(new Command_ExtendMiddleAxle());
 
     //

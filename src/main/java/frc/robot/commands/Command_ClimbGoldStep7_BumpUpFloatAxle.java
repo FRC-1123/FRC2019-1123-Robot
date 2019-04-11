@@ -14,6 +14,6 @@ public class Command_ClimbGoldStep7_BumpUpFloatAxle extends CommandGroup {
    * Add your docs here.
    */
   public Command_ClimbGoldStep7_BumpUpFloatAxle() {
-    addSequential(new Command_PulseExtendMiddleAxle(0.5d));
+    addSequential(new Command_PulseExtendMiddleAxle(0.25d));
   }
 }
