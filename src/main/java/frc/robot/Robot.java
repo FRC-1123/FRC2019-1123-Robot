@@ -150,9 +150,10 @@ public class Robot extends TimedRobot {
     //
     // Initialize the cameras
     //
-    // cameraServer = AIMRoboticsCameraServer.getInstance();
+    cameraServer = AIMRoboticsCameraServer.getInstance();
     // for (int devId = 0; devId < RobotMap.cameraCount; devId++)
     //   cameraServer.addCamera(devId, "camera_" + String.valueOf(devId), 640, 480, 30);
+    cameraServer.addCamera(0, "camera_0", 640, 480, 30);
 
     //
     // Dashboard widgets.
