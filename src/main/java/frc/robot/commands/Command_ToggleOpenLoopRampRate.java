@@ -8,12 +8,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Logger;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Command_ToggleOpenLoopRampRate extends Command {
-  private static final Logger log = new Logger(Command_ToggleOpenLoopRampRate.class);
 
   public Command_ToggleOpenLoopRampRate() {
     requires(Robot.m_subsystemDriveTrain);
@@ -27,7 +25,6 @@ public class Command_ToggleOpenLoopRampRate extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    log.debug("***execute");
     Robot.m_subsystemDriveTrain.stop();
     double rate = Robot.m_subsystemDriveTrain.getOpenLoopRampRate();
     if (rate==RobotMap.driveRampRateNormal) {

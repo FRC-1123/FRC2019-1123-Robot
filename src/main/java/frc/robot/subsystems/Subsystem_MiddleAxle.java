@@ -51,6 +51,28 @@ public class Subsystem_MiddleAxle extends Subsystem {
     m_middleUp.startPulse();
   }
 
+  public void extendStart() {
+    log.debug("*** middleAxle extendStart");
+    m_middleUp.set(false);
+    m_middleDown.set(true);
+  }
+
+  public void extendStop() {
+    log.debug("*** middleAxle extendStop");
+    m_middleDown.set(false);
+  }
+
+  public void retractStart() {
+    log.debug("*** middleAxle retractStart");
+    m_middleDown.set(false);
+    m_middleUp.set(true);
+  }
+
+  public void retractStop() {
+    log.debug("*** middleAxle retractStop");
+    m_middleUp.set(false);
+  }
+
   @Override
   public void initDefaultCommand() {
   }

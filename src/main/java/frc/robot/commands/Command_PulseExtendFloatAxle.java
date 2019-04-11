@@ -8,14 +8,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Logger;
 import frc.robot.Robot;
 
 public class Command_PulseExtendFloatAxle extends Command {
-  private static final Logger log = new Logger(Command_PulseExtendFloatAxle.class);
   private double durationSeconds;  
+
   public Command_PulseExtendFloatAxle(double durationSeconds) {
-    requires(Robot.m_subsystemPneumatics);
+    requires(Robot.m_subsystemFloatAxle);
     this.durationSeconds = durationSeconds;
   }
 
@@ -27,8 +26,7 @@ public class Command_PulseExtendFloatAxle extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    log.debug("***execute");
-    Robot.m_subsystemPneumatics.pulseExtendFloatAxle(durationSeconds);
+    Robot.m_subsystemFloatAxle.pulseExtend(durationSeconds);
   }
 
   // Make this return true when this Command no longer needs to run execute()

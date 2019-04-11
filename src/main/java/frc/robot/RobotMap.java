@@ -87,6 +87,9 @@ public class RobotMap {
   public static final int solenoid_Module_Antenna_Retract = 22;
   public static final int solenoid_Channel_Antenna_Retract = 3;
 
+  public static final int solenoid_Module_House_Valve = 22;
+  public static final int solenoid_Channel_House_Valve = 7;
+
   public static final double solenoid_AxleFoot_Reset_Wait = 3.0d;
   public static final double solenoid_MassMover_Reset_Wait = 4.0d;
 

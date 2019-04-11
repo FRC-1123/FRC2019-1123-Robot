@@ -8,12 +8,10 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Logger;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class Command_ToggleAxleDelay extends Command {
-  private static final Logger log = new Logger(Command_ToggleAxleDelay.class);
 
   public Command_ToggleAxleDelay() {
   }
@@ -26,7 +24,6 @@ public class Command_ToggleAxleDelay extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    log.debug("***execute");
     if (Robot.m_oi.getAxleDelay()!=0.0d) {
       Robot.m_oi.setAxleDelay(0.0d);
     } else {

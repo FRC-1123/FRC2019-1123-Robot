@@ -7,7 +7,9 @@
 
 package frc.robot.commands;
 
-public class Command_ClimbGoldStep3_GetFixedAxleOn extends AbstractCommand_ClimbBox {
+import edu.wpi.first.wpilibj.command.CommandGroup;
+
+public class Command_ClimbGoldStep3_GetFixedAxleOn extends CommandGroup {
   /**
    * Get the fixed axle over the box.
    */
@@ -20,8 +22,7 @@ public class Command_ClimbGoldStep3_GetFixedAxleOn extends AbstractCommand_Climb
     //
     // Retract the foot.
     //
-    addSequential(new Command_ExtendFootStop());
-    addSequential(new Command_RetractFootStart());
+    addSequential(new Command_RetractFoot());
 
   }
 }

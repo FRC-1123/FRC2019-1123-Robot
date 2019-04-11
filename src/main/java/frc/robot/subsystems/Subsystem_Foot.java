@@ -51,6 +51,28 @@ public class Subsystem_Foot extends Subsystem {
     m_footUp.startPulse();
   }
 
+  public void extendStart() {
+    log.debug("*** foot extendStart");
+    m_footUp.set(false);
+    m_footDown.set(true);
+  }
+
+  public void extendStop() {
+    log.debug("*** foot extendStop");
+    m_footDown.set(false);
+  }
+
+  public void retractStart() {
+    log.debug("*** foot retractStart");
+    m_footDown.set(false);
+    m_footUp.set(true);
+  }
+
+  public void retractStop() {
+    log.debug("*** foot retractStop");
+    m_footUp.set(false);
+  }
+
   @Override
   public void initDefaultCommand() {
   }

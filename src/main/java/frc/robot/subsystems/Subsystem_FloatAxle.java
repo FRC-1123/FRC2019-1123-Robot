@@ -51,6 +51,28 @@ public class Subsystem_FloatAxle extends Subsystem {
     m_floatUp.startPulse();
   }
 
+  public void extendStart() {
+    log.debug("*** floatAxle extendStart");
+    m_floatUp.set(false);
+    m_floatDown.set(true);
+  }
+
+  public void extendStop() {
+    log.debug("*** floatAxle extendStop");
+    m_floatDown.set(false);
+  }
+
+  public void retractStart() {
+    log.debug("*** floatAxle retractStart");
+    m_floatDown.set(false);
+    m_floatUp.set(true);
+  }
+
+  public void retractStop() {
+    log.debug("*** floatAxle retractStop");
+    m_floatUp.set(false);
+  }
+
   @Override
   public void initDefaultCommand() {
   }

@@ -9,12 +9,20 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class Command_RetractFloatAxleAndFootStart extends CommandGroup {
+public class Command_ClimbGoldStep6_GetFloatAxleOn extends CommandGroup {
   /**
-   * Add your docs here.
+   * Get the middle axle over the box.
    */
-  public Command_RetractFloatAxleAndFootStart() {
-    addSequential(new Command_RetractFootStart());
-    addSequential(new Command_RetractFloatAxleStart());
-  }
+  public Command_ClimbGoldStep6_GetFloatAxleOn() {
+    //
+    // Make sure the compressor is running to help keep up pressure on pneumatics.
+    //
+    addSequential(new Command_StartCompressor());
+
+    //
+    // Raise the rear axle
+    //
+    addSequential(new Command_RetractFloatAxle());
+
+ }
 }

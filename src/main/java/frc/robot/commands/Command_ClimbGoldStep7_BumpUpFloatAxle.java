@@ -9,11 +9,11 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class Command_ClimbGoldStepX_GetFloatAxleOnHelper extends CommandGroup {
+public class Command_ClimbGoldStep7_BumpUpFloatAxle extends CommandGroup {
   /**
    * Add your docs here.
    */
-  public Command_ClimbGoldStepX_GetFloatAxleOnHelper() {
+  public Command_ClimbGoldStep7_BumpUpFloatAxle() {
     addSequential(new Command_PulseExtendMiddleAxle(0.5d));
   }
 }

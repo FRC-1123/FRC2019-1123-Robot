@@ -7,9 +7,9 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.WaitCommand;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class Command_ClimbGoldStep1_Prepare extends AbstractCommand_ClimbBox {
+public class Command_ClimbGoldStep1_Prepare extends CommandGroup {
   /**
    * Prepare robot to climb the gold box. 
    */
@@ -24,11 +24,7 @@ public class Command_ClimbGoldStep1_Prepare extends AbstractCommand_ClimbBox {
     //
     // Move the mass to the back of the robot.
     //
-    addSequential(new Command_MoveMassForwardStart());
-    addSequential(new WaitCommand(massMoverWait));
-    addSequential(new Command_MoveMassForwardStop());
-    addSequential(new Command_PulseMassMoveBack(0.5d));
-    addSequential(new WaitCommand(0.5d));
+    addSequential(new Command_MoveMassForward());
   }
 }
 

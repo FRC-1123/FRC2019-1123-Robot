@@ -10,24 +10,22 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Command_ClimbGoldStep1_Prepare;
 import frc.robot.commands.Command_ClimbGoldStep2_RaiseRobot;
 import frc.robot.commands.Command_ClimbGoldStep3_GetFixedAxleOn;
-import frc.robot.commands.Command_ClimbGoldStep4_GetMiddleAxleOn;
-import frc.robot.commands.Command_ClimbGoldStep5_GetFloatAxleOn;
-import frc.robot.commands.Command_ClimbGoldStepX_GetFloatAxleOnHelper;
+import frc.robot.commands.Command_ClimbGoldStep4_MoveMassForward;
+import frc.robot.commands.Command_ClimbGoldStep5_GetMiddleAxleOn;
+import frc.robot.commands.Command_ClimbGoldStep6_GetFloatAxleOn;
+import frc.robot.commands.Command_ClimbGoldStep7_BumpUpFloatAxle;
 import frc.robot.commands.Command_DriveManually;
-import frc.robot.commands.Command_ExtendFloatAxleAndFootStart;
-import frc.robot.commands.Command_ExtendFloatAxleAndFootStop;
 import frc.robot.commands.Command_ExtendFloatAxleStart;
 import frc.robot.commands.Command_ExtendFloatAxleStop;
 import frc.robot.commands.Command_ExtendFootStart;
 import frc.robot.commands.Command_ExtendFootStop;
 import frc.robot.commands.Command_ExtendMiddleAxleStart;
 import frc.robot.commands.Command_ExtendMiddleAxleStop;
-import frc.robot.commands.Command_MoveBackOneInch;
-import frc.robot.commands.Command_MoveForwardOneInch;
 import frc.robot.commands.Command_MoveMassBackStart;
 import frc.robot.commands.Command_MoveMassBackStop;
 import frc.robot.commands.Command_MoveMassForwardStart;
@@ -35,8 +33,6 @@ import frc.robot.commands.Command_MoveMassForwardStop;
 import frc.robot.commands.Command_PulseExtendFloatAxle;
 import frc.robot.commands.Command_PulseExtendFoot;
 import frc.robot.commands.Command_ResetRobot;
-import frc.robot.commands.Command_RetractFloatAxleAndFootStart;
-import frc.robot.commands.Command_RetractFloatAxleAndFootStop;
 import frc.robot.commands.Command_RetractFloatAxleStart;
 import frc.robot.commands.Command_RetractFloatAxleStop;
 import frc.robot.commands.Command_RetractFootStart;
@@ -46,8 +42,15 @@ import frc.robot.commands.Command_RetractMiddleAxleStop;
 import frc.robot.commands.Command_StartCompressor;
 import frc.robot.commands.Command_StopCompressor;
 import frc.robot.commands.Command_ToggleOpenLoopRampRate;
+import frc.robot.subsystems.Subsystem_Antenna;
+import frc.robot.subsystems.Subsystem_Compressor;
 import frc.robot.subsystems.Subsystem_DriveTrain;
-import frc.robot.subsystems.Subsystem_Pneumatics;
+import frc.robot.subsystems.Subsystem_FloatAxle;
+import frc.robot.subsystems.Subsystem_Foot;
+import frc.robot.subsystems.Subsystem_Hatch;
+import frc.robot.subsystems.Subsystem_HouseValve;
+import frc.robot.subsystems.Subsystem_MassMover;
+import frc.robot.subsystems.Subsystem_MiddleAxle;
 import frc.team1123.camera.AIMRoboticsCameraServer;
 
 /**
@@ -69,8 +72,19 @@ public class Robot extends TimedRobot {
   //
   // Initialized when robotInit is called.
   //
-  public static Subsystem_Pneumatics m_subsystemPneumatics = null;
+  // public static Subsystem_Pneumatics m_subsystemPneumatics = null;
   public static Subsystem_DriveTrain m_subsystemDriveTrain = null;
+  //
+  // New subsystems for District Champs and Detroit!
+  //
+  public static Subsystem_Compressor m_subsystemCompressor = null;
+  public static Subsystem_MassMover m_subsystemMassMover = null;
+  public static Subsystem_FloatAxle m_subsystemFloatAxle = null;
+  public static Subsystem_MiddleAxle m_subsystemMiddleAxle = null;
+  public static Subsystem_Foot m_subsystemFoot = null;
+  public static Subsystem_Antenna m_subsystemAntenna = null;
+  public static Subsystem_Hatch m_subsystemHatch = null;
+  public static Subsystem_HouseValve m_subsystemHouseValve = null;
 
   //
   // Autonoumous Command initialized wwhen robotInit is called.
@@ -93,9 +107,16 @@ public class Robot extends TimedRobot {
     //
     // Initialize subsystems and add to dashboard.
     //
-    m_subsystemPneumatics = Subsystem_Pneumatics.create();
+    m_subsystemCompressor = Subsystem_Compressor.create();
     m_subsystemDriveTrain = Subsystem_DriveTrain.create();
-
+    m_subsystemMassMover = Subsystem_MassMover.create();
+    m_subsystemFloatAxle = Subsystem_FloatAxle.create();
+    m_subsystemMiddleAxle = Subsystem_MiddleAxle.create();
+    m_subsystemFoot = Subsystem_Foot.create();
+    m_subsystemAntenna = Subsystem_Antenna.create();
+    m_subsystemHatch = Subsystem_Hatch.create();
+    m_subsystemHouseValve = Subsystem_HouseValve.create();
+  
     //
     // Init autonomous command.
     //
@@ -116,11 +137,11 @@ public class Robot extends TimedRobot {
     //
     // Dashboard widgets.
     //
-    SmartDashboard.putData("Extend Both Axles Start", new Command_ExtendFloatAxleAndFootStart());
-    SmartDashboard.putData("Extend Both Axles Stop", new Command_ExtendFloatAxleAndFootStop());
+    // SmartDashboard.putData("Extend Both Axles Start", new Command_ExtendFloatAxleAndFootStart());
+    // SmartDashboard.putData("Extend Both Axles Stop", new Command_ExtendFloatAxleAndFootStop());
 
-    SmartDashboard.putData("Retract Both Axles Start", new Command_RetractFloatAxleAndFootStart());
-    SmartDashboard.putData("Retract Both Axles Stop", new Command_RetractFloatAxleAndFootStop());
+    // SmartDashboard.putData("Retract Both Axles Start", new Command_RetractFloatAxleAndFootStart());
+    // SmartDashboard.putData("Retract Both Axles Stop", new Command_RetractFloatAxleAndFootStop());
 
     SmartDashboard.putData("Extend Middle Axle Start", new Command_ExtendMiddleAxleStart());
     SmartDashboard.putData("Extend Middle Axle Stop", new Command_ExtendMiddleAxleStop());
@@ -149,15 +170,13 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Start Compressor", new Command_StartCompressor());
     SmartDashboard.putData("Stop Compressor", new Command_StopCompressor());
 
-    SmartDashboard.putData("Move Forward 1 Inch", new Command_MoveForwardOneInch());
-    SmartDashboard.putData("Move Back 1 Inch", new Command_MoveBackOneInch());
-
-    SmartDashboard.putData("Climb Box Step1 - Prepare", new Command_ClimbGoldStep1_Prepare());
-    SmartDashboard.putData("Climb Box Step2 - Raise Bot", new Command_ClimbGoldStep2_RaiseRobot());
-    SmartDashboard.putData("Climb Box Step3 - Fixed On", new Command_ClimbGoldStep3_GetFixedAxleOn());
-    SmartDashboard.putData("Climb Box Step4 - Middle On", new Command_ClimbGoldStep4_GetMiddleAxleOn());
-    SmartDashboard.putData("Climb Box Step5 - Float On", new Command_ClimbGoldStep5_GetFloatAxleOn());
-    SmartDashboard.putData("Climb Box StepX - Float On Helper", new Command_ClimbGoldStepX_GetFloatAxleOnHelper());
+    SmartDashboard.putData("Climb Step1 - Prepare", new Command_ClimbGoldStep1_Prepare());
+    SmartDashboard.putData("Climb Step2 - Raise Bot", new Command_ClimbGoldStep2_RaiseRobot());
+    SmartDashboard.putData("Climb Step3 - Fixed On", new Command_ClimbGoldStep3_GetFixedAxleOn());
+    SmartDashboard.putData("Climb Step4 - Mass Forward", new Command_ClimbGoldStep4_MoveMassForward());
+    SmartDashboard.putData("Climb Step5 - Middle On", new Command_ClimbGoldStep5_GetMiddleAxleOn());
+    SmartDashboard.putData("Climb Step6 - Float On", new Command_ClimbGoldStep6_GetFloatAxleOn());
+    SmartDashboard.putData("Climb Step7 - Bump Up Float", new Command_ClimbGoldStep7_BumpUpFloatAxle());
 
     SmartDashboard.putData("Reset the Robot", new Command_ResetRobot());
     SmartDashboard.putData("Pulse Extend Foot", new Command_PulseExtendFoot(0.25d));
@@ -165,6 +184,15 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData("Scheduler", Scheduler.getInstance());
 
+
+    Shuffleboard.getTab("Climb").add("Climb Step1 - Prepare", new Command_ClimbGoldStep1_Prepare());
+    Shuffleboard.getTab("Climb").add("Climb Step2 - Raise Bot", new Command_ClimbGoldStep2_RaiseRobot());
+    Shuffleboard.getTab("Climb").add("Climb Step3 - Fixed On", new Command_ClimbGoldStep3_GetFixedAxleOn());
+    Shuffleboard.getTab("Climb").add("Climb Step4 - Mass Forward", new Command_ClimbGoldStep4_MoveMassForward());
+    Shuffleboard.getTab("Climb").add("Climb Step5 - Middle On", new Command_ClimbGoldStep5_GetMiddleAxleOn());
+    Shuffleboard.getTab("Climb").add("Climb Step6 - Float On", new Command_ClimbGoldStep6_GetFloatAxleOn());
+    Shuffleboard.getTab("Climb").add("Climb Step7 - Bump Up Float", new Command_ClimbGoldStep7_BumpUpFloatAxle());
+  
     log.debug("End robotInit");
   }
 

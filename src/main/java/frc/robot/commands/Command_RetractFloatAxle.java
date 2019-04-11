@@ -8,14 +8,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Logger;
 import frc.robot.Robot;
 
-public class Command_RackAxlesStart extends Command {
-  private static final Logger log = new Logger(Command_RackAxlesStart.class);
-
-  public Command_RackAxlesStart() {
-    requires(Robot.m_subsystemDriveTrain);
+public class Command_RetractFloatAxle extends Command {
+  public Command_RetractFloatAxle() {
+    requires(Robot.m_subsystemFloatAxle);
   }
 
   // Called just before this Command runs the first time
@@ -26,8 +23,7 @@ public class Command_RackAxlesStart extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    log.debug("***execute");
-    Robot.m_subsystemDriveTrain.rackAxlesStart();
+    Robot.m_subsystemFloatAxle.retract();
   }
 
   // Make this return true when this Command no longer needs to run execute()

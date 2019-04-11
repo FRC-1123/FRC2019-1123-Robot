@@ -8,14 +8,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Logger;
 import frc.robot.Robot;
 
-public class Command_ResetRobotStart extends Command {
-  private static final Logger log = new Logger(Command_ResetRobotStart.class);
-  public Command_ResetRobotStart() {
-    requires(Robot.m_subsystemPneumatics);
-    requires(Robot.m_subsystemDriveTrain);
+public class Command_RetractFoot extends Command {
+  public Command_RetractFoot() {
+    requires(Robot.m_subsystemFoot);
   }
 
   // Called just before this Command runs the first time
@@ -26,9 +23,7 @@ public class Command_ResetRobotStart extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    log.debug("***execute");
-    Robot.m_subsystemDriveTrain.stop();
-    Robot.m_subsystemPneumatics.resetStart();
+    Robot.m_subsystemFoot.retract();
   }
 
   // Make this return true when this Command no longer needs to run execute()

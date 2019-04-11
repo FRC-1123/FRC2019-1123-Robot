@@ -7,8 +7,21 @@
 
 package frc.robot.commands;
 
-public class Command_MoveBackOneInch extends Command_DriveDistanceStraight {
-  public Command_MoveBackOneInch() {
-    super(1.0d, -0.05d);
+import edu.wpi.first.wpilibj.command.CommandGroup;
+
+public class Command_ClimbGoldStep4_MoveMassForward extends CommandGroup {
+  /**
+   * Get the middle axle over the box.
+   */
+  public Command_ClimbGoldStep4_MoveMassForward() {
+    //
+    // Make sure the compressor is running to help keep up pressure on pneumatics.
+    //
+    addSequential(new Command_StartCompressor());
+
+    //
+    // Move the mass to the back of the robot.
+    //
+    addSequential(new Command_MoveMassForward());
   }
 }

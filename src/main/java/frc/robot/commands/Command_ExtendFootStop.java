@@ -4,17 +4,14 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import frc.robot.Logger;
 import frc.robot.Robot;
 
 public class Command_ExtendFootStop extends Command {
-  private static final Logger log = new Logger(Command_ExtendFootStop.class);
   public Command_ExtendFootStop() {
-    requires(Robot.m_subsystemPneumatics);
+    requires(Robot.m_subsystemFoot);
   }
 
   // Called just before this Command runs the first time
@@ -25,8 +22,7 @@ public class Command_ExtendFootStop extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    log.debug("***execute");
-    Robot.m_subsystemPneumatics.extendFootStop();
+    Robot.m_subsystemFoot.extendStop();
   }
 
   // Make this return true when this Command no longer needs to run execute()
