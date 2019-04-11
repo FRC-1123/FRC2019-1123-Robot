@@ -54,6 +54,8 @@ dependencies {
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
     testCompile 'junit:junit:4.12'
+	compile 'org.slf4j:slf4j-api:1.8.0-beta4'
+	compile group: 'org.yaml', name: 'snakeyaml', version: '1.24'
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

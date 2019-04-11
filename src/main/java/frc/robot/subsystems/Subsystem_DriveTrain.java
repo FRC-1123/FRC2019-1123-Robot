@@ -15,7 +15,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.Logger;
 import frc.robot.RobotMap;
 import frc.robot.commands.Command_DriveManually;
 
@@ -25,7 +24,7 @@ import frc.robot.commands.Command_DriveManually;
  * correct.
  */
 public class Subsystem_DriveTrain extends Subsystem {
-  private static final Logger log = new Logger(Subsystem_DriveTrain.class);
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Subsystem_DriveTrain.class);
   private static final String subsystemName = "Drive Train";
 
   private static final double wheelCircumference = Math.PI * 6.0d;
@@ -43,7 +42,7 @@ public class Subsystem_DriveTrain extends Subsystem {
   private class DriveTrainSafety extends MotorSafety {
     @Override
     public void stopMotor() {
-      log.notice("Drive Train Safety is stopping motors.");
+      log.warn("Drive Train Safety is stopping motors.");
       for (CANSparkMax motor : m_motors) {
         motor.stopMotor();
       }

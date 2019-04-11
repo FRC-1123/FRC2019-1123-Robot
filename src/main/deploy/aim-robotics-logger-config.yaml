@@ -1,0 +1,26 @@
+#
+# AIM Robotics, FRC Team 1123 logger configuation file.
+#
+# This file is used to configure the AIM Robotics logger. The loggger 
+# has the following valid logging levels {trace, debug, info, warn, error}.
+# Setting the log level for loggers will control what gets logged to
+# the driver station.  All logging events are logged to the
+# run log on the roboRIO regardless of what the log levels are
+# set to. 
+#
+
+#
+# Log level for Commands
+#
+frc.robot.commands: trace
+
+#
+# Log level for Subsystems
+#
+frc.robot.commands: trace
+
+#
+# Log level for Robot.java
+#
+frc.robot.Robot: trace
+

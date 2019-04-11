@@ -7,6 +7,10 @@
 
 package frc.robot.subsystems;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
@@ -15,7 +19,7 @@ import frc.robot.RobotMap;
  * Add your docs here.
  */
 public class Subsystem_Compressor extends Subsystem {
-
+  private static final Logger log = LoggerFactory.getLogger(Subsystem_Compressor.class);
   private Compressor m_compressor;
 
   public Subsystem_Compressor(Compressor m_compressor) {
@@ -23,10 +27,12 @@ public class Subsystem_Compressor extends Subsystem {
   }
 
   public void start() {
+    log.debug("*** compressor start");
     m_compressor.start();
   }
 
   public void stop() {
+    log.debug("*** compressor stop");
     m_compressor.stop();
   }
 

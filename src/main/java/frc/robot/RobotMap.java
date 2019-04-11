@@ -13,9 +13,7 @@ package frc.robot;
  * the wiring easier and significantly reduces the number of magic numbers
  * floating around.
  */
-public class RobotMap {
-  public static final Logger.Level logLevel = Logger.Level.DEBUG;
-  
+public class RobotMap {  
   //
   // Robot axles have side A and B. The robot has 3 axles: fixed, middle and float.
   //

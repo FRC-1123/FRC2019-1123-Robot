@@ -9,14 +9,13 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.Logger;
 import frc.robot.RobotMap;
 
 /**
  * Add your docs here.
  */
 public class Subsystem_Hatch extends Subsystem {
-  private static final Logger log = new Logger(Subsystem_Hatch.class);
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Subsystem_Hatch.class);
 
   private Solenoid m_extend;
   private Solenoid m_retract;

@@ -1,0 +1,4 @@
+#
+# Service provider for AIM Robotics Logger
+#
+frc.team1123.logging.AIMRoboticsLoggerServiceProvider

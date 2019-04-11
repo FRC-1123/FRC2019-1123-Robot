@@ -9,14 +9,13 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.Logger;
 import frc.robot.RobotMap;
 
 /**
  * Mass mover subsystem.
  */
 public class Subsystem_MassMover extends Subsystem {
-  private static final Logger log = new Logger(Subsystem_MassMover.class);
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Subsystem_MassMover.class);
 
   private Solenoid m_massForward;
   private Solenoid m_massBack;

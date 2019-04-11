@@ -6,16 +6,18 @@
 /*----------------------------------------------------------------------------*/
 package frc.robot.subsystems;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.Logger;
 import frc.robot.RobotMap;
 
 /**
  * Add your docs here.
  */
 public class Subsystem_Antenna extends Subsystem {
-  private static final Logger log = new Logger(Subsystem_Antenna.class);
+  private static final Logger log = LoggerFactory.getLogger(Subsystem_Antenna.class);
 
   private Solenoid m_extend;
   private Solenoid m_retract;

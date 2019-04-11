@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -61,7 +64,8 @@ import frc.team1123.camera.AIMRoboticsCameraServer;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final Logger log = new Logger(Robot.class);
+  private static final Logger log = LoggerFactory.getLogger(Robot.class);
+
   // private long aliveCount = 0;
 
   //

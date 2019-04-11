@@ -9,14 +9,13 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.Logger;
 import frc.robot.RobotMap;
 
 /**
  * Add your docs here.
  */
 public class Subsystem_Foot extends Subsystem {
-  public static final Logger log = new Logger(Subsystem_Foot.class);
+  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Subsystem_Foot.class);
 
   private Solenoid m_footUp;
   private Solenoid m_footDown;
