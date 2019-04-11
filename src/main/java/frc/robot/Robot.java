@@ -10,6 +10,7 @@ package frc.robot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -222,7 +223,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     log.debug("disabledInit");
-    
+
     //
     // Make sure we don't have any commands sitting in the scheduler that will execute when the robot is enabled.
     //
@@ -231,7 +232,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    // log.debug("disabledPeriodic");
     Scheduler.getInstance().run();
   }
 
@@ -300,5 +300,21 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
     // log.debug("testPeriodic");
+  }
+
+  private StringBuilder _getDSGameInformation() {
+    DriverStation ds = DriverStation.getInstance();
+    StringBuilder gib = new StringBuilder();
+    String crlf = System.getProperty("line.separator");
+    gib.append(crlf).append("** DS Information ***************************************");
+    gib.append(crlf).append("*  location.......: ").append(ds.getLocation());
+    gib.append(crlf).append("*  match number...: ").append(ds.getMatchNumber());
+    gib.append(crlf).append("*  replay number..: ").append(ds.getReplayNumber());
+    gib.append(crlf).append("*  alliance.......: ").append(ds.getAlliance().name());
+    gib.append(crlf).append("*  event name.....: ").append(ds.getEventName());
+    gib.append(crlf).append("*  match type.....: ").append(ds.getMatchType().name());
+    gib.append(crlf).append("*  game msg.......: ").append(ds.getGameSpecificMessage());
+    gib.append(crlf).append("*********************************************************");
+    return gib;
   }
 }
